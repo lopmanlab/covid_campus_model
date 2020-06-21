@@ -1,0 +1,325 @@
+#' ---
+#' title: "PSA Runs"
+#' author: "Carol Liu"
+#' date: "6/1/2020"
+#' output: html_document
+#' ---
+#' knitr::purl(
+#'   input="C:/Users/cliu369/OneDrive - Emory University/Documents/Courses/2 Spring 2020/EPI ID Modelling/Week 3/HW2.Rmd",
+#'   output="HW2.R",
+#'   documentation=2,
+#'   quiet=T)
+#' 
+## ----setup, include=FALSE------------------------------------------------
+knitr::opts_chunk$set(echo = TRUE)
+# Load dependencies, functions and parameters
+source("99_dependencies.R")
+source("99_model_func.R")
+source("99_parm_init_control.R")
+source("99_psa_optimizedistr.R")
+source("99_psa_parm.R")   #Note this overwrites initial parameters from parm_init_control
+source("99_psa_plot.R")
+options(scipen=999)
+
+#' ## Base case
+## ----base_results--------------------------------------------------------
+## Scenario with seven day screening, two day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   testing = 0,
+                   screening = 0)
+
+mod_base <- dcm(param, init, control)
+mod_base <- mutate_epi(mod_base, I_stu = I_on + I_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+
+
+#' 
+#' ## Four day test interval
+## ----four_test_results---------------------------------------------------
+## Scenario with seven day screening, two day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   testing = 1/4,
+                   screening = 0)
+
+mod_4test <- dcm(param, init, control)
+mod_4test <- mutate_epi(mod_4test, I_stu = I_on + I_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+
+
+#' 
+#' ## Thirty day screen
+## ----thirty_screen_results-----------------------------------------------
+## Scenario with seven day screening, two day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   testing = 0,
+                   screening = 1/30)
+
+mod_30screen <- dcm(param, init, control)
+mod_30screen <- mutate_epi(mod_30screen, I_stu = I_on + I_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+
+
+#' 
+#' ## Combination intervention
+## ----combo_results-------------------------------------------------------
+## Scenario with seven day screening, two day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   testing = 1/4,
+                   screening = 1/30)
+
+mod_combo <- dcm(param, init, control)
+mod_combo <- mutate_epi(mod_combo, I_stu = I_on + I_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+
+
+#' 
+#' ## Plots of all scenarios and range
+## ----keyresult, echo=F---------------------------------------------------
+## Store key results
+#Cumulative staff and student infections for each run
+
+# Combine scenarios of interest into list of data frames
+list_res<-lapply(list("base"=mod_base,"test4"=mod_4test,"screen30"= mod_30screen,"combo"=mod_combo),as.data.frame)
+
+list_res<-lapply(names(c(list_res)),function(x) {
+  list_res[[x]] %>%
+    mutate(scenario = x)
+})
+
+# Process the output into plots for active and cumulative cases for stadd and student
+# Default is median with IQR as upper and lower bounds but can be changed
+p1<-psa_plot(list_res[[1]],title1="Active cases-base", title2="Total cases-base")
+p2<- psa_plot(list_res[[2]],title1="Active cases-4 day test delay only", title2 = "Total-4 day test delay only")
+p3 <-psa_plot(list_res[[3]], title1="Active cases-30day screen interval", title2="Total-30day screen interval")
+p4 <- psa_plot(list_res[[4]], title1= "Active cases-Comb. test & screen", title2= "Total-Comb. test&screen")
+
+# Arrange plots for output
+
+tiff("Plots/5_psa_plots1.tiff", units="in", width=6, height=5, res=300)
+grid.arrange(p1[[1]]+rremove("legend"),p1[[2]]+rremove("legend"),p2[[1]]+rremove("legend"),p2[[2]]+rremove("legend"))
+dev.off()
+
+tiff("Plots/5_psa_plots2.tiff", units="in", width=6, height=5, res=300)
+grid.arrange(p3[[1]]+rremove("legend"),p3[[2]]+rremove("legend"),p4[[1]]+rremove("legend"),p4[[2]]+rremove("legend"))
+dev.off()
+
+grid.arrange(m1,m2+rremove("xylab")+rremove("xy.text")+rremove("legend"),m3+rremove("xylab")+rremove("xy.text")+rremove("legend"),
+             m4+rremove("xylab")+rremove("xy.text")+rremove("legend"),m5+rremove("xylab")+rremove("xy.text")+rremove("legend"),
+             m6+rremove("xylab")+rremove("xy.text")+rremove("legend"), layout_matrix=lay)
+
+#' 
+#' ## Totals -- at end of the semester
+## ------------------------------------------------------------------------
+df_cum<-do.call("rbind",list_res)%>%
+      filter(time == max(time)) %>%
+      group_by(scenario, run) %>%
+      summarize(
+        student_n = S_on + E_on + I_on + R_on + P_on + Q_on - Dcum_on +
+                    S_off + E_off + I_off + R_off + P_off + Q_off - Dcum_off,
+        student_cases = Icum_on + Icum_off,
+        student_hosps = Hcum_on + Hcum_off,
+        student_isos = Pcum_on + Pcum_off,
+        student_quas = Qcum_on + Qcum_off,
+        student_deaths = Dcum_on + Dcum_off,
+        saf_n = S_saf + E_saf + I_saf + R_saf + P_saf + Q_saf - Dcum_saf,
+        saf_cases = Icum_saf,
+        saf_hosps = Hcum_saf,
+        saf_deaths = Dcum_saf,
+        tests = Test
+      ) %>%
+      ungroup() %>%
+      mutate(tests_pc = tests / (student_n + saf_n))
+
+    df_peak <- do.call("rbind",list_res) %>%
+      group_by(scenario, run) %>%
+      summarize(
+        student_cases_peak = max(I_on + I_off, na.rm = TRUE),
+        student_isos_peak = max(P_on + P_off, na.rm = TRUE),
+        student_isos_days = sum(P_on + P_off, na.rm = TRUE),
+        student_quas_peak = max(Q_on + Q_off, na.rm = TRUE),
+        student_quas_days = sum(Q_on + Q_off, na.rm = TRUE),
+        saf_cases_peak = max(I_saf, na.rm = TRUE),
+        ) %>%
+      ungroup()
+
+    df_out <- full_join(df_cum, df_peak, by = c("scenario", "run")) %>%
+      pivot_longer(
+        -c(scenario, run),
+        names_to = "measure",
+        values_to = "value"
+      ) %>%
+      group_by(measure, scenario) %>%
+      summarize(
+        low = quantile(value, 0.25, na.rm = TRUE),
+        med = quantile(value, 0.5, na.rm = TRUE),
+        high = quantile(value, 0.75, na.rm = TRUE)
+      ) %>%
+      mutate(value = paste0(
+        format_nb(med),
+        " (", format_nb(low), " - ",
+        format_nb(high), ")")
+        ) %>%
+      pivot_wider(id_cols = measure, names_from = scenario, values_from = value)
+
+ 
+kable(df_out[,c("measure","base","test4","screen30","combo")], digits = 0, align = "c") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
+
+
+
+#' ## PRCC
+## ----prcc----------------------------------------------------------------
+results<-data.frame(matrix(ncol=2,nrow=total.set.size))
+results[,1]<-as.data.frame(mod_combo) %>% filter(time==116) %>% select(Icum_stu)
+results[,2]<-as.data.frame(mod_combo) %>% filter(time==116) %>% select(Icum_saf)
+
+variable <- data.frame(R0_StoS = R0_student_to_student.int,
+                R0_OntoOn = R0_on_to_on.int,
+                R0_saf = R0_saf.int,
+                comm = community.int,
+                asympt_stu = p_asympt_stu.int,
+                asympt_saf = p_asympt_saf.int,
+                contacts = contacts.int,
+                p_contacts_reached = p_contacts_reached.int,
+                ili = ili.int,
+                sens = sensitivity.int,
+                latent = latent.int,
+                infectious = infectious.int)
+
+pcc_res<-list()
+
+for (i in 1:ncol(results)){
+  pcc_res[[i]]<-pcc(variable,results[,i], rank= T, nboot =total.set.size)$PRCC
+}
+
+df_res<-as.data.frame(do.call(rbind,pcc_res)) %>% select(original)
+df_res$output <-rep(rep(c("stud","staff"),each =12),1)
+df_res$output <-as.factor(df_res$output)
+df_res$var<-rep(colnames(variable),2)
+
+tiff("Plots/5_prcc.tiff", units="in", width=6, height=5, res=300)
+ggplot(data=df_res, aes(x= var,y = original,fill=output)) +
+  geom_bar(position="dodge",stat="identity") +
+  scale_fill_grey()+
+  scale_x_discrete(limits=colnames(variable),labels=colnames(variable))+
+  coord_flip() + theme_classic()+
+  ggtitle("Patial Rank Correlation Coefficient of variables")+xlab("Variable")+ylab("")+theme(legend.title=element_blank())
+dev.off()
+
+#' 
+#' ## Gut checks for sampled distributions
+#' 
+## ------------------------------------------------------------------------
+list.int<-list(R0_student_to_student=R0_student_to_student.int,R0_on_to_on = R0_on_to_on.int,R0_saf = R0_saf.int,
+               community = community.int,p_asympt_stu = p_asympt_stu.int,p_asympt_saf = p_asympt_saf.int,contacts = contacts.int,
+               ili = ili.int,sensitivity = sensitivity.int, p_contact_reached = p_contacts_reached.int,latent = latent.int,infectious = infectious.int,
+               p_hosp_stu = p_hosp_stu.int,p_hosp_saf = p_hosp_saf.int,p_death_stu = p_death_stu.int,p_death_saf=p_death_saf.int,
+               beta_student_to_student = beta_student_to_student.int,beta_on_to_on = beta_on_to_on.int,beta_saf = beta_saf.int)
+
+par(mfrow = c(2,2))
+for (i in 1:length(list.int)){
+  p1<-plot(density(x=list.int[[i]]),main=names(list.int[i]))
+  print(p1)
+}  
+
+summary_parm<-as.data.frame(matrix(data=0,nrow=length(list.int),ncol=3))
+colnames(summary_parm) <- c("2.5%","50%","97.5%")
+
+for (i in 1:length(list.int)){
+  summary_parm[i,]<-quantile(list.int[[i]],p=c(0.025,0.5,0.975))
+  row.names(summary_parm)[i] <- names(list.int[i])
+}
+
+summary_parm
+
+
+#' 
+#' Think for the most part, these are aligned with the parameter table apart from a few like the upper bound of sensitivity 
+#' 
+#' 
+#' 
+#' 
