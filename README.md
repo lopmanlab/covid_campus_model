@@ -28,3 +28,7 @@ Code in this repository was used for the simulations and results presented our p
 | [PSA parameters](.../99_psa_parm.R)         | Loads parameters and distributions used for the PSA  |
 | [PSA plot function](.../99_psa_plot.R)      | Loads plot function used for the PSA  |
 
+## Outputs
+| File                   | Description |
+| ---------------------- | ------------- |
+| [Plots](.../Plots.R)         | Folder containing figures from model outputs  |
