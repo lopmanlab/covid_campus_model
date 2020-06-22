@@ -23,6 +23,8 @@ mod <- mutate_epi(mod, I_stu = I_on + I_off,
                   Pcum_stu = Pcum_on + Pcum_off,
                   Qcum_stu = Qcum_on + Qcum_off)
 
+
+
 pal <- brewer_ramp(mod$control$nruns, "Spectral")
 dfweekly <- as.data.frame(mod, run = 1)
 dfonce <- as.data.frame(mod, run = length(screen.int))
@@ -35,7 +37,7 @@ df$scrInt <- rep(screen.int, each = 116)
 df <- select(df, c(-run, -time))
 dfLast <- filter(df, date == "2020-12-20")
 
-tiff("Plots/1_screen_explore.tiff", units="in", width=6, height=5, res=300)
+#tiff("Plots/1_screen_explore.tiff", units="in", width=6, height=5, res=300)
 m <- rbind(c(1,2,5), c(3, 4,5))
 print(m)
 layout(m)
@@ -60,4 +62,40 @@ lines(dfLast$scrInt, dfLast$Icum_saf, lwd = 5, col = pal[length(pal)])
 legend("topleft", legend = c("Students", "Staff/Faculty"), lwd = 3,
        col = c(pal[1], pal[length(pal)]), bty = "n", cex = 0.8)
 
-dev.off()
+#dev.off()
+
+## Reductions in cases from base case
+param <- param.dcm(latent = latent,
+                   infectious = infectious,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student,
+                   beta_on_to_on = beta_on_to_on,
+                   beta_saf = beta_saf,
+                   contacts = contacts,
+                   sensitivity = sensitivity,
+                   testing = 0,
+                   screening = 0)
+base<- dcm(param, init, control)
+base <- mutate_epi(base, I_stu = I_on + I_off,
+                   Icum_stu = Icum_on + Icum_off,
+                   P_stu = P_on + P_off,
+                   Q_stu = Q_on + Q_off,
+                   Pcum_stu = Pcum_on + Pcum_off,
+                   Qcum_stu = Qcum_on + Qcum_off)
+
+df<-as.data.frame(mod)
+base_df<-as.data.frame(base)
+
+#Once per semester - students
+max(dfonce$Icum_stu)/max(base_df$Icum_stu)
+
+#Once per week - students
+max(dfweekly$Icum_stu)/max(base_df$Icum_stu)
+
+#Once per month- students
+df[df$run==4,"Icum_stu"][116]/max(base_df$Icum_stu)
+
+#Once per semester-staff
+max(dfonce$Icum_saf)
+#Once per week - staff
+max(dfweekly$Icum_saf)
