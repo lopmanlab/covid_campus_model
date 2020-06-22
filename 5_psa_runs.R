@@ -234,22 +234,27 @@ df_cum<-do.call("rbind",list_res)%>%
       ) %>%
       group_by(measure, scenario) %>%
       summarize(
-        low = quantile(value, 0.25, na.rm = TRUE),
+        low = quantile(value, 0.025, na.rm = TRUE),
         med = quantile(value, 0.5, na.rm = TRUE),
-        high = quantile(value, 0.75, na.rm = TRUE)
+        high = quantile(value, 0.975, na.rm = TRUE)
       ) %>%
       mutate(value = paste0(
-        format_nb(med),
-        " (", format_nb(low), " - ",
-        format_nb(high), ")")
+        round(med,digits=0),
+        " (", round(low,digits=0), "-",
+        round(high, digits=0), ")",sep="")
         ) %>%
       pivot_wider(id_cols = measure, names_from = scenario, values_from = value)
 
  
+var_order <- data.frame(measure=c("student_cases","student_cases_peak","student_hosps","student_deaths","student_isos","student_isos_peak","student_isos_days",
+               "student_quas","student_quas_peak","student_quas_days","saf_cases","saf_cases_peak","saf_hosps","saf_deaths","tests","tests_pc")) %>%
+            mutate(measure= as.character(measure))
+
+df_out<-var_order %>% left_join(df_out, by="measure")
+
+
 kable(df_out[,c("measure","base","test4","screen30","combo")], digits = 0, align = "c") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
-
-
 
 #' ## PRCC
 ## ----prcc----------------------------------------------------------------
