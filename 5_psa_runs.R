@@ -275,6 +275,11 @@ variable <- data.frame(R0_StoS = R0_student_to_student.int,
                 latent = latent.int,
                 infectious = infectious.int)
 
+variable_name <- c("R0 student to student","R0 on campus student to on campus student","R0 students to staff",
+                   "Community introduction","Prop. asymptomatic (students)","Prop. asymptomatic (staff)",
+                   "No. contacts per case","Proportion contacts reached","Proportion with ILI symptoms per month",
+                   "PCR sensitivity","Latent period (days)", "Infectious period (days)")
+
 pcc_res<-list()
 
 for (i in 1:ncol(results)){
@@ -286,11 +291,11 @@ df_res$output <-rep(rep(c("stud","staff"),each =12),1)
 df_res$output <-as.factor(df_res$output)
 df_res$var<-rep(colnames(variable),2)
 
-tiff("Plots/5_prcc.tiff", units="in", width=6, height=5, res=300)
+tiff("Plots/5_prcc.tiff", units="in", width=7, height=5, res=300)
 ggplot(data=df_res, aes(x= var,y = original,fill=output)) +
   geom_bar(position="dodge",stat="identity") +
   scale_fill_grey()+
-  scale_x_discrete(limits=colnames(variable),labels=colnames(variable))+
+  scale_x_discrete(limits=colnames(variable),labels=variable_name)+
   coord_flip() + theme_classic()+
   ggtitle("Patial Rank Correlation Coefficient of variables")+xlab("Variable")+ylab("")+theme(legend.title=element_blank())
 dev.off()
@@ -328,3 +333,184 @@ summary_parm
 #' 
 #' 
 #' 
+
+
+#' 
+#' ## One time screening
+## ----one_time_screen---------------------------------------------------
+## Scenario with one time screening across entire semester
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   testing = 0,
+                   screening = 1/116)
+
+mod_116screen <- dcm(param, init, control)
+mod_116screen <- mutate_epi(mod_116screen, I_stu = I_on + I_off,
+                        Icum_stu = Icum_on + Icum_off,
+                        P_stu = P_on + P_off,
+                        Pcum_stu = Pcum_on + Pcum_off,
+                        Qcum_stu = Qcum_on + Qcum_off,
+                        Hcum_stu = Hcum_on + Hcum_off,
+                        Dcum_stu = Dcum_on + Dcum_off)
+
+#' ## Seven day screening interval
+## ----seven_day_screen---------------------------------------------------
+## Scenario with one time screening across entire semester
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   testing = 0,
+                   screening = 1/7)
+
+mod_7screen <- dcm(param, init, control)
+mod_7screen <- mutate_epi(mod_7screen, I_stu = I_on + I_off,
+                            Icum_stu = Icum_on + Icum_off,
+                            P_stu = P_on + P_off,
+                            Pcum_stu = Pcum_on + Pcum_off,
+                            Qcum_stu = Qcum_on + Qcum_off,
+                            Hcum_stu = Hcum_on + Hcum_off,
+                            Dcum_stu = Dcum_on + Dcum_off)
+#' ## Two day testing
+## ----two_day_test---------------------------------------------------
+## Scenario with one time screening across entire semester
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   testing = 1/2,
+                   screening = 0)
+
+mod_2test <- dcm(param, init, control)
+mod_2test <- mutate_epi(mod_2test, I_stu = I_on + I_off,
+                            Icum_stu = Icum_on + Icum_off,
+                            P_stu = P_on + P_off,
+                            Pcum_stu = Pcum_on + Pcum_off,
+                            Qcum_stu = Qcum_on + Qcum_off,
+                            Hcum_stu = Hcum_on + Hcum_off,
+                            Dcum_stu = Dcum_on + Dcum_off)
+
+#' ## Seven day test interval
+## ----seven_day_test---------------------------------------------------
+## Scenario with one time screening across entire semester
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   testing = 1/7,
+                   screening = 0)
+
+mod_7test <- dcm(param, init, control)
+mod_7test <- mutate_epi(mod_7test, I_stu = I_on + I_off,
+                            Icum_stu = Icum_on + Icum_off,
+                            P_stu = P_on + P_off,
+                            Pcum_stu = Pcum_on + Pcum_off,
+                            Qcum_stu = Qcum_on + Qcum_off,
+                            Hcum_stu = Hcum_on + Hcum_off,
+                            Dcum_stu = Dcum_on + Dcum_off)
+
+# Combine all scenarios for cumulative incidence, % reduction and ranges for staff and student
+list_res<-lapply(list("base"=mod_base,
+                      "test2"=mod_2test,
+                      "test4"=mod_4test,
+                      "test7"=mod_7test,
+                      "screen116"=mod_116screen,
+                      "screen30"= mod_30screen,
+                      "screen7"=mod_7screen,
+                      "combo"=mod_combo),as.data.frame)
+
+list_res<-lapply(names(c(list_res)),function(x) {
+  list_res[[x]] %>%
+    mutate(scenario = x)
+})
+
+df_cum<-do.call("rbind",list_res)%>%
+  filter(time == max(time)) %>%
+  group_by(scenario, run) %>%
+  summarize(
+    student_cases = Icum_on + Icum_off,
+    saf_cases = Icum_saf,
+  ) %>%
+  pivot_longer(
+    -c(scenario, run),
+    names_to = "measure",
+    values_to = "value"
+  ) %>%
+  group_by(measure, scenario) %>%
+  summarize(
+    low = quantile(value, 0.025, na.rm = TRUE),
+    med = quantile(value, 0.5, na.rm = TRUE),
+    high = quantile(value, 0.975, na.rm = TRUE)
+  ) %>%
+  mutate(value = paste0(
+    round(med,digits=0),
+    " (", round(low,digits=0), "-",
+    round(high, digits=0), ")",sep="")
+  ) 
+
+df_stu <- df_cum %>% filter(measure=="student_cases") %>%
+  mutate(
+    perc_red = round((1-med/804)*100,digits=0)
+  )
+
+df_saf <- df_cum %>% filter(measure=="saf_cases") %>%
+  mutate(
+    perc_red = round((1-med/415)*100,digits=0)
+  )
+
+df_summary <- full_join(df_stu,df_saf)  %>%
+    pivot_wider(id_cols = scenario, names_from = measure, values_from = c(value,perc_red))
