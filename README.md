@@ -32,3 +32,44 @@ Code in this repository was used for the simulations and results presented our p
 | File                   | Description |
 | ---------------------- | ------------- |
 | [Plots](.../Plots.R)         | Folder containing figures from model outputs  |
+
+
+# Shiny web app
+
+The application is available online [on shinyapps](https://epimodel.shinyapps.io/covid-emory/).
+
+## Dependencies
+
+In order to run the app from your computer you require the following libraries:
+
+``` R
+install.packages(c(
+  "shiny",
+  "shinydashboard",
+  "plotly",
+  "EpiModel",
+  "lhs",
+  "tidyr",
+  "purrr",
+  "glue",
+  "kableExtra",
+  "ggplot2"
+))
+```
+
+Alternatively if you use [`renv`](https://rstudio.github.io/renv/index.html) to isolate your libraries and ensure reproducibility, a "renv.lock" file is present at the root of this project.
+
+``` R
+renv::restore()
+```
+
+### Run the app
+
+To launch the app, either run from the R console:
+
+``` R
+shiny::runApp("shiny/app")
+```
+
+Or using RStudio, open either "shiny/app/ui.R" or "shiny/app/server.R" and click the "Run App" button on the top right corner of the editor.
+

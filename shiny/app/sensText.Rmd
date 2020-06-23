@@ -1,0 +1,6 @@
+
+This section computes sensitivity analysis using probability sampling.
+
+Use the sliders below to choose the range of the parameters you wish to assess then press "Run sensitivity analysis".
+
+__Warning__, the more sample you use the longer it will take to compute
