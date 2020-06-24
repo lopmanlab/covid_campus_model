@@ -7,10 +7,10 @@ ui <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       menuItem("Introduction", tabName = "text", icon = icon("info")),
-      menuItem("Main", tabName = "main", icon = icon("dashboard")),
-      menuItem("Sensitivity Analysis",
+      menuItem("Main Scenarios", tabName = "main", icon = icon("dashboard")),
+      menuItem("Sensitivity Analyses",
                tabName = "sens_ana", icon = icon("bar-chart")),
-      menuItem("Raw Parameters", tabName = "raw_params", icon = icon("th"))
+      menuItem("Raw Model Parameters", tabName = "raw_params", icon = icon("th"))
     )
   ),
   ## Body content
