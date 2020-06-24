@@ -3,7 +3,7 @@ The COVID19 Campus Model is a tool to guide mitigation strategies and resource n
 
 Code in this repository was used for the simulations and results presented our paper. An interactive software tool is available for additional simulations. Links below:
 
-* [Paper](https://github.com/lopmanlab/covid_campus_model/blob/master/EmoryCampusModel_Preprint.pdf)
+* [Paper](https://www.medrxiv.org/content/10.1101/2020.06.23.20138677v2)
 * [Interactive web tool](https://epimodel.shinyapps.io/covid-university/)
 
 # Code description
@@ -36,7 +36,7 @@ Code in this repository was used for the simulations and results presented our p
 
 # Shiny web app
 
-The application is available online [on shinyapps](https://epimodel.shinyapps.io/covid-university/).
+The application is available [online](https://epimodel.shinyapps.io/covid-university/).
 
 ## Dependencies
 
