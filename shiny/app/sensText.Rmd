@@ -1,2 +1,2 @@
 
-This section computes sensitivity analysis using probability sampling. Use the sliders below to choose the range of the parameters, then press the **Run** button. __Note:__ running analyses with greater number of samples will increase the total computing time.
+This section computes sensitivity analysis using probability sampling. Use the sliders below to choose the range of the parameters, then press the **Run** button. *Note:* Running analyses with greater number of samples will increase the total computing time.
