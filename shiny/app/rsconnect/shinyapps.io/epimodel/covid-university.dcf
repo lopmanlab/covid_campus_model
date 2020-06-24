@@ -1,0 +1,12 @@
+name: covid-university
+title: covid-university
+username:
+account: epimodel
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2497458
+bundleId: 3310828
+url: https://epimodel.shinyapps.io/covid-university/
+when: 1593000906.95082
+asMultiple: FALSE
+asStatic: FALSE
