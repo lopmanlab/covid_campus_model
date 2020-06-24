@@ -414,13 +414,13 @@ server <- function(input, output, session) {
         column(
           width = 12,
           box(
-            width = NULL, title = "Run simulations",
+            width = NULL, title = "Run Sensitivity Analysis",
             status = "primary", solidHeader = TRUE,
 
             column(
               width = 2,
-              p(strong("Run Sensitivity Analysis")),
-              actionButton("sens_run", "Run Simulations")
+              p(strong("Run New Simulations")),
+              actionButton("sens_run", "Run")
             ),
             column(
               width = 4,
@@ -707,7 +707,7 @@ server <- function(input, output, session) {
     setProgress(
       2,
       message = "Processing simulations",
-      detail = "It may take some time"
+      detail = "Please wait"
     )
 
     df

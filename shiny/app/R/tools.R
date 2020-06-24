@@ -153,9 +153,9 @@ all_labs <- c(
   "model_opts_trans"            = "Model Options - Transmission Parameters",
   "dl_btn"                = "Download Raw Data as TSV",
   "model_range"           = "Parameter Ranges",
-  "base_raw"              = "Base Model Parameters",
-  "base_param"            = "Control - Parameters",
-  "base_init"             = "Initial Values",
+  "base_raw"              = "Raw Model Parameters",
+  "base_param"            = "Model Parameters",
+  "base_init"             = "Initial Conditions",
   "reset_button"         = "Reset Inputs"
 )
 
