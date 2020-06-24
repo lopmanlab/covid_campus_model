@@ -36,7 +36,7 @@ Code in this repository was used for the simulations and results presented our p
 
 # Shiny web app
 
-The application is available online [on shinyapps](https://epimodel.shinyapps.io/covid-emory/).
+The application is available online [on shinyapps](https://epimodel.shinyapps.io/covid-university/).
 
 ## Dependencies
 
