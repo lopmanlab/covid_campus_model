@@ -2,7 +2,7 @@ source("R/tools.R")
 
 ui <- dashboardPage(
   ## Header content
-  dashboardHeader(title = "Emory Fall 2020 COVID Model"),
+  dashboardHeader(title = "COVID University Model"),
   ## Sidebar content
   dashboardSidebar(
     sidebarMenu(
