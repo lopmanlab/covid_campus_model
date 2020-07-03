@@ -14,11 +14,12 @@ model <- function(t, t0, parms) {
     dP_on <- testing*(1-p_asympt_stu)*sensitivity*I_on + screening*(E_on+I_on)*sensitivity - 1/isolation*P_on
     dQ_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached  - 1/isolation*Q_on
 
-    dIcum_on <- (1-p_asympt_stu)*((beta_student_to_student*(I_off+I_on) + (beta_on_to_on*I_on) + (beta_saf*I_saf))*S_on)/N
+    dIcum_on <- (1-p_asympt_stu)*lam_on*S_on
+    
     dPcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity + screening*(E_on+I_on)*sensitivity
     dQcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts
-    dHcum_on <- ((1-p_asympt_stu)*((beta_student_to_student*(I_off+I_on) + (beta_on_to_on*I_on) + (beta_saf*I_saf))*S_on)/N)*p_hosp_stu
-    dDcum_on <- ((1-p_asympt_stu)*((beta_student_to_student*(I_off+I_on) + (beta_on_to_on*I_on) + (beta_saf*I_saf))*S_on)/N)*p_death_stu
+    dHcum_on <- (1-p_asympt_stu)*lam_on*S_on*p_hosp_stu
+    dDcum_on <- (1-p_asympt_stu)*lam_on*S_on*p_death_stu
 
     # Off campus students
     lam_off = (beta_student_to_student*(I_off/N_off+I_on/N_on)+(beta_saf*I_saf/N_saf))
@@ -31,11 +32,11 @@ model <- function(t, t0, parms) {
     dP_off <- testing*(1-p_asympt_stu)*I_off*sensitivity - 1/isolation*P_off + screening*(E_off+I_off)*sensitivity
     dQ_off <- testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_off
 
-    dIcum_off = (1-p_asympt_stu)*((beta_student_to_student*(I_off+I_on)+(beta_saf*I_saf))*S_off)/N
+    dIcum_off = (1-p_asympt_stu)*lam_off*S_off 
     dPcum_off <- testing*(1-p_asympt_stu)*I_off*sensitivity + screening*(E_off+I_off)*sensitivity
     dQcum_off <-testing*(1-p_asympt_stu)*I_off*sensitivity*contacts
-    dHcum_off <- ((1-p_asympt_stu)*((beta_student_to_student*(I_off+I_on)+(beta_saf*I_saf))*S_off)/N)*p_hosp_stu
-    dDcum_off <- ((1-p_asympt_stu)*((beta_student_to_student*(I_off+I_on)+(beta_saf*I_saf))*S_off)/N)*p_death_stu
+    dHcum_off <- (1-p_asympt_stu)*lam_off*S_off*p_hosp_stu
+    dDcum_off <- (1-p_asympt_stu)*lam_off*S_off*p_death_stu
 
     # Staff and faculty
     lam_saf = beta_saf*(I_on/N_on+I_off/N_off+I_saf/N_saf)
@@ -48,10 +49,10 @@ model <- function(t, t0, parms) {
     dP_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity - 1/isolation*P_saf + screening*(E_saf+I_saf)*sensitivity
     dQ_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_saf
 
-    dIcum_saf = (1-p_asympt_saf)*beta_saf*(I_on+I_off+I_saf)*S_saf/N
-    dPcum_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity  + screening*(E_saf+I_saf)*sensitivity
-    dHcum_saf <- ((1-p_asympt_saf)*beta_saf*(I_on+I_off+I_saf)*S_saf/N)*p_hosp_saf
-    dDcum_saf <- ((1-p_asympt_saf)*beta_saf*(I_on+I_off+I_saf)*S_saf/N)*p_death_saf
+    dIcum_saf = (1-p_asympt_saf)*lam_saf*S_saf 
+    dPcum_saf <- testing*(1-p_asympt_saf)*lam_saf*S_saf*sensitivity
+    dHcum_saf <- (1-p_asympt_saf)*beta_saf*lam_saf*S_saf*p_hosp_saf
+    dDcum_saf <- (1-p_asympt_saf)*beta_saf*lam_saf*S_saf*p_death_saf
 
     dTest <- N*screening + ((I_on+I_off+I_saf)*testing) + N*ili*ifelse(testing > 0, 1, 0)
 

@@ -49,13 +49,10 @@ plot(mod, y = "Icum_stu", main = "Cumulative cases", col = pal, legend = FALSE,
 legend("topleft", legend = c("Weekly Screening", "Monthly Screening", "One-Time Screening"), lwd = 3,
        col = c(pal[1], pal[4], pal[length(pal)]), bty = "n", cex = 0.8)
 plot(mod, y = "I_saf", col = pal, legend = FALSE,
-     ylab = "Staff/Faculty cases", xlab = "Time (Days)",
-     ylim = c(0, max(mod$epi$I_stu)))
+     ylab = "Staff/Faculty cases", xlab = "Time (Days)")
 plot(mod, y = "Icum_saf", col = pal, legend = FALSE,
-     ylab = "", xlab = "Time (Days)",
-     ylim = c(0, max(mod$epi$Icum_stu)))
-plot(dfLast$scrInt, dfLast$Icum_stu, type = "l", lwd = 5, col = pal[1],
-     ylim = c(0, max(dfLast$Icum_stu)),
+     ylab = "", xlab = "Time (Days)")
+plot(dfLast$scrInt, dfLast$Icum_stu, type = "l", lwd = 5, col = pal[1], ylim = c(0,5000),
      ylab = "Cumulative Cases", xlab = "Screening Interval (Days)",
      main = "Cumulative Cases")
 lines(dfLast$scrInt, dfLast$Icum_saf, lwd = 5, col = pal[length(pal)])
