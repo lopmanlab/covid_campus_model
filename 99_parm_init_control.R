@@ -3,7 +3,7 @@ p_tab <- parameter_table
 p_tab$Value <-gsub(",","",p_tab$Value)
 p_tab$Value <- as.numeric(as.character(p_tab$Value))
 p_tab$Lower <- as.numeric(as.character(p_tab$Lower))
-p_tab$Upper <-as.numeric(as.character(p_tab$Upper))
+p_tab$Upper <- as.numeric(as.character(p_tab$Upper))
 
 #Epi parameters
 R0_student_to_student <- p_tab$Value[which(p_tab$Var=="R0_student_to_student")]   # number of other students that a student infects, on average
@@ -18,7 +18,7 @@ infectious <- p_tab$Value[which(p_tab$Var == "infectious")]                     
 beta_student_to_student <- R0_student_to_student/infectious                       # daily effective contact rate -- symptomatic period
 beta_on_to_on <- R0_on_to_on/infectious                                           # daily effective contact rate -- symptomatic period
 beta_saf <- R0_saf/infectious                                                     # daily effective contact rate -- symptomatic period
-
+eff_npi <- p_tab$Value[which(p_tab$Var == "eff_npi")]                             # efficacy of masking and other NPIs
 
 community <- p_tab$Value[which(p_tab$Var == "community")]                         # daily probability of community infection - not acquired on campus
 
@@ -38,6 +38,7 @@ sensitivity_2  <- p_tab$Value[which(p_tab$Var == "sensitivity_2")]              
 sensitivity_7  <- p_tab$Value[which(p_tab$Var == "sensitivity_7")]                # PCR sensitivity on day 7
 
 isolation <- p_tab$Value[which(p_tab$Var == "isolation")]                         # isolation or quarantine period in days
+
 
 
 # Emory population
@@ -106,7 +107,10 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  Hcum_saf =0,
                  Dcum_saf =0,
 
-                 Test = 0)
+                 Test = 0,
+                 I_on_sym = 0, 
+                 I_off_sym = 0, 
+                 I_saf_sym = 0)
 
 # Control features
 control <- control.dcm(nsteps = 116, new.mod = model)

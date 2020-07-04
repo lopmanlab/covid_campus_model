@@ -148,14 +148,14 @@ all_labs <- c(
   "Plot_measures"         = "Compartments",
   "model_plots"           = "Model Plots",
   "model_summary"         = "Model Summary",
-  "model_scenario"        = "Intervention Parameters",
-  "model_opts"            = "Model Options - Campus Parameters",
+  "model_scenario"        = "Model Options - Intervention Parameters",
+  "model_opts"            = "Model Options - Initial Campus Conditions",
   "model_opts_trans"            = "Model Options - Transmission Parameters",
   "dl_btn"                = "Download Raw Data as TSV",
   "model_range"           = "Parameter Ranges",
-  "base_raw"              = "Base Model Parameters",
-  "base_param"            = "Control - Parameters",
-  "base_init"             = "Initial Values",
+  "base_raw"              = "Raw Model Parameters",
+  "base_param"            = "Model Parameters",
+  "base_init"             = "Initial Conditions",
   "reset_button"         = "Reset Inputs"
 )
 

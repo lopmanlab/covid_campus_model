@@ -3,7 +3,6 @@ source("99_dependencies.R")
 source("99_model_func.R")
 source("99_parm_init_control.R")
 
-
 tiff("Plots/2_test_explore.tiff", units="in", width=6, height=5, res=300)
 
 m <- rbind(c(1, 2, 5), c(3,4,6))
@@ -32,7 +31,7 @@ param <- param.dcm(latent = latent,
                    },
                    screening = 0)
 mod <- dcm(param, init, control)
-mod <- mutate_epi(mod, I_stu = I_on + I_off,
+mod <- mutate_epi(mod, I_stu = I_on_sym + I_off_sym,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Q_stu = Q_on + Q_off,
@@ -48,7 +47,7 @@ plot(mod, y = "I_stu", main = "Active Cases", col = pal, legend = FALSE,
      ylab = "Student cases", xlab = "")
 plot(mod, y = "Icum_stu", main = "Cumulative Cases", col = pal, legend = FALSE,
      ylab = "", xlab = "")
-plot(mod, y = "I_saf", main = "", col = pal, legend = FALSE,
+plot(mod, y = "I_saf_sym", main = "", col = pal, legend = FALSE,
      ylab = "Staff/Faculty cases", xlab = "Time (Days)",
      ylim = c(0, max(mod$epi$I_stu)))
 plot(mod, y = "Icum_saf", main = "", col = pal, legend = FALSE,
@@ -81,7 +80,7 @@ param <- param.dcm(latent = latent,
                    },
                    screening = 0)
 mod <- dcm(param, init, control)
-mod <- mutate_epi(mod, I_stu = I_on + I_off,
+mod <- mutate_epi(mod, I_stu = I_on_sym + I_off_sym,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Q_stu = Q_on + Q_off,
@@ -98,13 +97,13 @@ dfL7 <- filter(dfL, test.int == 7)
 
 pal <- RColorBrewer::brewer.pal(3, "Set1")
 plot(dfL2$contacts.reached, dfL2$Icum_stu, type = "b", col = pal[1], lwd = 1.5, pch = 20,
-     ylim = c(0, 800), xlab = "", ylab = "",
+     ylim = c(0, max(dfL7$Icum_stu)), xlab = "", ylab = "",
      main = "Cumulative Cases")
 lines(dfL4$contacts.reached, dfL4$Icum_stu, type = "b", col = pal[3], lwd = 1.5, pch = 20)
 lines(dfL7$contacts.reached, dfL7$Icum_stu, type = "b", col = pal[2], lwd = 1.5, pch = 20)
 
 plot(dfL2$contacts.reached, dfL2$Icum_saf, type = "b", col = pal[1], lwd = 1.5, pch = 20,
-     ylim = c(0, 800), xlab = "Prop. Contacts Reached",ylab = "")
+     ylim = c(0, max(dfL7$Icum_stu)), xlab = "Prop. Contacts Reached",ylab = "")
 lines(dfL4$contacts.reached, dfL4$Icum_saf, type = "b", col = pal[3], lwd = 1.5, pch = 20)
 lines(dfL7$contacts.reached, dfL7$Icum_saf, type = "b", col = pal[2], lwd = 1.5, pch = 20)
 legend("topright", legend = c("2-Day Test Delay", "4-Day Test Delay", "7-Day Test Delay"), lwd = 3,

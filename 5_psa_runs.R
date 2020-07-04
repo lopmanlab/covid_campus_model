@@ -14,7 +14,7 @@
 knitr::opts_chunk$set(echo = TRUE)
 # Load dependencies, functions and parameters
 source("99_dependencies.R")
-source("99_model_func.R")
+source("99_model_func_v2.R")
 source("99_parm_init_control.R")
 source("99_psa_optimizedistr.R")
 source("99_psa_parm.R")   #Note this overwrites initial parameters from parm_init_control
@@ -45,7 +45,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 0)
 
 mod_base <- dcm(param, init, control)
-mod_base <- mutate_epi(mod_base, I_stu = I_on + I_off,
+mod_base <- mutate_epi(mod_base, I_stu = I_on_sym + I_off_sym,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Pcum_stu = Pcum_on + Pcum_off,
@@ -79,7 +79,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 0)
 
 mod_4test <- dcm(param, init, control)
-mod_4test <- mutate_epi(mod_4test, I_stu = I_on + I_off,
+mod_4test <- mutate_epi(mod_4test, I_stu = I_on_sym + I_off_sym,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Pcum_stu = Pcum_on + Pcum_off,
@@ -113,7 +113,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 1/30)
 
 mod_30screen <- dcm(param, init, control)
-mod_30screen <- mutate_epi(mod_30screen, I_stu = I_on + I_off,
+mod_30screen <- mutate_epi(mod_30screen, I_stu = I_on_sym + I_off_sym,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Pcum_stu = Pcum_on + Pcum_off,
@@ -147,7 +147,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 1/30)
 
 mod_combo <- dcm(param, init, control)
-mod_combo <- mutate_epi(mod_combo, I_stu = I_on + I_off,
+mod_combo <- mutate_epi(mod_combo, I_stu = I_on_sym + I_off_sym,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Pcum_stu = Pcum_on + Pcum_off,
@@ -217,12 +217,12 @@ df_cum<-do.call("rbind",list_res)%>%
     df_peak <- do.call("rbind",list_res) %>%
       group_by(scenario, run) %>%
       summarize(
-        student_cases_peak = max(I_on + I_off, na.rm = TRUE),
+        student_cases_peak = max(I_on_sym + I_off_sym, na.rm = TRUE),
         student_isos_peak = max(P_on + P_off, na.rm = TRUE),
         student_isos_days = sum(P_on + P_off, na.rm = TRUE),
         student_quas_peak = max(Q_on + Q_off, na.rm = TRUE),
         student_quas_days = sum(Q_on + Q_off, na.rm = TRUE),
-        saf_cases_peak = max(I_saf, na.rm = TRUE),
+        saf_cases_peak = max(I_saf_sym, na.rm = TRUE),
         ) %>%
       ungroup()
 
@@ -360,7 +360,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 1/116)
 
 mod_116screen <- dcm(param, init, control)
-mod_116screen <- mutate_epi(mod_116screen, I_stu = I_on + I_off,
+mod_116screen <- mutate_epi(mod_116screen, I_stu = I_on_sym + I_off_sym,
                         Icum_stu = Icum_on + Icum_off,
                         P_stu = P_on + P_off,
                         Pcum_stu = Pcum_on + Pcum_off,
@@ -392,7 +392,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 1/7)
 
 mod_7screen <- dcm(param, init, control)
-mod_7screen <- mutate_epi(mod_7screen, I_stu = I_on + I_off,
+mod_7screen <- mutate_epi(mod_7screen, I_stu = I_on_sym + I_off_sym,
                             Icum_stu = Icum_on + Icum_off,
                             P_stu = P_on + P_off,
                             Pcum_stu = Pcum_on + Pcum_off,
@@ -423,7 +423,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 0)
 
 mod_2test <- dcm(param, init, control)
-mod_2test <- mutate_epi(mod_2test, I_stu = I_on + I_off,
+mod_2test <- mutate_epi(mod_2test, I_stu = I_on_sym + I_off_sym,
                             Icum_stu = Icum_on + Icum_off,
                             P_stu = P_on + P_off,
                             Pcum_stu = Pcum_on + Pcum_off,
@@ -455,7 +455,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 0)
 
 mod_7test <- dcm(param, init, control)
-mod_7test <- mutate_epi(mod_7test, I_stu = I_on + I_off,
+mod_7test <- mutate_epi(mod_7test, I_stu = I_on_sym + I_off_sym,
                             Icum_stu = Icum_on + Icum_off,
                             P_stu = P_on + P_off,
                             Pcum_stu = Pcum_on + Pcum_off,

@@ -27,7 +27,7 @@ param <- param.dcm(latent = latent,
                    },
                    screening = 1/p$screen.int)
 mod <- dcm(param, init, control)
-mod <- mutate_epi(mod, I_stu = I_on + I_off,
+mod <- mutate_epi(mod, I_stu = I_on_sym + I_off_sym,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Q_stu = Q_on + Q_off,
@@ -70,21 +70,21 @@ dfLc5t7 <- filter(dfL, contacts.reached == 1 & test.int == 7)
 
 pal <- RColorBrewer::brewer.pal(3, "Set1")
 par(mfrow = c(1,3), mar = c(3,3,2,1), mgp = c(2,1,0))
-plot(dfLc0t2$screen.int, dfLc0t2$Icum_stu, ylim = c(0, 800), type = "b",
+plot(dfLc0t2$screen.int, dfLc0t2$Icum_stu, ylim = c(0, max(dfLc0t7$Icum_stu)), type = "b",
      lwd = 1.5, col = pal[1], pch = 20, main = "0% contacts traced",
      xlab = "Screening Interval", ylab = "Cumulative Student Cases")
 lines(dfLc0t4$screen.int, dfLc0t4$Icum_stu, type = "b", lwd = 1.5, col = pal[2], pch = 20)
 lines(dfLc0t7$screen.int, dfLc0t7$Icum_stu, type = "b", lwd = 1.5, col = pal[3], pch = 20)
 abline(v = c(7,30))
 
-plot(dfLc1t2$screen.int, dfLc1t2$Icum_stu, ylim = c(0, 800), type = "b",
+plot(dfLc1t2$screen.int, dfLc1t2$Icum_stu, ylim = c(0, max(dfLc0t7$Icum_stu)), type = "b",
      lwd = 1.5, col = pal[1], pch = 20, main = "50% contacts traced",
      xlab = "Screening Interval", ylab = "")
 lines(dfLc1t4$screen.int, dfLc1t4$Icum_stu, type = "b", lwd = 1.5, col = pal[2], pch = 20)
 lines(dfLc1t7$screen.int, dfLc1t7$Icum_stu, type = "b", lwd = 1.5, col = pal[3], pch = 20)
 abline(v = c(7,30))
 
-plot(dfLc5t2$screen.int, dfLc5t2$Icum_stu, ylim = c(0, 800), type = "b",
+plot(dfLc5t2$screen.int, dfLc5t2$Icum_stu, ylim = c(0, max(dfLc0t7$Icum_stu)), type = "b",
      lwd = 1.5, col = pal[1], pch = 20, main = "100% contacts traced",
      xlab = "Screening Interval (days)", ylab = "")
 lines(dfLc5t4$screen.int, dfLc5t4$Icum_stu, type = "b", lwd = 1.5, col = pal[2], pch = 20)

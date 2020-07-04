@@ -1,21 +1,18 @@
-# A model of COVID-19 transmission and control on university campuses 
+# A Model of Covid-19 Transmission and Control on University Campuses 
 
-_This is a Web-Based Tool for Modeling COVID-19 on University Campuses_
+This is an interactive software tool to explore the modeling scenarios in the paper:
 
-This software tool is based on the mathematical models in the paper:
+> Lopman B, Liu CY, Le Guillou A, Lash TL, Isakov AP, Jenness SM. A Model of Covid-19 Transmission and Control on University Campuses. _Pre-Print._ [[Paper Link](https://www.medrxiv.org/content/10.1101/2020.06.23.20138677v2)]
 
-> Reference to the original paper
+**Before using this tool to guide any decisions, it is critical to read the full paper in order to understand the assumptions and limitations of this models. Results should not be taken at face value. This tool provides a way to explore the possible range of outcomes on campus over the course of a semester. However, there are a number of important things not captured in the fairly simple model -- like the structure of student housing or the impact of mask-wearing.**
 
-**Before using this tool to guide any decisions, it is critical to read the full paper in order to understand the assumptions and limitations of this models.  Results should not be taken at face value.  This tool provides a way to explore the possible range of outcomes on campus over the course of a semester. However, there are a number of important things not captured in the fairly simple model -- like the structure of student housing or the impact of mask-wearing.**
+This app provides tools to explore the associated modeling study for transmission of SARS-CoV-2 among university students, staff, and faculty. The basic components of the model are described below.
 
-This webtool provides tools to explore the model of transmission of SARS-COV-2 among university students, staff and faculty.
+_All control measures are initiated by diagnostics._
+*Screening* is a strategy in which students, staff, and faculty are tested at a given frequency regardless of the presence of symptoms. We assume that there is no contact tracing or quarantine initiated by screening. *Testing* is a strategy whereby symptomatic students, staff, and faculty present for clinical care and are tested using RT-PCR.
 
-_All control measures are initiated by diagnostics_
-*Screening* is a strategy in which students, staff, and faculty are tested at a given frequency regardless of the presence of symptoms. We assume that there is no contact tracing or quarantine initiated by screening.  
-*Testing* is a strategy whereby symptomatic students, staff, and faculty present for clinical care and are tested using RT-PCR. 
+The **Main Scenarios** tab shows a single run of the model outcome using the default parameters. Users may change the model options to better fit different university characteristics. It is also possible to modify the intervention and change which output is visualized. After selecting new parameters for the model, the app will automatically update the plots and summary data tables.
 
-The **"Main"** section shows a single run of the model outcome using the default parameters. You can change the model options to better fit your campus characteristics. In addition, you can modify the intervention you wish to explore. And, you can change which output is visualized in the graphs. After selecting the parameters set in each model, the model will automatically update the plots and summary data tables.
+The **Sensitivity Analyses** tab allows users to select ranges for key parameters and simulate a series of models using probability sampling. This accounts for underlying parameter uncertainty in the model. Note that the parameter sampling distributions here differ than those in the paper (the app uses all uniform distributions) for simplicity of interactivity here.
 
-The **"Sensitivity analysis"** section allows you to select a range for some of the parameters and simulate multiple models using probability sampling. 
-
-The **"Raw Parameters"** section contains the default values for the model. The initial values are similar to the ones used in the paper. You can change them to explore different scenarios. **Warning**: *this is an advanced feature. Entering certain values will cause the model to not run or give implausible results. Be careful before you change any values on this page.*
+The **Raw Model Parameters** tab contains all the default values for the model. The initial values are similar to those in the paper. You can change them to explore different scenarios. *Warning:* this is an advanced feature; entering certain values will cause the model to not run or give implausible results. Users should be careful and understand the model structure before changing any values on this page.

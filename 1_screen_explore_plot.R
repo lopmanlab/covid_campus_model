@@ -16,14 +16,12 @@ param <- param.dcm(latent = latent,
                    testing = 0,
                    screening = 1/screen.int)
 mod <- dcm(param, init, control)
-mod <- mutate_epi(mod, I_stu = I_on + I_off,
+mod <- mutate_epi(mod, I_stu = I_on_sym + I_off_sym,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Q_stu = Q_on + Q_off,
                   Pcum_stu = Pcum_on + Pcum_off,
                   Qcum_stu = Qcum_on + Qcum_off)
-
-
 
 pal <- brewer_ramp(mod$control$nruns, "Spectral")
 dfweekly <- as.data.frame(mod, run = 1)
@@ -48,14 +46,11 @@ plot(mod, y = "Icum_stu", main = "Cumulative cases", col = pal, legend = FALSE,
      ylab = "", xlab = "")
 legend("topleft", legend = c("Weekly Screening", "Monthly Screening", "One-Time Screening"), lwd = 3,
        col = c(pal[1], pal[4], pal[length(pal)]), bty = "n", cex = 0.8)
-plot(mod, y = "I_saf", col = pal, legend = FALSE,
-     ylab = "Staff/Faculty cases", xlab = "Time (Days)",
-     ylim = c(0, max(mod$epi$I_stu)))
+plot(mod, y = "I_saf_sym", col = pal, legend = FALSE,
+     ylab = "Staff/Faculty cases", xlab = "Time (Days)")
 plot(mod, y = "Icum_saf", col = pal, legend = FALSE,
-     ylab = "", xlab = "Time (Days)",
-     ylim = c(0, max(mod$epi$Icum_stu)))
-plot(dfLast$scrInt, dfLast$Icum_stu, type = "l", lwd = 5, col = pal[1],
-     ylim = c(0, max(dfLast$Icum_stu)),
+     ylab = "", xlab = "Time (Days)")
+plot(dfLast$scrInt, dfLast$Icum_stu, type = "l", lwd = 5, col = pal[1], ylim = c(0,max(dfLast$Icum_stu)),
      ylab = "Cumulative Cases", xlab = "Screening Interval (Days)",
      main = "Cumulative Cases")
 lines(dfLast$scrInt, dfLast$Icum_saf, lwd = 5, col = pal[length(pal)])
@@ -76,7 +71,7 @@ param <- param.dcm(latent = latent,
                    testing = 0,
                    screening = 0)
 base<- dcm(param, init, control)
-base <- mutate_epi(base, I_stu = I_on + I_off,
+base <- mutate_epi(base, I_stu = I_on_sym + I_off_sym,
                    Icum_stu = Icum_on + Icum_off,
                    P_stu = P_on + P_off,
                    Q_stu = Q_on + Q_off,
