@@ -36,7 +36,7 @@ df <- select(df, c(-run, -time))
 dfLast <- filter(df, date == "2020-12-20")
 
 #tiff("Plots/1_screen_explore.tiff", units="in", width=6, height=5, res=300)
-m <- rbind(c(1,2,5), c(3, 4,5))
+m <- rbind(c(1,2,5), c(3,4,5))
 print(m)
 layout(m)
 par(mar = c(3,3,2,1), mgp = c(2,1,0))

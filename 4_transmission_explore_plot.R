@@ -34,6 +34,8 @@ par(mar = c(3,3,2,1), mgp = c(2,1,0))
 plot(mod, y = "I_stu", main = "Active Cases (Students)", col = pal, legend = FALSE, ylab = "Cases")
 plot(mod, y = "I_saf_sym", main = "Active Cases (Staff/faculty)", col = pal,
      ylim = c(0, max(mod$epi$I_stu)),legend = FALSE, ylab = "")
-legend("topleft", legend = c("No reduction" , "50% reduction", "No transmission"), lwd = 3,
-       col = c(pal[length(pal)], pal[6], pal[1]), bty = "n", cex = 0.6,)
+legend("topleft", legend = c("No reduction" , "70% reduction", "No transmission"), lwd = 3,
+       col = c(pal[length(pal)], pal[8], pal[1]), bty = "n", cex = 1)
+
 dev.off()
+

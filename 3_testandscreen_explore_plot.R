@@ -55,7 +55,7 @@ ggplot(dfLC, aes(test.int, screen.int)) +
 
 #  Here is another way of viewing the same results, but with test intervals specified at 2, 4, and 7 days. Screening has little effect unless it is performed at least monthly.
 
-tiff("Plots/3_testandscreen_explore.tiff", units="in", width=6, height=5, res=300)
+tiff("Plots/3_testandscreen_explore.tiff", units="in", width=6, height=2, res=300)
 dfLc0t2 <- filter(dfL, contacts.reached == 0 & test.int == 2)
 dfLc0t4 <- filter(dfL, contacts.reached == 0 & test.int == 4)
 dfLc0t7 <- filter(dfL, contacts.reached == 0 & test.int == 7)
@@ -68,18 +68,20 @@ dfLc5t2 <- filter(dfL, contacts.reached == 1 & test.int == 2)
 dfLc5t4 <- filter(dfL, contacts.reached == 1 & test.int == 4)
 dfLc5t7 <- filter(dfL, contacts.reached == 1 & test.int == 7)
 
-pal <- RColorBrewer::brewer.pal(3, "Set1")
+#pal <- RColorBrewer::brewer.pal(1, "Spectral")
+pal <- brewer_ramp(3, "Spectral")
+
 par(mfrow = c(1,3), mar = c(3,3,2,1), mgp = c(2,1,0))
 plot(dfLc0t2$screen.int, dfLc0t2$Icum_stu, ylim = c(0, max(dfLc0t7$Icum_stu)), type = "b",
      lwd = 1.5, col = pal[1], pch = 20, main = "0% contacts traced",
-     xlab = "Screening Interval", ylab = "Cumulative Student Cases")
+     xlab = "Screening Interval (days)", ylab = "Cumulative Student Cases")
 lines(dfLc0t4$screen.int, dfLc0t4$Icum_stu, type = "b", lwd = 1.5, col = pal[2], pch = 20)
 lines(dfLc0t7$screen.int, dfLc0t7$Icum_stu, type = "b", lwd = 1.5, col = pal[3], pch = 20)
 abline(v = c(7,30))
 
 plot(dfLc1t2$screen.int, dfLc1t2$Icum_stu, ylim = c(0, max(dfLc0t7$Icum_stu)), type = "b",
      lwd = 1.5, col = pal[1], pch = 20, main = "50% contacts traced",
-     xlab = "Screening Interval", ylab = "")
+     xlab = "Screening Interval (days)", ylab = "")
 lines(dfLc1t4$screen.int, dfLc1t4$Icum_stu, type = "b", lwd = 1.5, col = pal[2], pch = 20)
 lines(dfLc1t7$screen.int, dfLc1t7$Icum_stu, type = "b", lwd = 1.5, col = pal[3], pch = 20)
 abline(v = c(7,30))
