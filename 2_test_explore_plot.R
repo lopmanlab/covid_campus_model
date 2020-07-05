@@ -95,17 +95,16 @@ dfL2 <- filter(dfL, test.int == 2)
 dfL4 <- filter(dfL, test.int == 4)
 dfL7 <- filter(dfL, test.int == 7)
 
-pal <- RColorBrewer::brewer.pal(3, "Set1")
 plot(dfL2$contacts.reached, dfL2$Icum_stu, type = "b", col = pal[1], lwd = 1.5, pch = 20,
      ylim = c(0, max(dfL7$Icum_stu)), xlab = "", ylab = "",
      main = "Cumulative Cases")
-lines(dfL4$contacts.reached, dfL4$Icum_stu, type = "b", col = pal[3], lwd = 1.5, pch = 20)
-lines(dfL7$contacts.reached, dfL7$Icum_stu, type = "b", col = pal[2], lwd = 1.5, pch = 20)
+lines(dfL4$contacts.reached, dfL4$Icum_stu, type = "b", col = pal[2], lwd = 1.5, pch = 20)
+lines(dfL7$contacts.reached, dfL7$Icum_stu, type = "b", col = pal[3], lwd = 1.5, pch = 20)
 
 plot(dfL2$contacts.reached, dfL2$Icum_saf, type = "b", col = pal[1], lwd = 1.5, pch = 20,
      ylim = c(0, max(dfL7$Icum_stu)), xlab = "Prop. Contacts Reached",ylab = "")
-lines(dfL4$contacts.reached, dfL4$Icum_saf, type = "b", col = pal[3], lwd = 1.5, pch = 20)
-lines(dfL7$contacts.reached, dfL7$Icum_saf, type = "b", col = pal[2], lwd = 1.5, pch = 20)
+lines(dfL4$contacts.reached, dfL4$Icum_saf, type = "b", col = pal[2], lwd = 1.5, pch = 20)
+lines(dfL7$contacts.reached, dfL7$Icum_saf, type = "b", col = pal[3], lwd = 1.5, pch = 20)
 legend("topright", legend = c("2-Day Test Delay", "4-Day Test Delay", "7-Day Test Delay"), lwd = 3,
         bty = "n", col = c(pal[1], pal[3], pal[2]), cex = 0.8)
 
