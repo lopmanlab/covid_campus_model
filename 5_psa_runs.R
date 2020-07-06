@@ -14,7 +14,7 @@
 knitr::opts_chunk$set(echo = TRUE)
 # Load dependencies, functions and parameters
 source("99_dependencies.R")
-source("99_model_func_v2.R")
+source("99_model_func.R")
 source("99_parm_init_control.R")
 source("99_psa_optimizedistr.R")
 source("99_psa_parm.R")   #Note this overwrites initial parameters from parm_init_control
@@ -41,6 +41,7 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
                    testing = 0,
                    screening = 0)
 
@@ -75,6 +76,7 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
                    testing = 1/4,
                    screening = 0)
 
@@ -109,6 +111,7 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
                    testing = 0,
                    screening = 1/30)
 
@@ -143,6 +146,7 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
                    testing = 1/4,
                    screening = 1/30)
 
@@ -179,11 +183,11 @@ p4 <- psa_plot(list_res[[4]], title1= "Active cases-Comb. test & screen", title2
 
 # Arrange plots for output
 
-tiff("Plots/5_psa_plots1.tiff", units="in", width=6, height=5, res=300)
+tiff("Plots/5_psa_plots12.tiff", units="in", width=6, height=5, res=300)
 grid.arrange(p1[[1]]+rremove("legend"),p1[[2]]+rremove("legend"),p2[[1]]+rremove("legend"),p2[[2]]+rremove("legend"))
 dev.off()
 
-tiff("Plots/5_psa_plots2.tiff", units="in", width=6, height=5, res=300)
+tiff("Plots/5_psa_plots22.tiff", units="in", width=6, height=5, res=300)
 grid.arrange(p3[[1]]+rremove("legend"),p3[[2]]+rremove("legend"),p4[[1]]+rremove("legend"),p4[[2]]+rremove("legend"))
 dev.off()
 
@@ -266,6 +270,7 @@ variable <- data.frame(R0_StoS = R0_student_to_student.int,
                 R0_OntoOn = R0_on_to_on.int,
                 R0_saf = R0_saf.int,
                 comm = community.int,
+                eff_npi = eff_npi.int,
                 asympt_stu = p_asympt_stu.int,
                 asympt_saf = p_asympt_saf.int,
                 contacts = contacts.int,
@@ -276,7 +281,7 @@ variable <- data.frame(R0_StoS = R0_student_to_student.int,
                 infectious = infectious.int)
 
 variable_name <- c("R0 student to student","R0 on campus student to on campus student","R0 students to staff",
-                   "Community introduction","Prop. asymptomatic (students)","Prop. asymptomatic (staff)",
+                   "Community introduction","Efficacy of NPI","Prop. asymptomatic (students)","Prop. asymptomatic (staff)",
                    "No. contacts per case","Proportion contacts reached","Proportion with ILI symptoms per month",
                    "PCR sensitivity","Latent period (days)", "Infectious period (days)")
 
@@ -287,11 +292,11 @@ for (i in 1:ncol(results)){
 }
 
 df_res<-as.data.frame(do.call(rbind,pcc_res)) %>% select(original)
-df_res$output <-rep(rep(c("stud","staff"),each =12),1)
+df_res$output <-rep(rep(c("stud","staff"),each =13),1)
 df_res$output <-as.factor(df_res$output)
 df_res$var<-rep(colnames(variable),2)
 
-tiff("Plots/5_prcc.tiff", units="in", width=7, height=5, res=300)
+tiff("Plots/5_prcc2.tiff", units="in", width=7, height=5, res=300)
 ggplot(data=df_res, aes(x= var,y = original,fill=output)) +
   geom_bar(position="dodge",stat="identity") +
   scale_fill_grey()+
