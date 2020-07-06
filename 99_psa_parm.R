@@ -1,6 +1,6 @@
 set.seed(234567)
-total.set.size <- 500
-l <- randomLHS(total.set.size, 16)
+total.set.size <- 1000
+l <- randomLHS(total.set.size, 17)
 
 # Uniform distributions
 R0_s_s <- c(p_tab$Lower[which(p_tab$Var=="R0_student_to_student")],p_tab$Upper[which(p_tab$Var=="R0_student_to_student")]) # number of other students that a student infects, on average
@@ -25,6 +25,8 @@ p_death_saf <- betaExpert(best = p_tab$Value[which(p_tab$Var=="p_death_saf")], l
 
 sensitivity <- betaExpert(best = p_tab$Value[which(p_tab$Var=="sensitivity")], lower=p_tab$Lower[which(p_tab$Var=="sensitivity")], upper= p_tab$Upper[which(p_tab$Var=="sensitivity")], p=0.95, method = "mean")
 
+eff_npi <- betaExpert(best = p_tab$Value[which(p_tab$Var=="eff_npi")],lower=p_tab$Lower[which(p_tab$Var=="eff_npi")],upper=p_tab$Upper[which(p_tab$Var=="eff_npi")],p=0.95, method="mean")
+
 # gamma distributions
 latent <-getdistr_parms(int.quantiles = c(2,4), int.mean = 3, starting.params = c(32, 11), distrib = "gamma")
 infectious_beta <-getdistr_parms(int.quantiles = c(6,8), int.mean = 7, starting.params = c(32, 11), distrib = "gamma")
@@ -34,6 +36,7 @@ R0_student_to_student.int <-round((l[,1]*(R0_s_s[2]-R0_s_s[1]))+R0_s_s[1],3)
 R0_on_to_on.int <- round((l[,2]*(R0_o_o[2]-R0_o_o[1]))+R0_o_o[1],3)
 R0_saf.int <-round((l[,3]*(R0_sa[2]-R0_sa[1]))+R0_sa[1],3)
 community.int <- qbeta(l[,4],community$alpha,community$beta)
+
 
 p_asympt_stu.int <- qbeta(l[,5],p_asympt_stu$alpha,p_asympt_stu$beta)
 p_asympt_saf.int <- qbeta(l[,6],p_asympt_saf$alpha,p_asympt_saf$beta)
@@ -53,6 +56,9 @@ p_hosp_saf.int <- qbeta(l[,14],p_hosp_saf$alpha,p_hosp_saf$beta)
 p_death_stu.int <-qbeta(l[,15],p_death_stu$alpha,p_death_stu$beta)
 p_death_saf.int <- qbeta(l[,16],p_death_saf$alpha,p_death_saf$beta)
 
+eff_npi.int <- qbeta(l[,17],eff_npi$alpha, eff_npi$beta)
+
 beta_student_to_student.int=R0_student_to_student.int/infectious
 beta_on_to_on.int = R0_on_to_on.int/infectious
 beta_saf.int = R0_saf.int/infectious
+
