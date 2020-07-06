@@ -55,6 +55,7 @@ ui <- dashboardPage(
                 numericInput("N_on", name2lab("N_on", all_labs), 4500),
                 numericInput("E_on", name2lab("E_on", all_labs), 0),
                 numericInput("I_on", name2lab("I_on", all_labs), 0),
+                numericInput("Isym_on", name2lab("Isym_on", all_labs), 0),
                 numericInput("P_on", name2lab("P_on", all_labs), 0),
                 numericInput("R_on", name2lab("R_on", all_labs), 0),
                 numericInput("Q_on", name2lab("Q_on", all_labs), 0)
@@ -65,6 +66,7 @@ ui <- dashboardPage(
                 numericInput("N_off", name2lab("N_off", all_labs), 10500),
                 numericInput("E_off", name2lab("E_off", all_labs), 0),
                 numericInput("I_off", name2lab("I_off", all_labs), 0),
+                numericInput("Isym_off", name2lab("Isym_off", all_labs), 0),
                 numericInput("P_off", name2lab("P_off", all_labs), 0),
                 numericInput("R_off", name2lab("R_off", all_labs), 0),
                 numericInput("Q_off", name2lab("Q_off", all_labs), 0),
@@ -76,6 +78,7 @@ ui <- dashboardPage(
                 numericInput("N_saf", name2lab("N_saf", all_labs), 20000),
                 numericInput("E_saf", name2lab("E_saf", all_labs), 0),
                 numericInput("I_saf", name2lab("I_saf", all_labs), 0),
+                numericInput("Isym_saf", name2lab("Isym_saf", all_labs), 0),
                 numericInput("P_saf", name2lab("P_saf", all_labs), 0),
                 numericInput("R_saf", name2lab("R_saf", all_labs), 0),
                 numericInput("Q_saf", name2lab("Q_saf", all_labs), 0)
@@ -132,6 +135,8 @@ ui <- dashboardPage(
                   ## numericInput("screening", name2lab("screening", all_labs), 0),
                   numericInput("sensitivity",
                                name2lab("sensitivity", all_labs), 0.8),
+                  numericInput("eff_npi",
+                               name2lab("eff_npi", all_labs), 0.3),
                   sliderInput("nsteps", name2lab("nsteps", all_labs), 0, 365, 180)
                 )
               )
