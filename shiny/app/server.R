@@ -261,7 +261,7 @@ server <- function(input, output, session) {
     if (input$mainPlot_test_int == 0 && input$mainPlot_screen_int == 0) {
       df <- tibble()
     } else {
-      param <- param()
+      param <- param_base()
       param$testing <- interval2rate(input$mainPlot_test_int)
       param$screening <- interval2rate(input$mainPlot_screen_int)
 
@@ -396,6 +396,7 @@ server <- function(input, output, session) {
     update_init_vals_pattern("baseIni_", input, session)
     update_init_vals_pattern("basePar_", input, session)
     updateSliderInput(session, "baseCon_nsteps", value = input$nsteps)
+    updateSliderInput(session, "basePar_eff_npi", value = input$npi)
   })
 
 # sens -----------------------------------------------------------------------
@@ -454,7 +455,7 @@ server <- function(input, output, session) {
                 name2lab("Plot_measures", all_labs),
                 choiceValues = names(cp_labs),
                 choiceNames = unname(cp_labs),
-                selected = c("I", "Icum")
+                selected = c("Isym")
               )
             )
           )
