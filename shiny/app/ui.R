@@ -18,8 +18,6 @@ ui <- dashboardPage(
     tabItems(
       tabItem(
         tabName = "text",
-        uiOutput("disclaimerText"),
-        checkboxInput("agreement", "I agree to the terms and conditions", value = FALSE, width = NULL),
         uiOutput("introductionText")
       ),
       tabItem(

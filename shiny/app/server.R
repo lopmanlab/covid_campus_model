@@ -2,6 +2,17 @@ source("R/model_func.R")
 
 server <- function(input, output, session) {
 
+  showModal(
+    modalDialog(
+      title = "Disclaimer",
+      "In order to use this app you must accept its ",
+      a(href = "TERMS OF USE AND DISCLAIMER.pdf", "terms and conditions"),
+      easyClose = FALSE,
+      size = "l",
+      footer = modalButton("Agree and Proceed")
+    )
+  )
+
 # defaults -------------------------------------------------------------------
   param <- reactive({
     beta_student_to_student <- input$R0_student_to_student / input$infectious
@@ -108,114 +119,110 @@ server <- function(input, output, session) {
     reset <- input$reset_main
     res_main(runif(1))
 
-    if (input$agreement) {
-      list(
-        fluidRow(
-          column(
-            width = 12,
-            box(
-              width = NULL, title = name2lab("model_plots", all_labs),
-              status = "primary", solidHeader = TRUE,
+    list(
+      fluidRow(
+        column(
+          width = 12,
+          box(
+            width = NULL, title = name2lab("model_plots", all_labs),
+            status = "primary", solidHeader = TRUE,
 
-              column(
-                width = 10,
+            column(
+              width = 10,
 
-                plotlyOutput("mainPlot", height = 500)
+              plotlyOutput("mainPlot", height = 500)
+            ),
+            column(
+              width = 2,
+              checkboxGroupInput(
+                "mainPlot_pop", name2lab("Plot_pop", all_labs),
+                choiceValues = names(pop_labs),
+                choiceNames = unname(pop_labs),
+                selected = c("stu", "saf")
               ),
-              column(
-                width = 2,
-                checkboxGroupInput(
-                  "mainPlot_pop", name2lab("Plot_pop", all_labs),
-                  choiceValues = names(pop_labs),
-                  choiceNames = unname(pop_labs),
-                  selected = c("stu", "saf")
-                ),
-                checkboxGroupInput(
-                  "mainPlot_measures",
-                  name2lab("Plot_measures", all_labs),
-                  choiceValues = names(cp_labs),
-                  choiceNames = unname(cp_labs),
-                  selected = c("Isym")
-                )
+              checkboxGroupInput(
+                "mainPlot_measures",
+                name2lab("Plot_measures", all_labs),
+                choiceValues = names(cp_labs),
+                choiceNames = unname(cp_labs),
+                selected = c("Isym")
               )
-            )
-          )
-        ),
-        fluidRow(
-          column(
-            width = 6,
-            box(
-              width = NULL, title = name2lab("model_summary", all_labs),
-              status = "primary", solidHeader = TRUE,
-
-              tableOutput("mainTable")
-            ),
-            ),
-          column(
-            width = 6,
-            box(
-              width = NULL, title = name2lab("model_scenario", all_labs),
-              status = "primary", solidHeader = TRUE,
-
-              column(
-                width = 6,
-                sliderInput(
-                  "mainPlot_test_int",
-                  name2lab("test_int", all_labs),
-                  0, 28, 4
-                )
-              ),
-              column(
-                width = 6,
-                sliderInput(
-                  "mainPlot_screen_int",
-                  name2lab("screen_int", all_labs),
-                  0, 180, 30
-                )
-              )
-            ),
-            box(
-              width = NULL, title = name2lab("model_opts", all_labs),
-              status = "primary", solidHeader = TRUE,
-
-              column(
-                width = 6,
-                numericInput("baseIni_N_off", name2lab("N_off", all_labs), 0),
-                numericInput("baseIni_N_saf", name2lab("N_saf", all_labs), 0)
-              ),
-              column(
-                width = 6,
-                numericInput("baseIni_N_on", name2lab("N_on", all_labs), 0),
-                sliderInput(
-                  "baseCon_nsteps",
-                  name2lab("nsteps", all_labs),
-                  0, 365, 180
-                )
-              ),
-              # action buttons
-              fluidRow(
-                column(
-                  width = 6,
-                  downloadButton("mainDL", name2lab("dl_btn", all_labs))
-                ),
-                column(
-                  width = 6,
-                  actionButton("reset_main", name2lab("reset_button", all_labs))
-                )
-              )
-            ),
-            box(
-              width = NULL, title = name2lab("model_opts_trans", all_labs),
-              status = "primary", solidHeader = TRUE,
-
-              sliderInput("basePar_eff_npi", name2lab("eff_npi", all_labs), 0, 1, 0.3)
             )
           )
         )
+      ),
+      fluidRow(
+        column(
+          width = 6,
+          box(
+            width = NULL, title = name2lab("model_summary", all_labs),
+            status = "primary", solidHeader = TRUE,
+
+            tableOutput("mainTable")
+          ),
+          ),
+        column(
+          width = 6,
+          box(
+            width = NULL, title = name2lab("model_scenario", all_labs),
+            status = "primary", solidHeader = TRUE,
+
+            column(
+              width = 6,
+              sliderInput(
+                "mainPlot_test_int",
+                name2lab("test_int", all_labs),
+                0, 28, 4
+              )
+            ),
+            column(
+              width = 6,
+              sliderInput(
+                "mainPlot_screen_int",
+                name2lab("screen_int", all_labs),
+                0, 180, 30
+              )
+            )
+          ),
+          box(
+            width = NULL, title = name2lab("model_opts", all_labs),
+            status = "primary", solidHeader = TRUE,
+
+            column(
+              width = 6,
+              numericInput("baseIni_N_off", name2lab("N_off", all_labs), 0),
+              numericInput("baseIni_N_saf", name2lab("N_saf", all_labs), 0)
+            ),
+            column(
+              width = 6,
+              numericInput("baseIni_N_on", name2lab("N_on", all_labs), 0),
+              sliderInput(
+                "baseCon_nsteps",
+                name2lab("nsteps", all_labs),
+                0, 365, 180
+              )
+            ),
+            # action buttons
+            fluidRow(
+              column(
+                width = 6,
+                downloadButton("mainDL", name2lab("dl_btn", all_labs))
+              ),
+              column(
+                width = 6,
+                actionButton("reset_main", name2lab("reset_button", all_labs))
+              )
+            )
+          ),
+          box(
+            width = NULL, title = name2lab("model_opts_trans", all_labs),
+            status = "primary", solidHeader = TRUE,
+
+            sliderInput("basePar_eff_npi", name2lab("eff_npi", all_labs), 0, 1, 0.3)
+          )
+        )
       )
-    } else {
-      list()
-    }
+    )
   })
 
   param_base <- reactive({
@@ -413,231 +420,227 @@ server <- function(input, output, session) {
     reset <- input$reset_sens
     res_sens(runif(1))
 
-    if (input$agreement) {
-      list(
-        fluidRow(
-          column(
-            width = 12,
-            box(
-              width = NULL, title = "Run Sensitivity Analysis",
-              status = "primary", solidHeader = TRUE,
+    list(
+      fluidRow(
+        column(
+          width = 12,
+          box(
+            width = NULL, title = "Run Sensitivity Analysis",
+            status = "primary", solidHeader = TRUE,
 
-              column(
-                width = 2,
-                p(strong("Run New Simulations")),
-                actionButton("sens_run", "Run")
-              ),
-              column(
-                width = 4,
-                numericInput("sens_set_size", "Number of Samples", 50)
-              ),
-              column(
-                width = 6,
-                uiOutput("sensText")
-              )
+            column(
+              width = 2,
+              p(strong("Run New Simulations")),
+              actionButton("sens_run", "Run")
+            ),
+            column(
+              width = 4,
+              numericInput("sens_set_size", "Number of Samples", 50)
+            ),
+            column(
+              width = 6,
+              uiOutput("sensText")
             )
           )
-        ),
-        fluidRow(
-          column(
-            width = 12,
-            box(
-              width = NULL, title = name2lab("model_plots", all_labs),
-              status = "primary", solidHeader = TRUE,
+        )
+      ),
+      fluidRow(
+        column(
+          width = 12,
+          box(
+            width = NULL, title = name2lab("model_plots", all_labs),
+            status = "primary", solidHeader = TRUE,
 
-              column(
-                width = 10,
+            column(
+              width = 10,
 
-                plotlyOutput("sensPlot", height = 500),
-                ),
-              column(
-                width = 2,
-                checkboxGroupInput(
-                  "sensPlot_pop",
-                  name2lab("Plot_pop", all_labs),
-                  choiceValues = names(pop_labs),
-                  choiceNames = unname(pop_labs),
-                  selected = c("stu", "saf")
-                ),
-                checkboxGroupInput(
-                  "sensPlot_measures",
-                  name2lab("Plot_measures", all_labs),
-                  choiceValues = names(cp_labs),
-                  choiceNames = unname(cp_labs),
-                  selected = c("Isym")
-                )
-              )
-            )
-          )
-        ),
-        fluidRow(
-          column(
-            width = 6,
-            box(
-              width = NULL, title = name2lab("model_summary", all_labs),
-              status = "primary", solidHeader = TRUE,
-
-              tableOutput("sensTable")
-            ),
-            ),
-          column(
-            width = 6,
-            box(
-              width = NULL, title = name2lab("model_scenario", all_labs),
-              status = "primary", solidHeader = TRUE,
-
-              column(
-                width = 6,
-                sliderInput(
-                  "sensPlot_test_int",
-                  name2lab("test_int", all_labs),
-                  0, 28, 4
-                )
+              plotlyOutput("sensPlot", height = 500),
               ),
-              column(
-                width = 6,
-                sliderInput(
-                  "sensPlot_screen_int",
-                  name2lab("screen_int", all_labs),
-                  0, 180, 30
-                )
-              )
-            ),
-            box(
-              width = NULL, title = name2lab("model_opts", all_labs),
-              status = "primary", solidHeader = TRUE,
-
-              column(
-                width = 6,
-                numericInput("sensIni_N_off", name2lab("N_off", all_labs), 0),
-                numericInput("sensIni_N_saf", name2lab("N_saf", all_labs), 0),
-                downloadButton("sensDL", name2lab("dl_btn", all_labs))
+            column(
+              width = 2,
+              checkboxGroupInput(
+                "sensPlot_pop",
+                name2lab("Plot_pop", all_labs),
+                choiceValues = names(pop_labs),
+                choiceNames = unname(pop_labs),
+                selected = c("stu", "saf")
               ),
-              column(
-                width = 6,
-                numericInput("sensIni_N_on", name2lab("N_on", all_labs), 0),
-                sliderInput(
-                  "sensCon_nsteps",
-                  name2lab("nsteps", all_labs),
-                  0, 365, 180
-                ),
-                actionButton("reset_sens", name2lab("reset_button", all_labs))
-              )
-            )
-          )
-        ),
-        fluidRow(
-          column(
-            width = 12,
-            box(
-              width = NULL, title = name2lab("model_range", all_labs),
-              status = "primary", solidHeader = TRUE,
-              column(
-                width = 3,
-                sliderInput(
-                  "sensRange_R0_student_to_student",
-                  name2lab("R0_student_to_student", all_labs),
-                  0, 10, c(0.7, 2.5)
-                ),
-                sliderInput(
-                  "sensRange_R0_on_to_on",
-                  name2lab("R0_on_to_on", all_labs),
-                  0, 10, c(0.3, 1.4)
-                ),
-                sliderInput(
-                  "sensRange_R0_saf",
-                  name2lab("R0_saf", all_labs),
-                  0, 10, c(0.15, 0.7)
-                ),
-                sliderInput(
-                  "sensRange_community",
-                  name2lab("community", all_labs),
-                  0, 0.01, c(0.00025, 0.001)
-                ),
-                sliderInput(
-                  "sensRange_eff_npi",
-                  name2lab("eff_npi", all_labs),
-                  0, 1, c(0.2, 0.4))
-              ),
-              column(
-                width = 3,
-                sliderInput(
-                  "sensRange_latent",
-                  name2lab("latent", all_labs),
-                  0, 28, c(2, 4)
-                ),
-                sliderInput(
-                  "sensRange_infectious",
-                  name2lab("infectious", all_labs),
-                  0, 28, c(6, 8)
-                ),
-                sliderInput(
-                  "sensRange_contacts",
-                  name2lab("contacts", all_labs),
-                  0, 50 , c(4, 24)
-                ),
-                sliderInput(
-                  "sensRange_p_contacts_reached",
-                  name2lab("p_contacts_reached", all_labs),
-                  0, 1 , c(0.5, 1)
-                )
-              ),
-              column(
-                width = 3,
-                sliderInput(
-                  "sensRange_p_asympt_stu",
-                  name2lab("p_asympt_stu", all_labs),
-                  0, 1 , c(0.27, 0.43)
-                ),
-                sliderInput(
-                  "sensRange_p_hosp_stu",
-                  name2lab("p_hosp_stu", all_labs),
-                  0, 0.1 , c(0.01, 0.03)
-                ),
-                sliderInput(
-                  "sensRange_p_death_stu",
-                  name2lab("p_death_stu", all_labs),
-                  0, 0.01 , c(0.0003, 0.0009)
-                ),
-                sliderInput(
-                  "sensRange_sensitivity",
-                  name2lab("sensitivity", all_labs),
-                  0, 1 , c(0.75, 0.85)
-                )
-              ),
-              column(
-                width = 3,
-                sliderInput(
-                  "sensRange_p_asympt_saf",
-                  name2lab("p_asympt_saf", all_labs),
-                  0, 1 , c(0.41, 0.59)
-                ),
-                sliderInput(
-                  "sensRange_p_hosp_saf",
-                  name2lab("p_hosp_saf", all_labs),
-                  0, 0.1 , c(0.03, 0.07)
-                ),
-                sliderInput(
-                  "sensRange_p_death_saf",
-                  name2lab("p_death_saf", all_labs),
-                  0, 0.01 , c(0.0029, 0.0075)
-                ),
-                sliderInput(
-                  "sensRange_ili",
-                  name2lab("ili", all_labs),
-                  0.002, 0.005 , c(0.003, 0.004)
-                )
-              ),
-              fluidRow(
-                box(width = 12, uiOutput("sensRangeText"))
+              checkboxGroupInput(
+                "sensPlot_measures",
+                name2lab("Plot_measures", all_labs),
+                choiceValues = names(cp_labs),
+                choiceNames = unname(cp_labs),
+                selected = c("Isym")
               )
             )
           )
         )
+      ),
+      fluidRow(
+        column(
+          width = 6,
+          box(
+            width = NULL, title = name2lab("model_summary", all_labs),
+            status = "primary", solidHeader = TRUE,
+
+            tableOutput("sensTable")
+          ),
+          ),
+        column(
+          width = 6,
+          box(
+            width = NULL, title = name2lab("model_scenario", all_labs),
+            status = "primary", solidHeader = TRUE,
+
+            column(
+              width = 6,
+              sliderInput(
+                "sensPlot_test_int",
+                name2lab("test_int", all_labs),
+                0, 28, 4
+              )
+            ),
+            column(
+              width = 6,
+              sliderInput(
+                "sensPlot_screen_int",
+                name2lab("screen_int", all_labs),
+                0, 180, 30
+              )
+            )
+          ),
+          box(
+            width = NULL, title = name2lab("model_opts", all_labs),
+            status = "primary", solidHeader = TRUE,
+
+            column(
+              width = 6,
+              numericInput("sensIni_N_off", name2lab("N_off", all_labs), 0),
+              numericInput("sensIni_N_saf", name2lab("N_saf", all_labs), 0),
+              downloadButton("sensDL", name2lab("dl_btn", all_labs))
+            ),
+            column(
+              width = 6,
+              numericInput("sensIni_N_on", name2lab("N_on", all_labs), 0),
+              sliderInput(
+                "sensCon_nsteps",
+                name2lab("nsteps", all_labs),
+                0, 365, 180
+              ),
+              actionButton("reset_sens", name2lab("reset_button", all_labs))
+            )
+          )
+        )
+      ),
+      fluidRow(
+        column(
+          width = 12,
+          box(
+            width = NULL, title = name2lab("model_range", all_labs),
+            status = "primary", solidHeader = TRUE,
+            column(
+              width = 3,
+              sliderInput(
+                "sensRange_R0_student_to_student",
+                name2lab("R0_student_to_student", all_labs),
+                0, 10, c(0.7, 2.5)
+              ),
+              sliderInput(
+                "sensRange_R0_on_to_on",
+                name2lab("R0_on_to_on", all_labs),
+                0, 10, c(0.3, 1.4)
+              ),
+              sliderInput(
+                "sensRange_R0_saf",
+                name2lab("R0_saf", all_labs),
+                0, 10, c(0.15, 0.7)
+              ),
+              sliderInput(
+                "sensRange_community",
+                name2lab("community", all_labs),
+                0, 0.01, c(0.00025, 0.001)
+              ),
+              sliderInput(
+                "sensRange_eff_npi",
+                name2lab("eff_npi", all_labs),
+                0, 1, c(0.2, 0.4))
+            ),
+            column(
+              width = 3,
+              sliderInput(
+                "sensRange_latent",
+                name2lab("latent", all_labs),
+                0, 28, c(2, 4)
+              ),
+              sliderInput(
+                "sensRange_infectious",
+                name2lab("infectious", all_labs),
+                0, 28, c(6, 8)
+              ),
+              sliderInput(
+                "sensRange_contacts",
+                name2lab("contacts", all_labs),
+                0, 50 , c(4, 24)
+              ),
+              sliderInput(
+                "sensRange_p_contacts_reached",
+                name2lab("p_contacts_reached", all_labs),
+                0, 1 , c(0.5, 1)
+              )
+            ),
+            column(
+              width = 3,
+              sliderInput(
+                "sensRange_p_asympt_stu",
+                name2lab("p_asympt_stu", all_labs),
+                0, 1 , c(0.27, 0.43)
+              ),
+              sliderInput(
+                "sensRange_p_hosp_stu",
+                name2lab("p_hosp_stu", all_labs),
+                0, 0.1 , c(0.01, 0.03)
+              ),
+              sliderInput(
+                "sensRange_p_death_stu",
+                name2lab("p_death_stu", all_labs),
+                0, 0.01 , c(0.0003, 0.0009)
+              ),
+              sliderInput(
+                "sensRange_sensitivity",
+                name2lab("sensitivity", all_labs),
+                0, 1 , c(0.75, 0.85)
+              )
+            ),
+            column(
+              width = 3,
+              sliderInput(
+                "sensRange_p_asympt_saf",
+                name2lab("p_asympt_saf", all_labs),
+                0, 1 , c(0.41, 0.59)
+              ),
+              sliderInput(
+                "sensRange_p_hosp_saf",
+                name2lab("p_hosp_saf", all_labs),
+                0, 0.1 , c(0.03, 0.07)
+              ),
+              sliderInput(
+                "sensRange_p_death_saf",
+                name2lab("p_death_saf", all_labs),
+                0, 0.01 , c(0.0029, 0.0075)
+              ),
+              sliderInput(
+                "sensRange_ili",
+                name2lab("ili", all_labs),
+                0.002, 0.005 , c(0.003, 0.004)
+              )
+            ),
+            fluidRow(
+              box(width = 12, uiOutput("sensRangeText"))
+            )
+          )
+        )
       )
-    } else {
-      list()
-    }
+    )
   })
 
   lhs_param <- eventReactive(input$sens_run,{
