@@ -2,6 +2,17 @@ source("R/model_func.R")
 
 server <- function(input, output, session) {
 
+  showModal(
+    modalDialog(
+      title = "Disclaimer",
+      "In order to use this app you must accept its ",
+      a(href = "TERMS OF USE AND DISCLAIMER.pdf", "terms and conditions"),
+      easyClose = FALSE,
+      size = "l",
+      footer = modalButton("Agree and Proceed")
+    )
+  )
+
 # defaults -------------------------------------------------------------------
   param <- reactive({
     beta_student_to_student <- input$R0_student_to_student / input$infectious
@@ -107,6 +118,7 @@ server <- function(input, output, session) {
   output$ui_main <- renderUI({
     reset <- input$reset_main
     res_main(runif(1))
+
     list(
       fluidRow(
         column(
@@ -148,7 +160,7 @@ server <- function(input, output, session) {
 
             tableOutput("mainTable")
           ),
-        ),
+          ),
         column(
           width = 6,
           box(
@@ -211,7 +223,6 @@ server <- function(input, output, session) {
         )
       )
     )
-
   })
 
   param_base <- reactive({
@@ -386,6 +397,9 @@ server <- function(input, output, session) {
       kable_sum()
   }
 
+  output$disclaimerText <- renderUI({
+    includeMarkdown("disclaimerText.Rmd")
+  })
 
   output$introductionText <- renderUI({
     includeMarkdown("introductionText.Rmd")
@@ -405,6 +419,7 @@ server <- function(input, output, session) {
   output$ui_sens <- renderUI({
     reset <- input$reset_sens
     res_sens(runif(1))
+
     list(
       fluidRow(
         column(
@@ -626,7 +641,6 @@ server <- function(input, output, session) {
         )
       )
     )
-
   })
 
   lhs_param <- eventReactive(input$sens_run,{
