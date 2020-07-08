@@ -18,7 +18,7 @@ The **Sensitivity Analyses** tab allows users to select ranges for key parameter
 
 The **Raw Model Parameters** tab contains all the default values for the model. The initial values are similar to those in the paper. You can change them to explore different scenarios. *Warning:* this is an advanced feature; entering certain values will cause the model to not run or give implausible results. Users should be careful and understand the model structure before changing any values on this page.
 
-### Terms and Disclaimer
+### Terms and Conditions
 
 
-Using this application indicates you agree with its [Terms and Conditions](TERMS OF USE AND DISCLAIMER.pdf)
+Using this application indicates you agree with its [Terms and Conditions](TERMSOFUSEANDDISCLAIMER.pdf).
