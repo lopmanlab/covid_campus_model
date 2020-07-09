@@ -65,6 +65,7 @@ compartment_labs <- c(
   "S"    = "Susceptible",
   "E"    = "Latent",
   "I"    = "Infectious",
+  "Isym"    = "Symptomatic",
   "P"    = "Isolated",
   "R"    = "Recovered",
   "Icum" = "Infectious (Cumulative)",
@@ -126,6 +127,7 @@ all_labs <- c(
   "R0_student_to_student" = "R0 #1: Number of Students Infected by Each Student",
   "R0_on_to_on"           = "R0 #2: Number of Additional Students Infected by Students Living on Campus",
   "R0_saf"                = "R0 #3: Number of Students Infected by Staff/Faculty (and Staff/Faculty Infected by Students)",
+  "eff_npi"              = "Efficacy of Wearing Face Mask and Other Interventions",
   "community"             = "Daily Probability of Community Infection (Not Acquired on Campus)",
   "p_asympt_saf"          = paste0("Proportion of Asymptomatic - ", pop_labs["saf"]),
   "p_asympt_stu"          = paste0("Proportion of Asymptomatic - ", pop_labs["stu"]),
@@ -150,13 +152,13 @@ all_labs <- c(
   "model_summary"         = "Model Summary",
   "model_scenario"        = "Model Options - Intervention Parameters",
   "model_opts"            = "Model Options - Initial Campus Conditions",
-  "model_opts_trans"            = "Model Options - Transmission Parameters",
+  "model_opts_trans"      = "Model Options - Transmission Parameters",
   "dl_btn"                = "Download Raw Data as TSV",
   "model_range"           = "Parameter Ranges",
   "base_raw"              = "Raw Model Parameters",
   "base_param"            = "Model Parameters",
   "base_init"             = "Initial Conditions",
-  "reset_button"         = "Reset Inputs"
+  "reset_button"          = "Reset Inputs"
 )
 
 all_labs <- c(all_labs, cp_pop_labs, pop_labs, compartment_labs, summ_labs)

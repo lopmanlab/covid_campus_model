@@ -2,6 +2,17 @@ source("R/model_func.R")
 
 server <- function(input, output, session) {
 
+  showModal(
+    modalDialog(
+      title = "Disclaimer",
+      "In order to use this app you must accept its ",
+      a(href = "TERMSOFUSEANDDISCLAIMER.pdf", "Terms and Conditions."),
+      easyClose = FALSE,
+      size = "l",
+      footer = modalButton("Agree and Proceed")
+    )
+  )
+
 # defaults -------------------------------------------------------------------
   param <- reactive({
     beta_student_to_student <- input$R0_student_to_student / input$infectious
@@ -17,6 +28,7 @@ server <- function(input, output, session) {
       R0_on_to_on             = input$R0_on_to_on,
       R0_student_to_student   = input$R0_student_to_student,
       R0_saf                  = input$R0_saf,
+      eff_npi                 = input$eff_npi,
       beta_student_to_student = beta_student_to_student,
       beta_on_to_on           = beta_on_to_on,
       beta_saf                = beta_saf,
@@ -39,18 +51,22 @@ server <- function(input, output, session) {
       p_asympt_stu            = input$p_asympt_stu,
       p_asympt_saf            = input$p_asympt_saf,
       ili                     = input$ili,
-      N                       = N
+      N                       = N,
+      N_on                    = input$N_on,
+      N_off                   = input$N_off,
+      N_saf                   = input$N_saf
     )
   })
 
   init <- reactive({
-    N_off <- input$N_stu - input$N_on # Based on number on campus
+    ## N_off <- input$N_stu - input$N_on # Based on number on campus
 
     init.dcm(
       # S_on must be input that updates with E I R N
       S_on = input$N_on - (input$E_on + input$I_on + input$R_on), # number initially susceptible
       E_on = input$E_on, # number initially incubating
       I_on = input$I_on, # number initially infectious
+      Isym_on = input$Isym_on, # number initially symptomatic
       P_on = input$P_on, # number initially isolated
       R_on = input$R_on, # initially immune
       Icum_on = 0, # cumulative cases -- for counting incidence
@@ -63,6 +79,7 @@ server <- function(input, output, session) {
       S_off = input$N_off - (input$E_off + input$I_off + input$R_off),
       E_off = input$E_off,
       I_off = input$I_off,
+      Isym_off = input$Isym_off,
       P_off = input$P_off,
       R_off = input$R_off,
       Icum_off = 0,
@@ -75,6 +92,7 @@ server <- function(input, output, session) {
       S_saf = input$N_saf - (input$E_saf + input$I_saf + input$R_saf),
       E_saf = input$E_saf,
       I_saf = input$I_saf,
+      Isym_saf = input$Isym_saf,
       P_saf = input$P_saf,
       R_saf = input$R_saf,
       Icum_saf = 0,
@@ -100,6 +118,7 @@ server <- function(input, output, session) {
   output$ui_main <- renderUI({
     reset <- input$reset_main
     res_main(runif(1))
+
     list(
       fluidRow(
         column(
@@ -126,7 +145,7 @@ server <- function(input, output, session) {
                 name2lab("Plot_measures", all_labs),
                 choiceValues = names(cp_labs),
                 choiceNames = unname(cp_labs),
-                selected = c("I", "Icum")
+                selected = c("Isym")
               )
             )
           )
@@ -141,7 +160,7 @@ server <- function(input, output, session) {
 
             tableOutput("mainTable")
           ),
-        ),
+          ),
         column(
           width = 6,
           box(
@@ -199,24 +218,11 @@ server <- function(input, output, session) {
             width = NULL, title = name2lab("model_opts_trans", all_labs),
             status = "primary", solidHeader = TRUE,
 
-            column(
-              width = 6,
-              numericInput("basePar_R0_student_to_student",
-                           name2lab("R0_student_to_student", all_labs), 0),
-              numericInput("basePar_R0_saf", name2lab("R0_saf", all_labs), 0)
-            ),
-            column(
-              width = 6,
-              numericInput("basePar_R0_on_to_on",
-                           name2lab("R0_on_to_on", all_labs), 0),
-              numericInput("basePar_community",
-                           name2lab("community", all_labs), 0)
-            )
+            sliderInput("basePar_eff_npi", name2lab("eff_npi", all_labs), 0, 1, 0.3)
           )
         )
       )
     )
-
   })
 
   param_base <- reactive({
@@ -266,7 +272,7 @@ server <- function(input, output, session) {
     if (input$mainPlot_test_int == 0 && input$mainPlot_screen_int == 0) {
       df <- tibble()
     } else {
-      param <- param()
+      param <- param_base()
       param$testing <- interval2rate(input$mainPlot_test_int)
       param$screening <- interval2rate(input$mainPlot_screen_int)
 
@@ -286,13 +292,13 @@ server <- function(input, output, session) {
       filter(time == max(time)) %>%
       summarize(
         student_n = S_on + E_on + I_on +  P_on + R_on + Q_on - Dcum_on +
-                    S_off + E_off + I_off +  P_off + R_off + Q_off - Dcum_off,
+                    S_off + E_off + I_off +  P_off + R_off + Q_off - Dcum_off, #+ Isym_on + Isym_off,
         student_cases = Icum_on + Icum_off,
         student_hosps = Hcum_on + Hcum_off,
         student_isos = Pcum_on + Pcum_off,
         student_quas = Qcum_on + Qcum_off,
         student_deaths = Dcum_on + Dcum_off,
-        saf_n = S_saf + E_saf + I_saf +  P_saf + R_saf + Q_saf - Dcum_saf,
+        saf_n = S_saf + E_saf + I_saf +  P_saf + R_saf + Q_saf - Dcum_saf, #+ Isym_saf,
         saf_cases = Icum_saf,
         saf_hosps = Hcum_saf,
         saf_deaths = Dcum_saf,
@@ -391,6 +397,9 @@ server <- function(input, output, session) {
       kable_sum()
   }
 
+  output$disclaimerText <- renderUI({
+    includeMarkdown("disclaimerText.Rmd")
+  })
 
   output$introductionText <- renderUI({
     includeMarkdown("introductionText.Rmd")
@@ -401,6 +410,7 @@ server <- function(input, output, session) {
     update_init_vals_pattern("baseIni_", input, session)
     update_init_vals_pattern("basePar_", input, session)
     updateSliderInput(session, "baseCon_nsteps", value = input$nsteps)
+    updateSliderInput(session, "basePar_eff_npi", value = input$npi)
   })
 
 # sens -----------------------------------------------------------------------
@@ -409,6 +419,7 @@ server <- function(input, output, session) {
   output$ui_sens <- renderUI({
     reset <- input$reset_sens
     res_sens(runif(1))
+
     list(
       fluidRow(
         column(
@@ -459,7 +470,7 @@ server <- function(input, output, session) {
                 name2lab("Plot_measures", all_labs),
                 choiceValues = names(cp_labs),
                 choiceNames = unname(cp_labs),
-                selected = c("I", "Icum")
+                selected = c("Isym")
               )
             )
           )
@@ -548,7 +559,11 @@ server <- function(input, output, session) {
                 "sensRange_community",
                 name2lab("community", all_labs),
                 0, 0.01, c(0.00025, 0.001)
-              )
+              ),
+              sliderInput(
+                "sensRange_eff_npi",
+                name2lab("eff_npi", all_labs),
+                0, 1, c(0.2, 0.4))
             ),
             column(
               width = 3,
@@ -626,7 +641,6 @@ server <- function(input, output, session) {
         )
       )
     )
-
   })
 
   lhs_param <- eventReactive(input$sens_run,{
