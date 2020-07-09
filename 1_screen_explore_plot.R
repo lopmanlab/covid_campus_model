@@ -16,7 +16,7 @@ param <- param.dcm(latent = latent,
                    testing = 0,
                    screening = 1/screen.int)
 mod <- dcm(param, init, control)
-mod <- mutate_epi(mod, I_stu = I_on_sym + I_off_sym,
+mod <- mutate_epi(mod, I_stu = Isym_on + Isym_off,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Q_stu = Q_on + Q_off,
@@ -46,7 +46,7 @@ plot(mod, y = "Icum_stu", main = "Cumulative cases", col = pal, legend = FALSE,
      ylab = "", xlab = "")
 legend("topleft", legend = c("Weekly Screening", "Monthly Screening", "One-Time Screening"), lwd = 3,
        col = c(pal[1], pal[4], pal[length(pal)]), bty = "n", cex = 0.8)
-plot(mod, y = "I_saf_sym", col = pal, legend = FALSE,
+plot(mod, y = "Isym_saf", col = pal, legend = FALSE,
      ylab = "Staff/Faculty cases", xlab = "Time (Days)")
 plot(mod, y = "Icum_saf", col = pal, legend = FALSE,
      ylab = "", xlab = "Time (Days)")
@@ -71,7 +71,7 @@ param <- param.dcm(latent = latent,
                    testing = 0,
                    screening = 0)
 base<- dcm(param, init, control)
-base <- mutate_epi(base, I_stu = I_on_sym + I_off_sym,
+base <- mutate_epi(base, I_stu = Isym_on + Isym_off,
                    Icum_stu = Icum_on + Icum_off,
                    P_stu = P_on + P_off,
                    Q_stu = Q_on + Q_off,
