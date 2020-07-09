@@ -16,7 +16,7 @@ param <- param.dcm(latent = latent,
                    testing = 0,
                    screening = screening)
 mod <- dcm(param, init, control)
-mod <- mutate_epi(mod, I_stu = I_on_sym + I_off_sym,
+mod <- mutate_epi(mod, I_stu = Isym_on + Isym_off,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Q_stu = Q_on + Q_off,

@@ -108,9 +108,9 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  Dcum_saf =0,
 
                  Test = 0,
-                 I_on_sym = 0, 
-                 I_off_sym = 0, 
-                 I_saf_sym = 0)
+                 Isym_on = 0, 
+                 Isym_off = 0, 
+                 Isym_saf = 0)
 
 # Control features
 control <- control.dcm(nsteps = 116, new.mod = model)
