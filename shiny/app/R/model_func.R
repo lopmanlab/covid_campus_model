@@ -61,10 +61,10 @@ model <- function(t, t0, parms) {
                                       1/latent*E_off - testing*(1-p_asympt_stu)*I_off*sensitivity - 1/infectious*I_off - screening*I_off*sensitivity)
     
     
-    state_list <- c(dS_on,dE_on,dI_on,dP_on,dR_on,dIcum_on, dPcum_on, dQ_on, dQcum_on, dHcum_on, dDcum_on,
-                    dS_off,dE_off,dI_off,dP_off,dR_off,dIcum_off, dPcum_off, dQ_off, dQcum_off, dHcum_off, dDcum_off,
-                    dS_saf,dE_saf,dI_saf,dP_saf,dR_saf,dIcum_saf,dPcum_saf, dQ_saf, dHcum_saf, dDcum_saf, 
-                    dTest, dIsym_on, dIsym_off, dIsym_saf)
+    state_list <- c(dS_on,dE_on,dI_on, dIsym_on,dP_on,dR_on,dIcum_on, dPcum_on, dQ_on, dQcum_on, dHcum_on, dDcum_on,
+                    dS_off,dE_off,dI_off, dIsym_off,dP_off,dR_off,dIcum_off, dPcum_off, dQ_off, dQcum_off, dHcum_off, dDcum_off,
+                    dS_saf,dE_saf,dI_saf, dIsym_saf,dP_saf,dR_saf,dIcum_saf,dPcum_saf, dQ_saf, dHcum_saf, dDcum_saf, 
+                    dTest)
     out <- list(state_list)
     return(out)
   })
