@@ -17,8 +17,8 @@ model <- function(t, t0, parms) {
     dIcum_on <- (1-p_asympt_stu)*1/latent*E_on
     dPcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity + screening*(E_on+I_on)*sensitivity
     dQcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts
-    dHcum_on <- (1-p_asympt_stu)*lam_on*S_on*p_hosp_stu
-    dDcum_on <- (1-p_asympt_stu)*lam_on*S_on*p_death_stu
+    dHcum_on <- lam_on*S_on*p_hosp_stu
+    dDcum_on <- lam_on*S_on*p_death_stu
 
     # Off campus students
     lam_off = (1-eff_npi)*(beta_student_to_student*(I_off/N_off+I_on/N_on)+(beta_saf*I_saf/N_saf))
@@ -36,8 +36,8 @@ model <- function(t, t0, parms) {
     dIcum_off = (1-p_asympt_stu)*1/latent*E_off 
     dPcum_off <- testing*(1-p_asympt_stu)*I_off*sensitivity + screening*(E_off+I_off)*sensitivity
     dQcum_off <-testing*(1-p_asympt_stu)*I_off*sensitivity*contacts
-    dHcum_off <- (1-p_asympt_stu)*lam_off*S_off*p_hosp_stu
-    dDcum_off <- (1-p_asympt_stu)*lam_off*S_off*p_death_stu
+    dHcum_off <- lam_off*S_off*p_hosp_stu
+    dDcum_off <- lam_off*S_off*p_death_stu
     
     # Staff and faculty
     lam_saf = (1-eff_npi)*beta_saf*(I_on/N_on+I_off/N_off+I_saf/N_saf)
@@ -54,8 +54,8 @@ model <- function(t, t0, parms) {
 #   dIcum_saf = (1-p_asympt_saf)*lam_saf*S_saf 
     dIcum_saf = (1-p_asympt_saf)*1/latent*E_saf 
     dPcum_saf <- testing*(1-p_asympt_saf)*lam_saf*S_saf*sensitivity
-    dHcum_saf <- (1-p_asympt_saf)*beta_saf*lam_saf*S_saf*p_hosp_saf
-    dDcum_saf <- (1-p_asympt_saf)*beta_saf*lam_saf*S_saf*p_death_saf
+    dHcum_saf <- lam_saf*S_saf*p_hosp_saf
+    dDcum_saf <- lam_saf*S_saf*p_death_saf
 
     #Calculated outputs
     dTest <- N*screening + ((I_on+I_off+I_saf)*testing) + N*ili*ifelse(testing > 0, 1, 0) #diagnostics performed
