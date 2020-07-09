@@ -302,7 +302,7 @@ ggplot(data=df_res, aes(x= var,y = original,fill=output)) +
   scale_fill_grey()+
   scale_x_discrete(limits=colnames(variable),labels=variable_name)+
   coord_flip() + theme_classic()+
-  ggtitle("Patial Rank Correlation Coefficient of variables")+xlab("Variable")+ylab("")+theme(legend.title=element_blank())
+  ggtitle("Partial Rank Correlation Coefficient of variables")+xlab("Variable")+ylab("")+theme(legend.title=element_blank())
 dev.off()
 
 #' 
@@ -361,6 +361,7 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
                    testing = 0,
                    screening = 1/116)
 
@@ -393,6 +394,7 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
                    testing = 0,
                    screening = 1/7)
 
@@ -424,6 +426,7 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
                    testing = 1/2,
                    screening = 0)
 
@@ -456,6 +459,7 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
                    testing = 1/7,
                    screening = 0)
 
@@ -467,6 +471,37 @@ mod_7test <- mutate_epi(mod_7test, I_stu = I_on_sym + I_off_sym,
                             Qcum_stu = Qcum_on + Qcum_off,
                             Hcum_stu = Hcum_on + Hcum_off,
                             Dcum_stu = Dcum_on + Dcum_off)
+
+# Base scenario with no control measures at all
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   eff_npi = 0,
+                   sensitivity = sensitivity.int,
+                   testing = 0,
+                   screening = 0)
+
+mod_nocont <- dcm(param, init, control)
+mod_nocont<- mutate_epi(mod_nocont, I_stu = I_on_sym + I_off_sym,
+                        Icum_stu = Icum_on + Icum_off,
+                        P_stu = P_on + P_off,
+                        Pcum_stu = Pcum_on + Pcum_off,
+                        Qcum_stu = Qcum_on + Qcum_off,
+                        Hcum_stu = Hcum_on + Hcum_off,
+                        Dcum_stu = Dcum_on + Dcum_off)
 
 # Combine all scenarios for cumulative incidence, % reduction and ranges for staff and student
 list_res<-lapply(list("base"=mod_base,
