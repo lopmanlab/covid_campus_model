@@ -4,9 +4,10 @@ server <- function(input, output, session) {
 
   showModal(
     modalDialog(
-      title = "Disclaimer",
+      title = "Terms of Use and Disclaimer",
       "In order to use this app you must accept its ",
-      a(href = "TERMSOFUSEANDDISCLAIMER.pdf", "Terms and Conditions."),
+      a(href = "TERMSOFUSEANDDISCLAIMER.pdf", "Terms and Conditions"),
+      "which should be reviewed before proceeding.  The terms include important disclaimers, releases, and limitations of liability.",
       easyClose = FALSE,
       size = "l",
       footer = modalButton("Agree and Proceed")
