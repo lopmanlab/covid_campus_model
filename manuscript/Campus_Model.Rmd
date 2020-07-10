@@ -96,34 +96,35 @@ The model was built and simulated in the EpiModel package in the R statistical c
 
 
 ```{r paramtable,  echo=FALSE}
-paramtable=read.csv(here('99_ParameterTable.csv'))
+paramtable=read.csv(here('99_ParameterTable_new.csv'))
 pt = paramtable[,1:6]
 knitr::kable(pt, caption = 'Model parameters and ranges.')
 ```
 
 
 # Results
-UPDATE ALL
+
+UPDATE ALL TEXT
 
 We start by simulating transmission on campus (Table 2; Figure 2) in which no diagnostic control measures are in place (no testing, isolation, contact tracing, or quarantine). With R0 of 3.5 for on-campus student and 2.5 for off-campus, case prevalence peaks at 1324 cases (Range, 2.5th to 97.5th centiles: 624 to 2070) per day among students and 1061 cases per day among staff/faculty (404 to 1907), resulting in cumulative 4960 (3846 to 6264) and 5175 (2573 to 7302) cases at the end of the semester in a population of about 15,000 of each. With our baseline levels of facemask and social distancing efficacy (70%) but with no diagnostics, we estimate case prevalence peaks at  98 cases (Range, 2.5th to 97.5th centiles:15 to 1048) per day among students and 66 cases per day among staff/faculty (17 to 681), resulting in a cumulative of 1233 (231 to 5117) student cases and 888 (255 to 4210) staff cases at the end of the semester.  Note that this number of symptomatic cases is substantially lower than the number of infections since we assume that 35% (27 to 43%) of infected students and 51% (41 to 59%) of infected staff are symptomatic, given infection.(15)  We use this scenario as the baseline counterfactual for all subsequent comparisons. 
 
 
-```{r npifig,  fig.cap='Effect of non-pharmaceutical interventions (with no testing and screening) on daily COVID-19 prevalence.', echo=FALSE}
-knitr::include_graphics(here('figures/schematic.png'))
+```{r npifig,  fig.cap='Effect of non-pharmaceutical interventions (with no testing and screening) on COVID-19 cases among students and faculty. Top: Emory, Bottom: UGA.', echo=FALSE}
+knitr::include_graphics(here('figures/npi_fig.png'))
 ```
 
 
 We next explored a wide range of screening intervals, from weekly to once during the semester (Fig 3). One-time screening, whereby the population is tested on average once during the 4-month semester, reduced cumulative student incidence overall by 14%; monthly and weekly screening reduced cumulative student incidence by 38% and 73% respectively. For staff and faculty, one-time screening reduced cumulative incidence by 10%; monthly and weekly screening reduce cumulative incidence by 27% and 58% respectively. For students, the cumulative incidence ranged from 336 (115-1536)with weekly screening to 1060 (219 -4839) with one-time screening. For staff/faculty, the cumulative incidence ranged from 371 (142-751)) with weekly screening to 804 (242-3850) with one-time screening.
 
-```{r screeningfig,  fig.cap='Impact of Screening Frequency on Projected Covid-19 Daily and Cumulative Incidence.', echo=FALSE}
-knitr::include_graphics(here('figures/schematic.png'))
+```{r screeningfig,  fig.cap='Impact of Screening Frequency on Projected Covid-19 incidence.', echo=FALSE}
+knitr::include_graphics(here('figures/screening_fig.png'))
 ```
 
 
 With testing and this level of contact tracing as described, the cumulative incidence for the semester ranges from 207 (78-507)  among students and 364 (148-751)57 (15-144) and staff & faculty with two-day delay testing interval,  296 (106-1055) among students and 426 (165-1023) among staff & faculty with a four-day delay testing interval; 412 (136-1851) among students and 498 (184-1405)  among staff & faculty with a seven-day delay testing interval. (Fig 3) This represents an 83%, 76% and 67% reduction in cumulative incidence over the semester among students and an 59%, 52% and 44% reduction in cumulative incidence among staff & faculty. The impact of testing is highly sensitive to the success of contact tracing, which can overwhelm the impact of quarantine of the tested and isolation of the cases themselves.
 
-```{r testinfig,  fig.cap=' Impact of testing, contact tracing and quarantine at a range of testing delay intervals. Daily and cumulative Covid-19 incidence on university campus.', echo=FALSE}
-knitr::include_graphics(here('figures/schematic.png'))
+```{r testingfig,  fig.cap=' Impact of testing, contact tracing and quarantine at a range of testing delay intervals.', echo=FALSE}
+knitr::include_graphics(here('figures/testing_fig.png'))
 ```
 
 

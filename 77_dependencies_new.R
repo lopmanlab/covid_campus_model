@@ -14,7 +14,8 @@ package_list <- c(
   "boot",
   "prevalence",
   "kableExtra",
-  "patchwork"
+  "patchwork",
+  "here"
 )
 
 

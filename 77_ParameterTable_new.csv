@@ -24,8 +24,8 @@ Daily rate of community introduction - Atlanta,0.0005,0.00025,0.001,Beta,,https:
 Daily rate of community introduction - Athens,0.0005,0.00025,0.001,Beta,,https://dph.georgia.gov/covid-19-daily-status-report,,community,UGA,SecondarySetting
 Efficacy of NPIs,0.7,0.36,0.86,Beta,,https://www.thelancet.com/action/showPdf?pii=S0140-6736%2820%2931142-9,assume 50% compliance,eff_npi,All,SecondarySetting
 Testing and quarantine,,,,,,,,,All,
-Time from onset of infectiousness to testing (1/days),2,7,1,Uniform,,,"First day is asymptomatic, so when this value is 2, testing is on first day of disease",testing,All,InterventionScenario
-Screening frequency (1/days),30,120,1,Uniform,,,"Monthly, range is once per semester to daily",screening,All,InterventionScenario
+Time from onset of infectiousness to testing (days),2,7,1,Uniform,,,"First day is asymptomatic, so when this value is 2, testing is on first day of disease",testing,All,InterventionScenario
+Screening frequency (days),30,120,1,Uniform,,,"Monthly, range is once per semester to daily",screening,All,InterventionScenario
 Duration of quarantine (days),14,,,,,,,isolation,All,InterventionScenario
 Number of contacts per case,14,12,16,Uniform,,Mossong et al; Prem et al,NEED Source,contacts,All,InterventionScenario
 Proportion of contacts reached,0.75,0.5,1,Uniform,,,,p_contacts_reached,All,

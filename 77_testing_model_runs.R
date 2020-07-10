@@ -1,7 +1,8 @@
+#Run testing scenarios
 # Load packages, data files and functions 
-source("99_dependencies_new.R") #loads needed packages
-source("99_model_func_new.R") #loads a function called 'model' which contains the main model. Used below in dcm routine
-source("99_parm_init_new.R") #loads function that pulls values from spreadsheet to set parameter values and initial conditions
+source("77_dependencies_new.R") #loads needed packages
+source("77_model_func_new.R") #loads a function called 'model' which contains the main model. Used below in dcm routine
+source("77_parm_init_new.R") #loads function that pulls values from spreadsheet to set parameter values and initial conditions
 
 ##########################################
 #Do run for Emory for different NPI effectiveness
@@ -13,20 +14,21 @@ source("99_parm_init_new.R") #loads function that pulls values from spreadsheet 
 pars_ini <- setpars_ini(school = "Emory")
 parvals <- pars_ini$parvals
 
-parvals["testing"] = 0
+parvals["eff_npi"] = 0.4
 parvals["screening"] = 0
 
-eff_npi <- seq(0, 1, 0.2) #changing amount that NPI are expected to reduce transmission
-#eff_npi <- 0 #changing amount that NPI are expected to reduce transmission
+#2, 4 and 7 days
+testing_delays = c(2,4,7)
+
 all_res = NULL
 
 #do loop over npi, run model for each
 #not using EpiModel, just basic ode solver
-for (i in 1:length(eff_npi))
+for (i in 1:length(testing_delays))
 {
-  parvals["eff_npi"] = eff_npi[i]
+  parvals["testing"] = 1/testing_delays[i] #take inverse since it's used as rate in the model
   res <- deSolve::ode(y = pars_ini$ini_cond, times = seq(0, parvals["tmax"], by = 1), func = covid_model, parms = parvals)
-  df <- data.frame(res) %>% mutate(eff_npi = eff_npi[i])
+  df <- data.frame(res) %>% mutate(Testing_delay = as.factor(testing_delays[i]))
   if (i == 1) {all_res = df} #combine results from all runs into a long data frame
   if (i > 1) {  all_res = rbind(all_res,df)}
 }
@@ -42,26 +44,30 @@ df_emo = all_res %>% mutate(school = "Emory")
 pars_ini <- setpars_ini(school = "UGA")
 parvals <- pars_ini$parvals
 
-parvals["testing"] = 0
+parvals["eff_npi"] = 0.4
 parvals["screening"] = 0
 
+#2, 4 and 7 days
+testing_delays = c(2,4,7)
 
-eff_npi <- seq(0, 1, 0.2) #changing amount that NPI are expected to reduce transmission
 all_res = NULL
-for (i in 1:length(eff_npi))
+
+#do loop over npi, run model for each
+#not using EpiModel, just basic ode solver
+for (i in 1:length(testing_delays))
 {
-  parvals["eff_npi"] = eff_npi[i]
+  parvals["testing"] = 1/testing_delays[i] #take inverse since it's used as rate in the model
   res <- deSolve::ode(y = pars_ini$ini_cond, times = seq(0, parvals["tmax"], by = 1), func = covid_model, parms = parvals)
-  df <- data.frame(res) %>% mutate(eff_npi = eff_npi[i])
-  if (i == 1) {all_res = df}
+  df <- data.frame(res) %>% mutate(Testing_delay = as.factor(testing_delays[i]))
+  if (i == 1) {all_res = df} #combine results from all runs into a long data frame
   if (i > 1) {  all_res = rbind(all_res,df)}
 }
 
+#add column with school label
 df_uga = all_res %>% mutate(school = "UGA")
 
 
 df <- bind_rows(df_emo,df_uga) %>% 
-        mutate(NPI_Impact = as.factor(eff_npi)) %>%
         mutate(All_students = Isym_on + Isym_off + Iasym_on + Iasym_off) %>%
         mutate(Cum_students = Iasymcum_on + Isymcum_on + Iasymcum_off + Isymcum_off) %>%
         mutate(All_saf = Isym_saf + Iasym_saf) %>%
@@ -75,22 +81,22 @@ df <- bind_rows(df_emo,df_uga) %>%
 
 
 p1 <- df %>% filter(school == "Emory") %>%
-             ggplot(aes(x=time,y=All_students, color=NPI_Impact)) +  
+             ggplot(aes(x=time,y=All_students, color=Testing_delay)) +  
              geom_line() + 
              geom_line(aes(y=Cum_students)) 
   
 p2 <- df %>% filter(school == "Emory") %>%
-             ggplot(aes(x=time,y=All_saf, color=NPI_Impact)) +  
+             ggplot(aes(x=time,y=All_saf, color=Testing_delay)) +  
              geom_line() + 
              geom_line(aes(y=Cum_saf)) 
 
 p3 <- df %>%  filter(school == "UGA") %>%
-              ggplot(aes(x=time,y=All_students, color=NPI_Impact)) +  
+              ggplot(aes(x=time,y=All_students, color=Testing_delay)) +  
               geom_line() + 
               geom_line(aes(y=Cum_students)) 
 
 p4 <- df %>%  filter(school == "UGA") %>%
-              ggplot(aes(x=time,y=All_saf, color=NPI_Impact)) +  
+              ggplot(aes(x=time,y=All_saf, color=Testing_delay)) +  
               geom_line() + 
               geom_line(aes(y=Cum_saf)) 
 
@@ -98,7 +104,7 @@ pl <- p1 + p2 + p3 + p4
 
 plot(pl)
 
-filename = here('figures/','npi_fig.png')
+filename = here('figures/','testing_fig.png')
 ggsave(filename, plot = pl, width = 10, height = 9)
 
 
