@@ -35,7 +35,7 @@ df$scrInt <- rep(screen.int, each = 116)
 df <- select(df, c(-run, -time))
 dfLast <- filter(df, date == "2020-12-20")
 
-#tiff("Plots/1_screen_explore.tiff", units="in", width=6, height=5, res=300)
+tiff("Plots/1_screen_explore.tiff", units="in", width=6, height=5, res=300)
 m <- rbind(c(1,2,5), c(3,4,5))
 print(m)
 layout(m)

@@ -75,6 +75,7 @@ N = N_on + N_off + N_saf
 init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptible
                  E_on=E_on,                         # number initially incubating
                  I_on=I_on,                         # number initially infectious
+                 Isym_on = 0,
                  P_on=P_on,                         # number initially isolated
                  R_on=R_on,                         # initially immune
                  Icum_on = 0,                       # cumulative cases -- for counting incidence
@@ -87,6 +88,7 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  S_off=N_off-(E_off+I_off+R_off),
                  E_off=E_off,
                  I_off=I_off,
+                 Isym_off = 0,
                  P_off=P_off,
                  R_off=R_off,
                  Icum_off = 0,
@@ -99,6 +101,7 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  S_saf=N_saf-(E_saf+I_saf+R_saf),
                  E_saf=E_saf,
                  I_saf=I_saf,
+                 Isym_saf = 0,
                  P_saf=P_saf,
                  R_saf=R_saf,
                  Icum_saf = 0,
@@ -108,9 +111,7 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  Dcum_saf =0,
 
                  Test = 0,
-                 Isym_on = 0, 
-                 Isym_off = 0, 
-                 Isym_saf = 0)
+                 )
 
 # Control features
 control <- control.dcm(nsteps = 116, new.mod = model)

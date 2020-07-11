@@ -29,4 +29,4 @@ On campus students <-> On campus students,1,0.3,1.4,SecondarySetting,,,Uniform,R
 All students <-> staff/faculty,0.5,0.15,0.7,SecondarySetting,,,Uniform,R0_saf,,,,,,,,
 Staff/faculty <-> staff/faculty,0.5,0.15,0.7,SecondarySetting,,,Uniform,,,,,,,,,
 Daily rate of community introduction ,0.0005,0.00025,0.001,SecondarySetting,https://dph.georgia.gov/covid-19-daily-status-report,,Beta,community,,,,,,,,
-Efficacy of NPIs,0.7,0.36,0.86,SecondarySetting,https://www.thelancet.com/action/showPdf?pii=S0140-6736%2820%2931142-9,assume 50% compliance,Beta,eff_npi,,,,,,,,
+Efficacy of NPIs,0.35,0.18,0.43,SecondarySetting,https://www.thelancet.com/action/showPdf?pii=S0140-6736%2820%2931142-9,assume 50% compliance,Beta,eff_npi,,,,,,,,

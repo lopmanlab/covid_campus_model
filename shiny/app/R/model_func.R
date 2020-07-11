@@ -3,7 +3,7 @@ model <- function(t, t0, parms) {
     
     # ODEs
     # On campus students
-    lam_on = (1-eff_npi)*(beta_student_to_student*(I_off/N_off+I_on/N_on) + (beta_on_to_on*I_on/N_on) + (beta_saf*I_saf/N_saf))
+    lam_on = (1-eff_npi)*(beta_student_to_student/2*(I_off/N_off+I_on/N_on) + (beta_on_to_on*I_on/N_on) + (beta_saf*I_saf/N_saf))
     
     dS_on <- -lam_on*S_on - community*S_on - testing*(1-p_asympt_stu)*I_on*sensitivity*(contacts-R0_on_to_on-R0_student_to_student)*p_contacts_reached + 1/isolation*Q_on*((contacts-R0_on_to_on-R0_student_to_student)/contacts)
     dE_on <-  lam_on*S_on + community*S_on - 1/latent*E_on  - screening*E_on*sensitivity - testing*(1-p_asympt_stu)*I_on*sensitivity*(R0_on_to_on+R0_student_to_student)*p_contacts_reached #last term represents contract tracing
@@ -21,7 +21,7 @@ model <- function(t, t0, parms) {
     dDcum_on <- lam_on*S_on*p_death_stu
     
     # Off campus students
-    lam_off = (1-eff_npi)*(beta_student_to_student*(I_off/N_off+I_on/N_on)+(beta_saf*I_saf/N_saf))
+    lam_off = (1-eff_npi)*(beta_student_to_student/2*(I_off/N_off+I_on/N_on)+(beta_saf*I_saf/N_saf))
     
     dS_off <- -lam_off*S_off - community*S_off - testing*(1-p_asympt_stu)*I_off*sensitivity*(contacts - R0_student_to_student)*p_contacts_reached + 1/isolation*Q_off*((contacts-R0_student_to_student)/contacts)
     dE_off <-  lam_off*S_off + community*S_off - (1/latent)*E_off - screening*E_off*sensitivity - testing*(1-p_asympt_stu)*I_off*sensitivity*(R0_student_to_student)*p_contacts_reached
@@ -61,9 +61,9 @@ model <- function(t, t0, parms) {
                                       1/latent*E_off - testing*(1-p_asympt_stu)*I_off*sensitivity - 1/infectious*I_off - screening*I_off*sensitivity)
     
     
-    state_list <- c(dS_on,dE_on,dI_on, dIsym_on,dP_on,dR_on,dIcum_on, dPcum_on, dQ_on, dQcum_on, dHcum_on, dDcum_on,
-                    dS_off,dE_off,dI_off, dIsym_off,dP_off,dR_off,dIcum_off, dPcum_off, dQ_off, dQcum_off, dHcum_off, dDcum_off,
-                    dS_saf,dE_saf,dI_saf, dIsym_saf,dP_saf,dR_saf,dIcum_saf,dPcum_saf, dQ_saf, dHcum_saf, dDcum_saf, 
+    state_list <- c(dS_on,dE_on,dI_on,dIsym_on, dP_on,dR_on,dIcum_on, dPcum_on, dQ_on, dQcum_on, dHcum_on, dDcum_on,
+                    dS_off,dE_off,dI_off,dIsym_off,dP_off,dR_off,dIcum_off, dPcum_off, dQ_off, dQcum_off, dHcum_off, dDcum_off,
+                    dS_saf,dE_saf,dI_saf,dIsym_saf, dP_saf,dR_saf,dIcum_saf,dPcum_saf, dQ_saf, dHcum_saf, dDcum_saf, 
                     dTest)
     out <- list(state_list)
     return(out)
