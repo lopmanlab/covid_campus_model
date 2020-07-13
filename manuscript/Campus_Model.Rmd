@@ -70,7 +70,7 @@ Staff and faculty had a higher risk of severe illness and death (given infection
 
 We further assume that a fraction of cases is asymptomatic and that, the probability of symptoms is greater for staff/faculty given their older age distribution than students. We assumed that asymptomatic infected persons are as infectious as those with symptoms; this assumption may overestimate the true transmission rate in this group.(7) We assume that infectiousness begins on the third day after infection; this latent period is shorter than the incubation period(8) to represent pre-symptomatic transmission.  
 
-In order to capture external infection from non-university sources, we modeled a constant daily rate of infection being introduced on campus.  In our model, this is based on confirmed COVID-19 cases in the counties that surround our institution. For Emory, we chose the average of Fulton and Dekalb, for UGA the average of Clarke and Oconee (9). We assume that infection incidence is ten-times that of reported cases.(7) The model runs for a semester from the day classes start to the end of the term (August 26 - December 19 for Emory and August 20 - December 18 for UGA). We did not assume reduced transmission over traditional Fall or Thanksgiving breaks or consider alternative schedules. 
+In order to capture external infection from non-university sources, we modeled a constant daily rate of infection being introduced on campus.  In our model, this is based on confirmed COVID-19 cases in the counties that surround our institution. For Emory, we chose the average of Fulton and Dekalb, for UGA the average of Clarke and Oconee (9). We assume that infection incidence is ten-times that of reported cases.(7) Since both Emory and UGA's semester are almost 120 days long (August 26 - December 19 for Emory and August 20 - December 18 for UGA), we run the model for each school for 120 days. We did not assume reduced transmission over traditional Fall or Thanksgiving breaks or consider alternative schedules. 
 
 
 ## Intervention Design 
@@ -96,7 +96,7 @@ The model was built and simulated in the EpiModel package in the R statistical c
 
 
 ```{r paramtable,  echo=FALSE}
-paramtable=read.csv(here('99_ParameterTable_new.csv'))
+paramtable=read.csv(here('77_ParameterTable_new.csv'))
 pt = paramtable[,1:6]
 knitr::kable(pt, caption = 'Model parameters and ranges.')
 ```

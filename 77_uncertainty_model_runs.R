@@ -1,8 +1,9 @@
-#Run testing scenarios
+#Do uncertainty analysis by running over parameter samples
 # Load packages, data files and functions 
 source("77_dependencies_new.R") #loads needed packages
 source("77_model_func_new.R") #loads a function called 'model' which contains the main model. Used below in dcm routine
 source("77_parm_init_new.R") #loads function that pulls values from spreadsheet to set parameter values and initial conditions
+source("77_parm_dist_new.R") #loads function that creates a large matrix of distributions for each parameter
 
 ##########################################
 #Do run for Emory for different NPI effectiveness
@@ -12,29 +13,28 @@ source("77_parm_init_new.R") #loads function that pulls values from spreadsheet 
 #returns a list with ini_cond and parvals 
 
 pars_ini <- setpars_ini(school = "Emory")
-parvals <- pars_ini$parvals
 
-parvals["eff_npi"] = 0.4
-parvals["screening"] = 0
+#creates the specified number of samples (in rows) for all parameters (in columns)
+#for convenience, all parameters are sampled, even the fixed ones. Those just have lower and upper bounds the same, thus their value doesn't change 
+pardist = set_pardist(samples = 10, school = "Emory") 
 
-#2, 4 and 7 days
-testing_delays = c(2,4,7)
+#testing and screening are given/sampled as days. model needs rates, so convert here
+pardist <- pardist %>% mutate(testing = 1/testing) %>% mutate(screening = 1/screening)
+
+#some parameters are not sampled, those that have to do with screening/testing
+#parvals <- pars_ini$parvals
+#parvals["eff_npi"] = 0.4
+#parvals["screening"] = 0
 
 all_res = NULL
 
-#do loop over npi, run model for each
+#do loop over all parameter samples, run model for each
 #not using EpiModel, just basic ode solver
-for (i in 1:length(testing_delays))
+for (i in 1:nrow(pardist))
 {
-  parvals["testing"] = 1/testing_delays[i] #take inverse since it's used as rate in the model
-  
-  #depending on testing delay, test sensitivity changes
-  if (testing_delays[i] == 2) { parvals["sensitivity"] = pars_ini$parvals["sensitivity_2"] }
-  if (testing_delays[i] == 4) { parvals["sensitivity"] = pars_ini$parvals["sensitivity"] }
-  if (testing_delays[i] == 7) { parvals["sensitivity"] = pars_ini$parvals["sensitivity_7"] }
-  
-  res <- deSolve::ode(y = pars_ini$ini_cond, times = seq(0, parvals["tmax"], by = 1), func = covid_model, parms = parvals)
-  df <- data.frame(res) %>% mutate(Testing_delay = as.factor(testing_delays[i]))
+  parvals = pardist[i,] 
+  res <- deSolve::ode(y = pars_ini$ini_cond, times = seq(0, pars_ini$parvals["tmax"], by = 1), func = covid_model, parms = parvals)
+  df <- data.frame(res) %>% mutate(run = i)
   if (i == 1) {all_res = df} #combine results from all runs into a long data frame
   if (i > 1) {  all_res = rbind(all_res,df)}
 }

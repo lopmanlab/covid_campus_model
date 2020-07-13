@@ -1,8 +1,8 @@
 #Run screening scenarios
 # Load packages, data files and functions 
-source("99_dependencies_new.R") #loads needed packages
-source("99_model_func_new.R") #loads a function called 'model' which contains the main model. Used below in dcm routine
-source("99_parm_init_new.R") #loads function that pulls values from spreadsheet to set parameter values and initial conditions
+source("77_dependencies_new.R") #loads needed packages
+source("77_model_func_new.R") #loads a function called 'model' which contains the main model. Used below in dcm routine
+source("77_parm_init_new.R") #loads function that pulls values from spreadsheet to set parameter values and initial conditions
 
 ##########################################
 #Do run for Emory for different NPI effectiveness
@@ -17,8 +17,8 @@ parvals <- pars_ini$parvals
 parvals["eff_npi"] = 0.4
 parvals["testing"] = 0
 
-#between weekly and once
-screening = c(7,14,30,60,120)
+#between weekly and never
+screening = c(7,14,30,60,120,Inf)
 
 all_res = NULL
 
@@ -26,7 +26,11 @@ all_res = NULL
 #not using EpiModel, just basic ode solver
 for (i in 1:length(screening))
 {
-  parvals["screening"] = 1/screening[i] #take inverse since it's used as rate in the model
+  if (screening[i]>0)
+  {
+    parvals["screening"] = 1/screening[i] #take inverse since it's used as rate in the model
+  }
+  
   res <- deSolve::ode(y = pars_ini$ini_cond, times = seq(0, parvals["tmax"], by = 1), func = covid_model, parms = parvals)
   df <- data.frame(res) %>% mutate(Screening_intervals = as.factor(screening[i]))
   if (i == 1) {all_res = df} #combine results from all runs into a long data frame
@@ -47,8 +51,8 @@ parvals <- pars_ini$parvals
 parvals["eff_npi"] = 0.4
 parvals["testing"] = 0
 
-#between weekly and once
-screening = c(7,14,30,60,120)
+#between weekly and never
+screening = c(7,14,30,60,120,Inf)
 
 all_res = NULL
 
@@ -56,7 +60,11 @@ all_res = NULL
 #not using EpiModel, just basic ode solver
 for (i in 1:length(screening))
 {
-  parvals["screening"] = 1/screening[i] #take inverse since it's used as rate in the model
+  if (screening[i]>0)
+  {
+    parvals["screening"] = 1/screening[i] #take inverse since it's used as rate in the model
+  }
+  
   res <- deSolve::ode(y = pars_ini$ini_cond, times = seq(0, parvals["tmax"], by = 1), func = covid_model, parms = parvals)
   df <- data.frame(res) %>% mutate(Screening_intervals = as.factor(screening[i]))
   if (i == 1) {all_res = df} #combine results from all runs into a long data frame

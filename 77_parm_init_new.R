@@ -32,9 +32,11 @@ setpars_ini <- function(school)
   N_off = as.numeric(parvals["N"]-parvals["N_on"])
   
   #start and end date of term/simulation
-  start_date <- as.Date("2020-08-26")
-  end_date <- as.Date("2020-12-19")
-  tmax = as.vector(difftime(end_date,start_date,units = "days"))
+  #not used right now, run each model/school for 120 days
+  #start_date <- as.Date("2020-08-26")
+  #end_date <- as.Date("2020-12-19")
+  #tmax = as.vector(difftime(end_date,start_date,units = "days"))
+  tmax = 120
   
   #place all parameters in a vector
   parvals = c(parvals,p_asym_stu = p_asym_stu,
