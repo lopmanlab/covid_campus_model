@@ -2,7 +2,7 @@
 
 This is an interactive software tool to explore the modeling scenarios in the paper:
 
-> Lopman B, Liu CY, Le Guillou A, Lash TL, Isakov AP, Jenness SM. A Model of Covid-19 Transmission and Control on University Campuses. _Pre-Print._ [[Paper Link](https://www.medrxiv.org/content/10.1101/2020.06.23.20138677v2)]
+> Lopman B, Liu CY, Le Guillou A, Lash TL, Isakov AP, Jenness SM. A Model of Covid-19 Transmission and Control on University Campuses. _Pre-Print._ [[Paper Link](https://github.com/lopmanlab/covid_campus_model/blob/master/EmoryCampusModel_Preprint_v2.pdf)]
 
 
 **Before using this tool to guide any decisions, it is critical to read the full paper in order to understand the assumptions and limitations of this models. Results should not be taken at face value. This tool provides a way to explore the possible range of outcomes on campus over the course of a semester. However, there are a number of important things not captured in the fairly simple model -- like the structure of student housing or the impact of mask-wearing.**
