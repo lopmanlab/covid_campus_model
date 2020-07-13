@@ -17,6 +17,8 @@ library('here')
 ```
 
 
+
+
 # Authors
 Ben Lopman, PhD1; 
 Carol Y. Liu, MSc1; 
@@ -56,28 +58,44 @@ University administrators are now facing decisions about how to safely return st
 
 # Methods
 
-We developed a dynamic model of transmission of SARS-CoV-2 among students, staff and faculty. We parameterized the model for our institutions, Emory University, a medium-size private university in Atlanta, Georgia, and the University of Georgia (UGA), a large public university in Athens, Georgia (numbers are for the main campus of each institution only). We expect the model could be applicable to other colleges and universities and therefore provide a public web-interface where key initial conditions and model parameters, such as student and staff population sizes can be varied (https://epimodel.shinyapps.io/covid-university/). The main features and assumptions are described in the following sections. Table \@ref(tab:paramtable)] provides a full list of all parameter values, the model equations are shown in the appendix.
+We developed a dynamic model of transmission of SARS-CoV-2 among students, staff and faculty. We parameterized the model for our institutions, Emory University, a medium-size private university in Atlanta, Georgia, and the University of Georgia (UGA), a large public university in Athens, Georgia (numbers are for the main campus of each institution only). We expect the model could be applicable to other colleges and universities and therefore provide a public web-interface where key initial conditions and model parameters, such as student and staff population sizes can be varied (https://epimodel.shinyapps.io/covid-university/). The main features and assumptions are described in the following sections. Table \@ref(tab:paramtable) provides a full list of all parameter values, the model equations are shown in the appendix.
 
+
+
+```{r, message=FALSE, echo=FALSE}
+#load parameter table so we can cite quantities below
+p_tab <- read.csv(here('77_ParameterTable_new.csv'))
+#parameter values and their names in model from CSV file
+pars = p_tab$Value
+names(pars) = p_tab$Var
+```
 
 
 ## Population Structure and Transmission
 
-We modeled three distinct population groups with different degrees of interactions among them: students living on campus; students living off campus; and staff and faculty.  We assume that students living on campus have a higher risk for infection than those living off campus, because congregate living is typical on most college campuses.  Staff/faculty can be infected by students and can infect other staff/faculty.  We do not track transmission in the wider community, aside from incorporating a daily rate of introduction of virus onto campus from the community.
+We modeled three distinct population groups with different degrees of interactions among them: students living on campus; students living off campus; and staff and faculty.
+We assume that staff/faculty can be infected by students and can infect other staff/faculty, with a reproduction number (before NPI) of `r pars["R0_saf"]`. Student-to-student interactions leads to transmission at a higher rate, we assume a reproduction number (before NPI) of `r pars["R0_student_to_student"]`.
 
-Universities are planning an array of measures to limit transmission on campus.  These may include mask-wearing; other personal protective equipment; smaller class sizes; staggered class times; enhanced cleaning protocols; enhanced hygiene; cancelling large social gatherings; fewer students living in dorms and restricting off-campus movements.  We lack data on the efficacy of all these interventions, especially in this specific population, but we assume that they will have an effect on transmission.  We parameterize these non-pharmaceutical controls based on a systematic review of the effect of social distancing and face coverings (5). 
+We assume that students living on campus have a further increased transmission potential to other on-campus students, because congregate living is typical on most college campuses.
+We therefore assume those students infect on average `r pars["Rp_on_to_on"]` additional on-campus students. 
 
-Staff and faculty had a higher risk of severe illness and death (given infection) than students, based on accumulating evidence of age-differences in the case-fatality rate (6).  
+We do not track transmission in the wider community, aside from incorporating a daily rate of introduction of virus onto campus from the community. To capture external infection from non-university sources, we modeled a constant daily rate of infection being introduced on campus.  In our model, this is based on confirmed COVID-19 cases in the counties that surround our institution. For Emory, we chose the average of Fulton and Dekalb, for UGA the average of Clarke and Oconee (9). We assume that infection incidence is ten-times that of reported cases.(7) 
 
-We further assume that a fraction of cases is asymptomatic and that, the probability of symptoms is greater for staff/faculty given their older age distribution than students. We assumed that asymptomatic infected persons are as infectious as those with symptoms; this assumption may overestimate the true transmission rate in this group.(7) We assume that infectiousness begins on the third day after infection; this latent period is shorter than the incubation period(8) to represent pre-symptomatic transmission.  
+Universities are planning an array of measures to limit transmission on campus.  These may include mask-wearing; other personal protective equipment; smaller class sizes; staggered class times; enhanced cleaning protocols; enhanced hygiene; canceling large social gatherings; fewer students living in dorms and restricting off-campus movements.  We lack data on the efficacy of all these interventions, especially in this specific population, but we assume that they will have an effect on transmission.  We parameterize these non-pharmaceutical controls based on a systematic review of the effect of social distancing and face coverings (5), which found around 80% efficacy. Assuming 50% compliance, we estimate the impact of NPI in reducing transmission by 40%, but we evaluate the model for different values of this parameter. 
 
-In order to capture external infection from non-university sources, we modeled a constant daily rate of infection being introduced on campus.  In our model, this is based on confirmed COVID-19 cases in the counties that surround our institution. For Emory, we chose the average of Fulton and Dekalb, for UGA the average of Clarke and Oconee (9). We assume that infection incidence is ten-times that of reported cases.(7) Since both Emory and UGA's semester are almost 120 days long (August 26 - December 19 for Emory and August 20 - December 18 for UGA), we run the model for each school for 120 days. We did not assume reduced transmission over traditional Fall or Thanksgiving breaks or consider alternative schedules. 
+Staff and faculty had a higher risk of severe illness and death (given infection) than students, based on accumulating evidence of age-differences in the case-fatality rate (6), Table \@ref(tab:paramtable).
+
+We further assume that a fraction of cases is asymptomatic and that the probability of symptoms is greater for staff/faculty given their older age distribution than students. We assumed that asymptomatic infected persons are as infectious as those with symptoms; this assumption may overestimate the true transmission rate in this group.(7) We assume that infectiousness begins on the third day after infection; this latent period is shorter than the incubation period(8) to represent pre-symptomatic transmission.  
+
+Since both Emory and UGA's semester are almost 120 days long (August 26 - December 19 for Emory and August 20 - December 18 for UGA), we run the model for each school for 120 days. We did not assume reduced transmission over traditional Fall or Thanksgiving breaks or consider alternative schedules. 
 
 
 ## Intervention Design 
 
 In the model, control is initiated by SARS-CoV-2 diagnostics.  Infected persons can be identified by reverse transcription polymerase chain reaction (RT-PCR) through either testing or screening, defined as follows. Screening is a strategy in which students, staff, and faculty are tested at a given frequency ranging from weekly to once per semester regardless of the presence of symptoms. Testing is a strategy whereby symptomatic students, staff, and faculty present for clinical care and are tested using RT-PCR. We assume a background level of persons with influenza-like symptoms caused by infections other than SARS-CoV-2 ,(10,11) who will test negative.  Those with COVID-19 who test positive are immediately isolated.  However, we assume that the diagnostic has imperfect sensitivity that varies based on what date of illness the test is performed.(12) There is evidence that PCR sensitivity varies over the course of infection, reaching a peak around day 7 of infection (or day 4 of infectiousness), then declines again.  Therefore, we examined the impact of variation in the testing interval, defined as the average lag time between symptom onset and quarantine. Because infectiousness begins one day before symptom onset in the model, we simulated testing intervals ranging from a two -day to a one-week test delay.  These testing scenarios are in the absence of any screening to isolate the causal effects of this more intensive intervention. 
 
-Following both screening and testing, those testing positive for COVID-19 were immediately isolated. Case isolation in the model mechanistically involved a complete reduction in their contact rate for the duration of infection. Positive test results also lead to contact tracing.  Contact tracing is conducted by assuming public health authorities could elicit 14 contacts per case detected with 75% of those 14 successfully traced and quarantined. Quarantine, like isolation, was modeled as a complete reduction in the contact rate for the duration of infection. Some of those quarantined contacts might have been incubating but are now no longer able to infect since they are under quarantine. 
+Following both screening and testing, those testing positive for COVID-19 were immediately isolated. Case isolation in the model mechanistically involved a complete reduction in their contact rate for the duration of infection. Positive test results also lead to contact tracing.  Contact tracing is conducted by assuming public health authorities could elicit `r pars["contacts
+"]` contacts per case detected with `r 100*pars["p_contacts_reached"]`% of those successfully traced and quarantined. Quarantine, like isolation, was modeled as a complete reduction in the contact rate for the duration of infection. Some of those quarantined contacts might have been incubating but are now no longer able to infect since they are under quarantine. 
 
 ```{r schematic,  fig.cap='Schematic of A) Disease Structure and B) Student and Staff/Faculty Transmission Pathways.', echo=FALSE}
 knitr::include_graphics(here('figures/schematic.png'))
@@ -88,11 +106,11 @@ knitr::include_graphics(here('figures/schematic.png'))
 
 ## Parameterization and Analysis 
 
-In our base models, we simulated SARS-CoV-2 transmission and interventions for the Fall 2020 semester. Our main base model assumed no interventions, to project the “worst case” scenario. Counterfactual scenarios then varied the screening and testing rates, and the completeness of contact tracing. Our primary outcomes were both active cases per day and cumulative cases across the semester. The model tracked both total cases in each campus group (students versus staff/faculty) as well as severe cases and COVID-related mortality. 
+In our base models, we simulated SARS-CoV-2 transmission and interventions for the Fall 2020 semester. Our main base model assumed NPI interventions but no screening or testing based-control. Counterfactual scenarios then varied the screening and testing rates, and the completeness of contact tracing. Our primary outcomes were daily and cumulative number of infections among students and staff/faculty, as well as severe cases and COVID-related mortality. 
 
 Given uncertainty in model parameters, we performed a probabilistic sensitivity analysis to determine the range of credible outcomes, given uncertainty in model parameters. In the probabilistic sensitivity analysis, we take 1,000 parameter draws using Latin Hypercube Sampling from the distributions in Table 1 and report the 2.5th and 97.5th centile of those runs (Appendix II). We use partial rank correlation coefficient to determine how much the modeled variation in cumulative incidence among students and faculty/staff depends on specific random parameters. 
 
-The model was built and simulated in the EpiModel package in the R statistical computing platform(13); the LHS package was used to perform Latin Hypercube Sampling. We also built an interactive web app for model exploration using the R Shiny framework. It can be accessed at https://epimodel.shinyapps.io/covid-university/.
+The model was built and simulated in the R statistical computing platform (13); the LHS package was used to perform Latin Hypercube Sampling. We also built an interactive web app for model exploration using the R Shiny framework. It can be accessed at https://epimodel.shinyapps.io/covid-university/.
 
 
 ```{r paramtable,  echo=FALSE}
@@ -106,7 +124,9 @@ knitr::kable(pt, caption = 'Model parameters and ranges.')
 
 UPDATE ALL TEXT
 
-We start by simulating transmission on campus (Table 2; Figure 2) in which no diagnostic control measures are in place (no testing, isolation, contact tracing, or quarantine). With R0 of 3.5 for on-campus student and 2.5 for off-campus, case prevalence peaks at 1324 cases (Range, 2.5th to 97.5th centiles: 624 to 2070) per day among students and 1061 cases per day among staff/faculty (404 to 1907), resulting in cumulative 4960 (3846 to 6264) and 5175 (2573 to 7302) cases at the end of the semester in a population of about 15,000 of each. With our baseline levels of facemask and social distancing efficacy (70%) but with no diagnostics, we estimate case prevalence peaks at  98 cases (Range, 2.5th to 97.5th centiles:15 to 1048) per day among students and 66 cases per day among staff/faculty (17 to 681), resulting in a cumulative of 1233 (231 to 5117) student cases and 888 (255 to 4210) staff cases at the end of the semester.  Note that this number of symptomatic cases is substantially lower than the number of infections since we assume that 35% (27 to 43%) of infected students and 51% (41 to 59%) of infected staff are symptomatic, given infection.(15)  We use this scenario as the baseline counterfactual for all subsequent comparisons. 
+We start by simulating transmission on campus (Table 2; Figure 2) in which no diagnostic control measures are in place (no testing, isolation, contact tracing, or quarantine). 
+
+With R0 of 3.5 for on-campus student and 2.5 for off-campus, case prevalence peaks at 1324 cases (Range, 2.5th to 97.5th centiles: 624 to 2070) per day among students and 1061 cases per day among staff/faculty (404 to 1907), resulting in cumulative 4960 (3846 to 6264) and 5175 (2573 to 7302) cases at the end of the semester in a population of about 15,000 of each. With our baseline levels of facemask and social distancing efficacy (70%) but with no diagnostics, we estimate case prevalence peaks at  98 cases (Range, 2.5th to 97.5th centiles:15 to 1048) per day among students and 66 cases per day among staff/faculty (17 to 681), resulting in a cumulative of 1233 (231 to 5117) student cases and 888 (255 to 4210) staff cases at the end of the semester.  Note that this number of symptomatic cases is substantially lower than the number of infections since we assume that 35% (27 to 43%) of infected students and 51% (41 to 59%) of infected staff are symptomatic, given infection.(15)  We use this scenario as the baseline counterfactual for all subsequent comparisons. 
 
 
 ```{r npifig,  fig.cap='Effect of non-pharmaceutical interventions (with no testing and screening) on COVID-19 cases among students and faculty. Top: Emory, Bottom: UGA.', echo=FALSE}

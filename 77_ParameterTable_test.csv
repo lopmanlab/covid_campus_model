@@ -1,12 +1,12 @@
 Parameter,Value,Lower,Upper,Distribution,Var,School,Symbol,Source,Notes,Change Status for Shiny
 Emory Population,,,,,,All,,,,
-Students living on campus,4500,1575,4500,Uniform,N_on,Emory,,Univ. admin,ranges from (low) a room or apartment that results in housing to serve one person regardless of the number of rooms in the unit to (high) the number of beds Emory fills in a normal semester,UnderInput
-Students living off campus,10500,10500,10500,Uniform,N_off,Emory,,,,
-Staff and faculty,15266,15266,15266,Uniform,N_saf,Emory,,Univ. admin,,UnderInput
+Students living on campus,10000,,,Uniform,N_on,Emory,,Univ. admin,ranges from (low) a room or apartment that results in housing to serve one person regardless of the number of rooms in the unit to (high) the number of beds Emory fills in a normal semester,UnderInput
+Students living off campus,1,,,Uniform,N_off,Emory,,,,
+Staff and faculty,1,,,Uniform,N_saf,Emory,,Univ. admin,,UnderInput
 UGA Population,,,,,,All,,,,
-Students living on campus,8400,8400,8400,Uniform,N_on,UGA,,Univ. admin,,UnderInput
-Students living off campus,30520,30520,30520,Uniform,N_off,UGA,,,,
-Staff and faculty,10856,10856,10856,Uniform,N_saf,UGA,,Univ. admin,,UnderInput
+Students living on campus,10000,,,Uniform,N_on,UGA,,Univ. admin,,UnderInput
+Students living off campus,10000,,,Uniform,N_off,UGA,,,,
+Staff and faculty,10000,,,Uniform,N_saf,UGA,,Univ. admin,,UnderInput
 Natural history and clinical,,,,,,All,,,,
 Latent period (days),3,2,4,Gamma,latent,All,,https://pubmed.ncbi.nlm.nih.gov/32150748/?from_term=lessler+covid&from_pos=1,,AdvancedSetting
 Infectious period (days),7,6,8,Gamma,infectious,All,,https://pubmed.ncbi.nlm.nih.gov/32291278/?from_term=kissler&from_pos=1,First day is asymptomatic,AdvancedSetting
@@ -17,11 +17,11 @@ Proportion fatal infections - staff/faculty,0.0052,0.0029,0.0105,Uniform,p_death
 Proportion symptomatic infections - students,0.35,0.27,0.43,Beta,p_sympt_stu,All,,https://cmmid.github.io/topics/covid19/reports/20200426-Main-Age_dependence_v2_BUNDLED.pdf,,AdvancedSetting
 Proportion symptomatic infections - staff/faculty,0.51,0.41,0.59,Beta,p_sympt_saf,All,,https://cmmid.github.io/topics/covid19/reports/20200426-Main-Age_dependence_v2_BUNDLED.pdf,,AdvancedSetting
 Transmission,,,,,,All,,,,
-average new infections among students ,2.5,1.5,3.5,Uniform,R0_student_to_student,All,,,,SecondarySetting
-extra infections among on-campus students ,1,0.5,2,Uniform,Rp_on_to_on,All,,,,SecondarySetting
-infections among staff/faculty and to/from students ,1,0.5,1.5,Uniform,R0_saf,All,,,,SecondarySetting
-Daily rate of community introduction - Atlanta,0.0005,0.00025,0.001,Beta,community,Emory,,https://dph.georgia.gov/covid-19-daily-status-report,,SecondarySetting
-Daily rate of community introduction - Athens,0.0005,0.00025,0.001,Beta,community,UGA,,https://dph.georgia.gov/covid-19-daily-status-report,,SecondarySetting
+average new infections among students ,2,0.7,2.5,Uniform,R0_student_to_student,All,,,,SecondarySetting
+extra infections among on-campus students ,1,0.3,1.4,Uniform,Rp_on_to_on,All,,,,SecondarySetting
+infections among staff/faculty and to/from students ,0.5,0.15,0.7,Uniform,R0_saf,All,,,,SecondarySetting
+Daily rate of community introduction - Atlanta,0,,,Beta,community,Emory,,https://dph.georgia.gov/covid-19-daily-status-report,,SecondarySetting
+Daily rate of community introduction - Athens,0,,,Beta,community,UGA,,https://dph.georgia.gov/covid-19-daily-status-report,,SecondarySetting
 Efficacy of NPIs,0.4,0.2,0.6,Uniform,eff_npi,All,,https://www.thelancet.com/action/showPdf?pii=S0140-6736%2820%2931142-9,assume 50% compliance,SecondarySetting
 Testing and quarantine,,,,,,All,,,,
 Time from onset of infectiousness to testing (days),2,1,7,Uniform,testing,All,,,"First day is asymptomatic, so when this value is 2, testing is on first day of disease",InterventionScenario
@@ -34,4 +34,4 @@ PCR Sensitivity ,,,,,,All,,,,
 Day 2 of infectiousness,0.75,0.6,0.83,Beta,sensitivity_2,All,,https://www.acpjournals.org/doi/10.7326/M20-1495,,AdvancedSetting
 Day 4 of infectiousness,0.8,0.7,0.85,Beta,sensitivity,All,,https://www.acpjournals.org/doi/10.7326/M20-1496,,AdvancedSetting
 Day 7 of infectiousness,0.75,0.65,0.8,Beta,sensitivity_7,All,,https://www.acpjournals.org/doi/10.7326/M20-1497,,AdvancedSetting
-Simulation time (days),120,120,120,,tmax,All,,,,
+Simulation time (days),200,,,,tmax,All,,,,

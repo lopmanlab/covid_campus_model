@@ -1,5 +1,4 @@
 package_list <- c(
-  "EpiModel",
   "tidyverse",
   "viridis",
   "deSolve",
