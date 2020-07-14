@@ -228,11 +228,8 @@ server <- function(input, output, session) {
             ),
             column(
               width = 6,
-              sliderInput(
-                "basePar_community",
-                name2lab("community", all_labs),
-                0, 0.001, 0.00033
-              )
+              numericInput("basePar_community",
+                           name2lab("community", all_labs), 33)
             )
           )
         )
@@ -250,6 +247,8 @@ server <- function(input, output, session) {
     params$beta_on_to_on <- params$R0_on_to_on / params$infectious
     params$beta_saf <- params$R0_saf / params$infectious
     params$N <- input$baseIni_N_on + input$baseIni_N_off + input$baseIni_N_saf
+
+    params$community <- params$community  / 1e5
 
     params
   })
@@ -276,7 +275,9 @@ server <- function(input, output, session) {
   })
 
   df_base <- reactive({
-    df <- dcm(param_base(), init_base(), control_base()) %>%
+    param <- param_base()
+
+    df <- dcm(param, init_base(), control_base()) %>%
       as_tibble() %>%
       mutate(scenario = base_scenario_name)
 
@@ -426,7 +427,7 @@ server <- function(input, output, session) {
     update_init_vals_pattern("basePar_", input, session)
     updateSliderInput(session, "baseCon_nsteps", value = input$nsteps)
     updateSliderInput(session, "basePar_eff_npi", value = input$npi)
-    updateSliderInput(session, "basePar_community", value = input$community)
+    ## updateSliderInput(session, "basePar_community", value = input$community)
   })
 
 # sens -----------------------------------------------------------------------
@@ -574,7 +575,7 @@ server <- function(input, output, session) {
               sliderInput(
                 "sensRange_community",
                 name2lab("community", all_labs),
-                0, 0.01, c(0.00025, 0.001)
+                0, 200, c(5, 100)
               ),
               sliderInput(
                 "sensRange_eff_npi",
@@ -709,6 +710,8 @@ server <- function(input, output, session) {
       param <- param()
 
       param[names(lhs_param())] <- map(lhs_param(), ~ .x[[i]])
+
+      param$community <- param$community / 1e5
 
       df_base <- dcm(param, init_sens(), control_sens()) %>%
         as_tibble() %>%

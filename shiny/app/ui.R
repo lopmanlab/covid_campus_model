@@ -106,7 +106,7 @@ ui <- dashboardPage(
                   numericInput("infectious", name2lab("infectious", all_labs), 7),
                   numericInput("isolation", name2lab("isolation", all_labs), 14),
                   numericInput("community",
-                               name2lab("community", all_labs), 0.00033)
+                               name2lab("community", all_labs), 33)
                 ),
                 column(
                   width = 4,
