@@ -218,8 +218,22 @@ server <- function(input, output, session) {
           box(
             width = NULL, title = name2lab("model_opts_trans", all_labs),
             status = "primary", solidHeader = TRUE,
-
-            sliderInput("basePar_eff_npi", name2lab("eff_npi", all_labs), 0, 1, 0.3)
+            column(
+              width = 6,
+              sliderInput(
+                "basePar_eff_npi",
+                name2lab("eff_npi", all_labs),
+                0, 1, 0.3
+              )
+            ),
+            column(
+              width = 6,
+              sliderInput(
+                "basePar_community",
+                name2lab("community", all_labs),
+                0, 0.001, 0.00033
+              )
+            )
           )
         )
       )
@@ -412,6 +426,7 @@ server <- function(input, output, session) {
     update_init_vals_pattern("basePar_", input, session)
     updateSliderInput(session, "baseCon_nsteps", value = input$nsteps)
     updateSliderInput(session, "basePar_eff_npi", value = input$npi)
+    updateSliderInput(session, "basePar_community", value = input$community)
   })
 
 # sens -----------------------------------------------------------------------
