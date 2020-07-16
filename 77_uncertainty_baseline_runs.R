@@ -131,13 +131,36 @@ df_uga = all_res %>% mutate(school = "Emory")
 
 
 
+
+##########################################
+#Compute cumulative results from raw tables
+##########################################
+df_emo <- res_df_emo %>% pivot_longer(cols = everything(), names_to = "variable") %>% group_by(variable) %>% 
+  summarise(mean = round(quantile(value, probs = 0.50),0),
+            lower = round(quantile(value, probs = 0.025),0),
+            upper = round(quantile(value, probs = 0.975),0)) 
+
+
+df_emo <- df_emo %>% mutate(School = "Emory")
+
+
+df_uga <- res_df_uga %>% pivot_longer(cols = everything(), names_to = "variable") %>% group_by(variable) %>% 
+  summarise(mean = round(quantile(value, probs = 0.50),0),
+            lower = round(quantile(value, probs = 0.025),0),
+            upper = round(quantile(value, probs = 0.975),0)) 
+
+
+df_uga <- df_uga %>% mutate(School = "UGA")
+
+
+
+
 ##########################################
 #Save results for baseline uncertainty run for loading and displaying inside Rmd file
 ##########################################
 
-res_df_emo = cbind(res_df_emo, School = "Emory")
-res_df_uga = cbind(res_df_uga, School = "UGA")
-res_df = rbind(res_df_emo,res_df_uga)
+res_df = rbind(df_emo, df_uga)
+
 
 filename = here('tables/','uncertain_baseline_table.Rds')
 

@@ -1,6 +1,7 @@
 # Load packages, data files and functions 
 source("77_dependencies_new.R") #loads needed packages
 source("77_model_func_new.R") #loads a function called 'model' which contains the main model. Used below in dcm routine
+source("77_ggplot_themes.R") #loads themes for ggplot styling
 source("77_parm_init_new.R") #loads function that pulls values from spreadsheet to set parameter values and initial conditions
 
 #variable names for quantities we want to track/save for later use as a table
@@ -128,22 +129,23 @@ df <- bind_rows(df_emo,df_uga) %>%
 p1 <- df %>% filter(school == "Emory") %>%
              ggplot(aes(x=time,y=All_students, color=NPI_Impact)) +  
              geom_line() + 
-             geom_line(aes(y=Cum_students)) 
+             geom_line(aes(y=Cum_students)) + manuscript_theme
+
   
 p2 <- df %>% filter(school == "Emory") %>%
              ggplot(aes(x=time,y=All_saf, color=NPI_Impact)) +  
              geom_line() + 
-             geom_line(aes(y=Cum_saf)) 
+             geom_line(aes(y=Cum_saf)) + manuscript_theme
 
 p3 <- df %>%  filter(school == "UGA") %>%
               ggplot(aes(x=time,y=All_students, color=NPI_Impact)) +  
               geom_line() + 
-              geom_line(aes(y=Cum_students)) 
+              geom_line(aes(y=Cum_students)) + manuscript_theme
 
 p4 <- df %>%  filter(school == "UGA") %>%
               ggplot(aes(x=time,y=All_saf, color=NPI_Impact)) +  
               geom_line() + 
-              geom_line(aes(y=Cum_saf)) 
+              geom_line(aes(y=Cum_saf)) + manuscript_theme
 
 pl <- p1 + p2 + p3 + p4 
 

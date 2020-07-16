@@ -7,6 +7,7 @@ package_list <- c(
   "ggpubr",
   "dplyr",
   "gridExtra",
+  "gt",
   "tidyverse",
   "lhs",
   "sensitivity",

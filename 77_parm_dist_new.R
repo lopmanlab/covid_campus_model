@@ -20,35 +20,61 @@ set_pardist <- function(samples = 10, school)
   parvals = p_tab$Value
   parmin = p_tab$Lower
   parmax = p_tab$Upper
+  pdist = p_tab$Distribution
   
   #set seed for reproducibility, then sample
   set.seed(123)
   #random sample between 0 and 1 number of rows is number of replicates, each column is a different parameter
-  parvals=as.data.frame(lhs::randomLHS(samples,nrow(p_tab)))
-  colnames(parvals) = p_tab$Var #name the samples
+  parsample=as.data.frame(lhs::randomLHS(samples,nrow(p_tab)))
+  colnames(parsample) = p_tab$Var #name the samples
   #convert uniform 0-1 values for each parameter to uniform lower-upper values
-  for (i in 1:ncol(parvals))
+  for (i in 1:ncol(parsample))
   {
-    parvals[,i] = qunif(parvals[,i],min = parmin[i], max = parmax[i])
+    
+    if (pdist[i]=="Uniform")
+    {
+      parsample[,i] = qunif(parsample[,i],min = parmin[i], max = parmax[i])
+    }
+    if (pdist[i]=="Beta")
+    {
+      #compute shape parameters based on mean and variance
+      mu = parvals[i]; var = parvals[i]/10;
+      shape1 = mu*(mu*(1-mu)/var - 1)
+      shape2 = (1-mu)*(mu*(1-mu)/var - 1)
+      parsample[,i] = qbeta(parsample[,i], shape1 = shape1, shape2 = shape2)
+    }
+    if (pdist[i]=="Gamma")
+    {
+      #compute shape parameters based on mean and variance
+      mu = parvals[i]; var = parvals[i]/10;
+      shape = mu^2/var
+      scale = var/mu
+      parsample[,i] = qgamma(parsample[,i], shape = shape, scale = scale)
+    }
+    if (pdist[i]=="") #no distribution
+    {
+      parsample[,i] = parsample[,i] = parvals[i]
+    }
+    
   }
   
   #LHS is done on reproductive number, now need to compute betas see the parm_init_new file for details on these equations
-  beta_saf <- (parvals["R0_saf"]/parvals["infectious"]/(parvals["N_on"]+parvals["N_off"]+parvals["N_saf"]))                                                     
-  beta_student_to_student <- ( (parvals["R0_student_to_student"]-beta_saf*parvals["infectious"]*parvals["N_saf"]) /parvals["infectious"]/(parvals["N_on"]+parvals["N_off"]))
-  beta_on_to_on <- ((parvals["R0_student_to_student"] + parvals["Rp_on_to_on"]-beta_saf*parvals["infectious"]*parvals["N_saf"]-beta_student_to_student*parvals["infectious"]*parvals["N_off"] ) / parvals["infectious"] / parvals["N_on"]   )                    
+  beta_saf <- (parsample["R0_saf"]/parsample["infectious"]/(parsample["N_on"]+parsample["N_off"]+parsample["N_saf"]))                                                     
+  beta_student_to_student <- ( (parsample["R0_student_to_student"]-beta_saf*parsample["infectious"]*parsample["N_saf"]) /parsample["infectious"]/(parsample["N_on"]+parsample["N_off"]))
+  beta_on_to_on <- ((parsample["R0_student_to_student"] + parsample["Rp_on_to_on"]-beta_saf*parsample["infectious"]*parsample["N_saf"]-beta_student_to_student*parsample["infectious"]*parsample["N_off"] ) / parsample["infectious"] / parsample["N_on"]   )                    
   
   names(beta_student_to_student) = "beta_student_to_student"
   names(beta_on_to_on) = "beta_on_to_on"
   names(beta_saf) = "beta_saf"
   
   #add some more quantities/model parameters  
-  pardist <- parvals %>% 
+  parsample <- parsample %>% 
              mutate(beta_student_to_student = beta_student_to_student ) %>%
               mutate(beta_on_to_on = beta_on_to_on ) %>%
               mutate(beta_saf = beta_saf ) %>%
               mutate(p_asym_stu = 1- p_sympt_stu ) %>%
               mutate(p_asym_saf = 1- p_sympt_saf ) 
   
-  return(pardist)
+  return(parsample)
 }
 

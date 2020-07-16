@@ -115,46 +115,65 @@ The model was built and simulated in the R statistical computing platform (13); 
 
 ```{r paramtable,  echo=FALSE}
 paramtable=read.csv(here('77_ParameterTable_new.csv'))
-pt = paramtable[,1:6]
+pt = paramtable[,1:5]
 knitr::kable(pt, caption = 'Model parameters and ranges.')
 ```
 
 
 # Results
 
-UPDATE ALL TEXT
-
-We start by simulating transmission on campus (Table 2; Figure 2) in which no diagnostic control measures are in place (no testing, isolation, contact tracing, or quarantine). 
-
-With R0 of 3.5 for on-campus student and 2.5 for off-campus, case prevalence peaks at 1324 cases (Range, 2.5th to 97.5th centiles: 624 to 2070) per day among students and 1061 cases per day among staff/faculty (404 to 1907), resulting in cumulative 4960 (3846 to 6264) and 5175 (2573 to 7302) cases at the end of the semester in a population of about 15,000 of each. With our baseline levels of facemask and social distancing efficacy (70%) but with no diagnostics, we estimate case prevalence peaks at  98 cases (Range, 2.5th to 97.5th centiles:15 to 1048) per day among students and 66 cases per day among staff/faculty (17 to 681), resulting in a cumulative of 1233 (231 to 5117) student cases and 888 (255 to 4210) staff cases at the end of the semester.  Note that this number of symptomatic cases is substantially lower than the number of infections since we assume that 35% (27 to 43%) of infected students and 51% (41 to 59%) of infected staff are symptomatic, given infection.(15)  We use this scenario as the baseline counterfactual for all subsequent comparisons. 
+We start by simulating transmission on campus in which no diagnostic control measures are in place (no testing, isolation, contact tracing, or quarantine). 
+Figure \@ref(fig:npifig) shows total number of infections among students and staff for different assumed strengths of general non-pharmaceutical interventions (NPI), with other parameter values at their base values. Table \@ref(tab:basetable) shows the distribution of outcomes when sampling over distributions for each parameter. 
 
 
 ```{r npifig,  fig.cap='Effect of non-pharmaceutical interventions (with no testing and screening) on COVID-19 cases among students and faculty. Top: Emory, Bottom: UGA.', echo=FALSE}
 knitr::include_graphics(here('figures/npi_fig.png'))
 ```
 
+```{r basetable,  echo=FALSE}
+basetable=readRDS(here('tables/uncertain_baseline_table.Rds'))
+knitr::kable(basetable, caption = 'Cumulative outcomes at end of the semester. Values are medians and 2.5 and 97.5th percentiles of 1,000 model runs, sampled over parameter model ranges.')
+```
 
-We next explored a wide range of screening intervals, from weekly to once during the semester (Fig 3). One-time screening, whereby the population is tested on average once during the 4-month semester, reduced cumulative student incidence overall by 14%; monthly and weekly screening reduced cumulative student incidence by 38% and 73% respectively. For staff and faculty, one-time screening reduced cumulative incidence by 10%; monthly and weekly screening reduce cumulative incidence by 27% and 58% respectively. For students, the cumulative incidence ranged from 336 (115-1536)with weekly screening to 1060 (219 -4839) with one-time screening. For staff/faculty, the cumulative incidence ranged from 371 (142-751)) with weekly screening to 804 (242-3850) with one-time screening.
+
+We next explored a wide range of screening intervals, from weekly to once during the semester. Figure \@ref(fig:screeningfig) shows total number of infections among students and staff for different screening intervals, with other parameter values at their base values. Table \@ref(tab:screentable) shows the distribution of outcomes for a 30-day screening interval when sampling over distributions of the parameters. 
 
 ```{r screeningfig,  fig.cap='Impact of Screening Frequency on Projected Covid-19 incidence.', echo=FALSE}
 knitr::include_graphics(here('figures/screening_fig.png'))
 ```
 
 
-With testing and this level of contact tracing as described, the cumulative incidence for the semester ranges from 207 (78-507)  among students and 364 (148-751)57 (15-144) and staff & faculty with two-day delay testing interval,  296 (106-1055) among students and 426 (165-1023) among staff & faculty with a four-day delay testing interval; 412 (136-1851) among students and 498 (184-1405)  among staff & faculty with a seven-day delay testing interval. (Fig 3) This represents an 83%, 76% and 67% reduction in cumulative incidence over the semester among students and an 59%, 52% and 44% reduction in cumulative incidence among staff & faculty. The impact of testing is highly sensitive to the success of contact tracing, which can overwhelm the impact of quarantine of the tested and isolation of the cases themselves.
+```{r screentable,  echo=FALSE}
+screentable=readRDS(here('tables/uncertain_screening_table.Rds'))
+knitr::kable(screentable, caption = 'Cumulative outcomes at end of the semester. Monlthy screening frequency. Values are medians and 2.5 and 97.5th percentiles of 1,000 model runs, sampled over parameter model ranges.')
+```
+
+
+Next, we consider a testing-only strategy, wich also includes contact tracing and quarantine as measures. Assuming different delays between receiving the test and receiving the results, results are shown Figure \@ref(fig:testingfig). We again plot the total number of infections among students and staff, with other parameter values at their base values. Table \@ref(tab:testtable) shows the distribution of outcomes for a 4-day testing delay when sampling over distributions of the parameters. 
 
 ```{r testingfig,  fig.cap=' Impact of testing, contact tracing and quarantine at a range of testing delay intervals.', echo=FALSE}
 knitr::include_graphics(here('figures/testing_fig.png'))
 ```
 
-
-Here, with week-delayed testing (the least optimistic scenario), the expected cumulative incidence would be 412 (136-1851) for students and 498 (184-1405) for staff/faculty. Figure 3 shows the general relationship between “contact tracing” success and cumulative incidence assuming either a 2-day, 4-day, or 7-day delay in testing/quarantine following symptoms. Although the testing interval can reduce the cumulative incidence, the greater impact of this testing scenario is achieved by the number of contacts reached.
-
-In the final scenarios, we combined the testing and screening rates under different assumptions of contact
-tracing related to testing (Figure 5). Our model scenarios below varied the interval for screening between 1 week (7 days) and 1 semester (120 days) and testing at2-, 4- and 7-day delay, with the efficacy of contact tracing ranging from 0, 50% and 100%. These figure panels show cumulative incidence at the end
-of the semester for students only. When combined with testing, screening generally has little effect unless it is performed at least monthly.
+```{r testtable,  echo=FALSE}
+testtable=readRDS(here('tables/uncertain_testing_table.Rds'))
+knitr::kable(testtable, caption = 'Cumulative outcomes at end of the semester. Testing delay of 4 days. Values are medians and 2.5 and 97.5th percentiles of 1,000 model runs, sampled over parameter model ranges.')
+```
 
 
+The impact of testing is highly sensitive to the success of contact tracing, which can overwhelm the impact of quarantine of the tested and isolation of the cases themselves.
+Figure \@ref(fig:tracingfig) shows the relationship between “contact tracing” success and cumulative incidence assuming a 4-day delay in testing/quarantine following symptoms. Although the testing interval can reduce the cumulative incidence, the greater impact of this testing scenario is achieved by the number of contacts reached.
+
+
+```{r tracingfig,  fig.cap=' Impact of testing, contact tracing and quarantine for different levels of contacts reached.', echo=FALSE}
+knitr::include_graphics(here('figures/tracing_fig.png'))
+```
+
+
+
+NOT DONE YET:
+
+In the final scenarios, we combined the testing and screening rates under different assumptions of contact tracing related to testing (Figure 5). Our model scenarios below varied the interval for screening between 1 week (7 days) and 1 semester (120 days) and testing at2-, 4- and 7-day delay, with the efficacy of contact tracing ranging from 0, 50% and 100%. These figure panels show cumulative incidence at the end of the semester for students only. When combined with testing, screening generally has little effect unless it is performed at least monthly.
 
 ```{r screentestfig,  fig.cap='Impact of combined screening and testing of covid-19 cases among students. Vertical lines represent weekly and monthly screening.', echo=FALSE}
 knitr::include_graphics(here('figures/schematic.png'))
@@ -162,14 +181,12 @@ knitr::include_graphics(here('figures/schematic.png'))
 
 
 
-```{r ntable,  echo=FALSE}
-#ntable=readRDS(here('tables/resulttable.Rds'))
-#knitr::kable(ntable, caption = 'Cumulative outcomes at end of the semester on medium size university campus (approx.  15,000 students and 15,000 staff and faculty). Values are medians and 2.5 and 97.5th percentiles of 1,000 model runs.')
-```
 
 
 
 # Discussion
+
+NOT YET UPDATED
 
 We find that unmitigated transmission of Covid-19 in a population of 30,000 staff, faculty and students would lead to thousands of illnesses, many hospitalizations and likely deaths in this population, which is clearly an unacceptable outcome by administrators and the university community.  Combined with measures to reduce transmission, a testing strategy whereby symptomatic students, staff and faculty are identified, administered viral testing, and isolated is largely effective at controlling transmission.  We find that the success of this strategy relies on contact tracing and quarantining most contacts of infected individuals. Screening would have to be performed at least monthly to have much of an impact on the course of the outbreak on campus and increases the sample collection and assay requirements considerably. However, because we assume the campus community is not a closed population and that there is an ongoing risk of importation of virus, there are considerable numbers of cases even under the most optimistic scenario, which therefore requires substantial resources.  Overall, we recommend that these results be interpreted qualitatively, since there is considerable uncertainty in these projections stemming from lack of precision of parameter inputs (e.g. true R0 in this population).  
 

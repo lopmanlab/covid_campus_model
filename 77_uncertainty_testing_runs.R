@@ -26,14 +26,14 @@ pars_ini <- setpars_ini(school = "Emory")
 #for convenience, all parameters are sampled, even the fixed ones. Those just have lower and upper bounds the same, thus their value doesn't change 
 pardist = set_pardist(samples = nsamples, school = "Emory") 
 
-pardist$screening = 30
-
+#4 day delay
+pardist$testing = 4
 
 #testing and screening are given/sampled as days. model needs rates, so convert here
 pardist <- pardist %>% mutate(testing = 1/testing) %>% mutate(screening = 1/screening)
 
 #if we want no screening and testing
-pardist$testing = 0
+pardist$screening = 0
 
 all_res = NULL
 
@@ -88,13 +88,14 @@ pars_ini <- setpars_ini(school = "UGA")
 pardist = set_pardist(samples = nsamples, school = "UGA") 
 
 
-pardist$screening = 30
+#4 day delay
+pardist$testing = 4
 
 #testing and screening are given/sampled as days. model needs rates, so convert here
 pardist <- pardist %>% mutate(testing = 1/testing) %>% mutate(screening = 1/screening)
 
 #if we want no screening and testing
-pardist$testing = 0
+pardist$screening = 0
 
 all_res = NULL
 
@@ -164,7 +165,7 @@ df_uga <- df_uga %>% mutate(School = "UGA")
 
 res_df = rbind(df_emo, df_uga)
 
-filename = here('tables/','uncertain_screening_table.Rds')
+filename = here('tables/','uncertain_testing_table.Rds')
 
 saveRDS(res_df,filename)
 

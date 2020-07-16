@@ -91,8 +91,8 @@ covid_model <- function(t, t0, parms) {
     dIsymcum_saf <-  p_sympt_stu*1/latent*E_saf
     dPcum_saf <- testing*sensitivity*Isym_saf + screening*sensitivity*(E_saf+Isym_saf+Iasym_saf)
     dQcum_saf <- testing*Isym_saf*sensitivity*(contacts-R0_saf)*p_contacts_reached + testing*Isym_saf*sensitivity*(R0_saf)*p_contacts_reached 
-    dHcum_saf <- (lam_saf*S_saf + community*S_saf)*p_hosp_stu
-    dDcum_saf <- (lam_saf*S_saf + community*S_saf)*p_death_stu
+    dHcum_saf <- (lam_saf*S_saf + community*S_saf)*p_hosp_saf
+    dDcum_saf <- (lam_saf*S_saf + community*S_saf)*p_death_saf
     
     #Calculated outputs
     #number of tests done - not fully inderstanding this, so setting to 0 for now
