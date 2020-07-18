@@ -15,7 +15,7 @@ varnames = c( 'Peak_Stu_Inf', 'Cum_Stu_Inf', 'Cum_Stu_Hosp', 'Cum_Stu_Death', 'C
               'Peak_Saf_Inf', 'Cum_Saf_Inf', 'Cum_Saf_Hosp', 'Cum_Saf_Death', 'Cum_Saf_Iso', 'Cum_Saf_Q', 'N_Test' )
 
 
-nsamples = 10 #LHS samples
+nsamples = 100 #LHS samples
 
 #load parameters and initial conditions for Emory
 #returns a list with ini_cond and parvals 
@@ -136,7 +136,7 @@ df_uga = all_res %>% mutate(school = "Emory")
 #Compute cumulative results from raw tables
 ##########################################
 df_emo <- res_df_emo %>% pivot_longer(cols = everything(), names_to = "variable") %>% group_by(variable) %>% 
-  summarise(mean = round(quantile(value, probs = 0.50),0),
+  summarise(median = round(median(value),0),
             lower = round(quantile(value, probs = 0.025),0),
             upper = round(quantile(value, probs = 0.975),0)) 
 
@@ -145,7 +145,7 @@ df_emo <- df_emo %>% mutate(School = "Emory")
 
 
 df_uga <- res_df_uga %>% pivot_longer(cols = everything(), names_to = "variable") %>% group_by(variable) %>% 
-  summarise(mean = round(quantile(value, probs = 0.50),0),
+  summarise(median = round(median(value),0),
             lower = round(quantile(value, probs = 0.025),0),
             upper = round(quantile(value, probs = 0.975),0)) 
 

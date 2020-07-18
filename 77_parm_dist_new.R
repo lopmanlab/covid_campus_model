@@ -25,23 +25,20 @@ set_pardist <- function(samples = 10, school)
   #set seed for reproducibility, then sample
   set.seed(123)
   #random sample between 0 and 1 number of rows is number of replicates, each column is a different parameter
-  parsample=as.data.frame(lhs::randomLHS(samples,nrow(p_tab)))
+  lhssample=as.data.frame(lhs::randomLHS(samples,nrow(p_tab)))
+  parsample = lhssample
   colnames(parsample) = p_tab$Var #name the samples
   #convert uniform 0-1 values for each parameter to uniform lower-upper values
   for (i in 1:ncol(parsample))
   {
     
-    if (pdist[i]=="Uniform")
-    {
-      parsample[,i] = qunif(parsample[,i],min = parmin[i], max = parmax[i])
-    }
     if (pdist[i]=="Beta")
     {
       #compute shape parameters based on mean and variance
       mu = parvals[i]; var = parvals[i]/10;
       shape1 = mu*(mu*(1-mu)/var - 1)
       shape2 = (1-mu)*(mu*(1-mu)/var - 1)
-      parsample[,i] = qbeta(parsample[,i], shape1 = shape1, shape2 = shape2)
+      parsample[,i] = qbeta(lhssample[,i], shape1 = shape1, shape2 = shape2)
     }
     if (pdist[i]=="Gamma")
     {
@@ -49,14 +46,26 @@ set_pardist <- function(samples = 10, school)
       mu = parvals[i]; var = parvals[i]/10;
       shape = mu^2/var
       scale = var/mu
-      parsample[,i] = qgamma(parsample[,i], shape = shape, scale = scale)
+      parsample[,i] = qgamma(lhssample[,i], shape = shape, scale = scale)
+    }
+    if (pdist[i]=="Uniform")
+    {
+      parsample[,i] = qunif(lhssample[,i],min = parmin[i], max = parmax[i])
     }
     if (pdist[i]=="") #no distribution
     {
-      parsample[,i] = parsample[,i] = parvals[i]
+      parsample[,i] = parvals[i]
     }
-    
+
+    #turn this on to ignore everything above and do uniform sampling for all (so beta/gamma sampling)
+    if (pdist[i]!="") 
+    {
+      #parsample[,i] = qunif(lhssample[,i],min = parmin[i], max = parmax[i])
+    }
+        
   }
+  
+  #browser()
   
   #LHS is done on reproductive number, now need to compute betas see the parm_init_new file for details on these equations
   beta_saf <- (parsample["R0_saf"]/parsample["infectious"]/(parsample["N_on"]+parsample["N_off"]+parsample["N_saf"]))                                                     

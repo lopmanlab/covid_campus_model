@@ -26,7 +26,7 @@ Efficacy of NPIs,0.4,0.2,0.6,Beta,eff_npi,All,,https://www.thelancet.com/action/
 Testing and quarantine,,,,,,All,,,,
 Time from onset of infectiousness to testing (days),2,1,7,Uniform,testing,All,,,"First day is asymptomatic, so when this value is 2, testing is on first day of disease",InterventionScenario
 Screening frequency (days),30,1,120,Uniform,screening,All,,,"Monthly, range is once per semester to daily",InterventionScenario
-Duration of quarantine (days),14,,,,isolation,All,,,,InterventionScenario
+Duration of quarantine (days),14,14,14,,isolation,All,,,,InterventionScenario
 Number of contacts per case,14,12,16,Uniform,contacts,All,,Mossong et al; Prem et al,NEED Source,InterventionScenario
 Proportion of contacts reached,0.75,0.5,1,Uniform,p_contacts_reached,All,,,,
 Proportion experiencing ILI symptoms per day,0.00333,0.003,0.003667,Beta,ili,All,,Nichol et al; Guh et al,,InterventionScenario
