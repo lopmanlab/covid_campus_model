@@ -3,7 +3,7 @@ model <- function(t, t0, parms) {
     
     # ODEs
     # On campus students
-    lam_on = (1-eff_npi)*(beta_student_to_student/2*(I_off/N_off+I_on/N_on) + (beta_on_to_on*I_on/N_on) + (beta_saf*I_saf/N_saf))
+    lam_on = (1-eff_npi)*(beta_student_to_student*(I_off+I_on)+ beta_on_to_on*I_on + beta_saf*I_saf)
     
     dS_on <- -lam_on*S_on - community*S_on - testing*(1-p_asympt_stu)*I_on*sensitivity*(contacts-R0_on_to_on-R0_student_to_student)*p_contacts_reached + 1/isolation*Q_on*((contacts-R0_on_to_on-R0_student_to_student)/contacts)
     dE_on <-  lam_on*S_on + community*S_on - 1/latent*E_on  - screening*E_on*sensitivity - testing*(1-p_asympt_stu)*I_on*sensitivity*(R0_on_to_on+R0_student_to_student)*p_contacts_reached #last term represents contract tracing
@@ -16,12 +16,12 @@ model <- function(t, t0, parms) {
     
     dIcum_on <- (1-p_asympt_stu)*1/latent*E_on
     dPcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity + screening*(E_on+I_on)*sensitivity
-    dQcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts
+    dQcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached
     dHcum_on <- lam_on*S_on*p_hosp_stu
     dDcum_on <- lam_on*S_on*p_death_stu
     
     # Off campus students
-    lam_off = (1-eff_npi)*(beta_student_to_student/2*(I_off/N_off+I_on/N_on)+(beta_saf*I_saf/N_saf))
+    lam_off = (1-eff_npi)*(beta_student_to_student*(I_off+I_on) + beta_saf*I_saf)
     
     dS_off <- -lam_off*S_off - community*S_off - testing*(1-p_asympt_stu)*I_off*sensitivity*(contacts - R0_student_to_student)*p_contacts_reached + 1/isolation*Q_off*((contacts-R0_student_to_student)/contacts)
     dE_off <-  lam_off*S_off + community*S_off - (1/latent)*E_off - screening*E_off*sensitivity - testing*(1-p_asympt_stu)*I_off*sensitivity*(R0_student_to_student)*p_contacts_reached
@@ -34,12 +34,12 @@ model <- function(t, t0, parms) {
     
     dIcum_off = (1-p_asympt_stu)*1/latent*E_off 
     dPcum_off <- testing*(1-p_asympt_stu)*I_off*sensitivity + screening*(E_off+I_off)*sensitivity
-    dQcum_off <-testing*(1-p_asympt_stu)*I_off*sensitivity*contacts
+    dQcum_off <-testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached
     dHcum_off <- lam_off*S_off*p_hosp_stu
     dDcum_off <- lam_off*S_off*p_death_stu
     
     # Staff and faculty
-    lam_saf = (1-eff_npi)*beta_saf*(I_on/N_on+I_off/N_off+I_saf/N_saf)
+    lam_saf = (1-eff_npi)*(beta_saf*(I_on+I_off+I_saf))
     
     dS_saf <- -lam_saf*S_saf - community*S_saf - testing*(1-p_asympt_saf)*I_saf*sensitivity*(contacts-R0_saf)*p_contacts_reached + 1/isolation*Q_saf*((contacts-R0_saf)/contacts)
     dE_saf <-  lam_saf*S_saf + community*S_saf - 1/latent*E_saf - screening*E_saf*sensitivity - testing*(1-p_asympt_saf)*I_saf*sensitivity*(R0_saf)*p_contacts_reached

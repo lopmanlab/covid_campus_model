@@ -16,9 +16,10 @@ server <- function(input, output, session) {
 
 # defaults -------------------------------------------------------------------
   param <- reactive({
-    beta_student_to_student <- input$R0_student_to_student / input$infectious
-    beta_on_to_on <- input$R0_on_to_on / input$infectious
-    beta_saf <- input$R0_saf / input$infectious
+    beta_student_to_student <- input$R0_student_to_student/input$infectious/(input$N_on+input$N_off)
+    beta_on_to_on <- (input$R0_student_to_student + input$R0_on_to_on) / input$infectious / input$N_on                                           
+    beta_saf <- input$R0_saf/input$infectious/(input$N_on+input$N_off+input$N_saf) 
+    
     N <- input$N_on + input$N_off + input$N_saf
 
     param.dcm(
@@ -231,10 +232,12 @@ server <- function(input, output, session) {
     ids <- keep(names(input), ~ grepl("basePar_", .x))
     names <- map_chr(ids, ~ strsplit(.x, "basePar_")[[1]][2])
     params[names] <- map(ids, ~ input[[.x]])
+    
+    params$beta_student_to_student <- params$R0_student_to_student/params$infectious/(params$N_on+params$N_off)
+    params$beta_on_to_on <- (params$R0_student_to_student + params$R0_on_to_on) / params$infectious / params$N_on                                           
+    params$beta_saf <- params$R0_saf/params$infectious/(params$N_on+params$N_off+params$N_saf) 
 
-    params$beta_student_to_student <- params$R0_student_to_student / params$infectious
-    params$beta_on_to_on <- params$R0_on_to_on / params$infectious
-    params$beta_saf <- params$R0_saf / params$infectious
+    
     params$N <- input$baseIni_N_on + input$baseIni_N_off + input$baseIni_N_saf
 
     params

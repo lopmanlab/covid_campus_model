@@ -9,15 +9,19 @@ p_tab$Upper <- as.numeric(as.character(p_tab$Upper))
 R0_student_to_student <- p_tab$Value[which(p_tab$Var=="R0_student_to_student")]   # number of other students that a student infects, on average
 R0_on_to_on <- p_tab$Value[which(p_tab$Var == "R0_on_to_on")]                     # number of additional students that a student living off campus infects, on average
 R0_saf <- p_tab$Value[which(p_tab$Var == "R0_saf")]                               # number of staff and faculty that an average student infects
-R0_reduction <- 1                                                                 # efficacy of control on campus due to hygiene and social distancing
+
+beta_student_to_student <- as.numeric(R0_student_to_student/infectious/(N_on+N_off)) # daily effective contact rates
+beta_on_to_on <- as.numeric((R0_student_to_student + R0_on_to_on) / infectious / N_on)                                           
+beta_saf <- as.numeric(R0_saf/infectious/(N_on+N_off+N_saf))  
 
 latent <- p_tab$Value[which(p_tab$Var == "latent")]                               # latent period duration in days.  This is shorter than incubation period, which is more like 5 days
 infectious <- p_tab$Value[which(p_tab$Var == "infectious")]                       # infectious period in days.This is longer than symptomatic period, which is more like 6 days.
                                                                                   # Effectively this assumes that infectiousness starts 1 day before symptoms
 
-beta_student_to_student <- R0_student_to_student/infectious                       # daily effective contact rate -- symptomatic period
-beta_on_to_on <- R0_on_to_on/infectious                                           # daily effective contact rate -- symptomatic period
-beta_saf <- R0_saf/infectious                                                     # daily effective contact rate -- symptomatic period
+#beta_student_to_student <- R0_student_to_student/infectious                       # daily effective contact rate -- symptomatic period
+#beta_on_to_on <- R0_on_to_on/infectious                                           # daily effective contact rate -- symptomatic period
+#beta_saf <- R0_saf/infectious  
+# daily effective contact rate -- symptomatic period
 eff_npi <- p_tab$Value[which(p_tab$Var == "eff_npi")]                             # efficacy of masking and other NPIs
 
 community <- p_tab$Value[which(p_tab$Var == "community")]                         # daily probability of community infection - not acquired on campus

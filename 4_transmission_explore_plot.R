@@ -8,9 +8,9 @@ r.int <- seq(0, 1, 0.1)
 param <- param.dcm(latent = latent,
                    infectious = infectious,
                    isolation = isolation,
-                   beta_student_to_student = r.int*R0_student_to_student/infectious,
-                   beta_on_to_on = r.int*R0_on_to_on/infectious,
-                   beta_saf = r.int*R0_saf/infectious,
+                   beta_student_to_student = r.int*beta_student_to_student,
+                   beta_on_to_on = r.int*beta_on_to_on,
+                   beta_saf = r.int*beta_saf,
                    contacts = contacts,
                    sensitivity = sensitivity,
                    testing = 0,
@@ -32,7 +32,7 @@ m <- rbind(c(1,2))
 layout(m)
 par(mar = c(3,3,2,1), mgp = c(2,1,0))
 plot(mod, y = "I_stu", main = "Active Cases (Students)", col = pal, legend = FALSE, ylab = "Cases")
-plot(mod, y = "I_saf_sym", main = "Active Cases (Staff/faculty)", col = pal,
+plot(mod, y = "Isym_saf", main = "Active Cases (Staff/faculty)", col = pal,
      ylim = c(0, max(mod$epi$I_stu)),legend = FALSE, ylab = "")
 legend("topleft", legend = c("No reduction" , "70% reduction", "No transmission"), lwd = 3,
        col = c(pal[length(pal)], pal[8], pal[1]), bty = "n", cex = 1)
