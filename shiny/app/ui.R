@@ -145,7 +145,13 @@ ui <- dashboardPage(
         )
       )
     )
-  )
+  ),
+
+  # Update JQuery
+  htmltools::htmlDependency("jquery", "3.5.1",
+    src = "jquery/",#c(href = "https://code.jquery.com/"),
+    script = "jquery-3.5.1.min.js")
+
 )
 
 ui
