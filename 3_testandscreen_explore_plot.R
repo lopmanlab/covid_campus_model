@@ -54,8 +54,7 @@ ggplot(dfLC, aes(test.int, screen.int)) +
   scale_fill_viridis(discrete = FALSE, alpha = 1, option = "D", direction = 1)
 
 #  Here is another way of viewing the same results, but with test intervals specified at 2, 4, and 7 days. Screening has little effect unless it is performed at least monthly.
-
-tiff("Plots/3_testandscreen_explore.tiff", units="in", width=6, height=2, res=300)
+png("Plots/3_testandscreen_explore.png", units="in", width=6, height=3, res=500)
 dfLc0t2 <- filter(dfL, contacts.reached == 0 & test.int == 2)
 dfLc0t4 <- filter(dfL, contacts.reached == 0 & test.int == 4)
 dfLc0t7 <- filter(dfL, contacts.reached == 0 & test.int == 7)
