@@ -44,7 +44,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 0)
 
 mod_base <- dcm(param, init, control)
-mod_base <- mutate_epi(mod_base, I_stu = I_on_sym + I_off_sym,
+mod_base <- mutate_epi(mod_base, I_stu = Isym_on + Isym_off,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Pcum_stu = Pcum_on + Pcum_off,
@@ -80,7 +80,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 0)
 
 mod_4test <- dcm(param, init, control)
-mod_4test <- mutate_epi(mod_4test, I_stu = I_on_sym + I_off_sym,
+mod_4test <- mutate_epi(mod_4test, I_stu = Isym_on + Isym_off,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Pcum_stu = Pcum_on + Pcum_off,
@@ -116,7 +116,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 1/30)
 
 mod_30screen <- dcm(param, init, control)
-mod_30screen <- mutate_epi(mod_30screen, I_stu = I_on_sym + I_off_sym,
+mod_30screen <- mutate_epi(mod_30screen, I_stu = Isym_on + Isym_off,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Pcum_stu = Pcum_on + Pcum_off,
@@ -154,7 +154,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 1/30)
 
 mod_combo <- dcm(param, init, control)
-mod_combo <- mutate_epi(mod_combo, I_stu = I_on_sym + I_off_sym,
+mod_combo <- mutate_epi(mod_combo, I_stu = Isym_on + Isym_off,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Pcum_stu = Pcum_on + Pcum_off,
@@ -190,13 +190,13 @@ p4 <- psa_plot(list_res[[4]], title1= "Active cases-Comb. test & screen", title2
 
 # Arrange plots for output
 
-#tiff("Plots/5_psa_plots12.tiff", units="in", width=6, height=5, res=300)
+png("Plots/5_psa_plots12.png", units="in", width=6, height=5, res=500)
 grid.arrange(p1[[1]]+rremove("legend"),p1[[2]]+rremove("legend"),p2[[1]]+rremove("legend"),p2[[2]]+rremove("legend"))
-#dev.off()
+dev.off()
 
-#tiff("Plots/5_psa_plots22.tiff", units="in", width=6, height=5, res=300)
+png("Plots/5_psa_plots22.png", units="in", width=6, height=5, res=500)
 grid.arrange(p3[[1]]+rremove("legend"),p3[[2]]+rremove("legend"),p4[[1]]+rremove("legend"),p4[[2]]+rremove("legend"))
-#dev.off()
+dev.off()
 
 ```
 
@@ -227,12 +227,12 @@ df_cum<-do.call("rbind",list_res)%>%
     df_peak <- do.call("rbind",list_res) %>%
       group_by(scenario, run) %>%
       summarize(
-        student_cases_peak = max(I_on_sym + I_off_sym, na.rm = TRUE),
+        student_cases_peak = max(Isym_on + Isym_off, na.rm = TRUE),
         student_isos_peak = max(P_on + P_off, na.rm = TRUE),
         student_isos_days = sum(P_on + P_off, na.rm = TRUE),
         student_quas_peak = max(Q_on + Q_off, na.rm = TRUE),
         student_quas_days = sum(Q_on + Q_off, na.rm = TRUE),
-        saf_cases_peak = max(I_saf_sym, na.rm = TRUE),
+        saf_cases_peak = max(Isym_saf, na.rm = TRUE),
         ) %>%
       ungroup()
 
@@ -265,6 +265,12 @@ df_out<-var_order %>% left_join(df_out, by="measure")
 
 kable(df_out[,c("measure","base","test4","screen30","combo")], digits = 0, align = "c") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
+
+
+df_out
+
+saveRDS(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_scen.RDS")
+
 ```
 
 ```{r}
@@ -304,7 +310,7 @@ df_res$output <-rep(rep(c("stud","staff"),each =13),1)
 df_res$output <-as.factor(df_res$output)
 df_res$var<-rep(colnames(variable),2)
 
-tiff("Plots/5_prcc2.tiff", units="in", width=7, height=5, res=300)
+png("Plots/5_prcc2.png", units="in", width=7, height=5, res=300)
 ggplot(data=df_res, aes(x= var,y = original,fill=output)) +
   geom_bar(position="dodge",stat="identity") +
   scale_fill_grey()+
@@ -375,7 +381,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 1/116)
 
 mod_116screen <- dcm(param, init, control)
-mod_116screen <- mutate_epi(mod_116screen, I_stu = I_on_sym + I_off_sym,
+mod_116screen <- mutate_epi(mod_116screen, I_stu = Isym_on + Isym_off,
                         Icum_stu = Icum_on + Icum_off,
                         P_stu = P_on + P_off,
                         Pcum_stu = Pcum_on + Pcum_off,
@@ -408,7 +414,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 1/7)
 
 mod_7screen <- dcm(param, init, control)
-mod_7screen <- mutate_epi(mod_7screen, I_stu = I_on_sym + I_off_sym,
+mod_7screen <- mutate_epi(mod_7screen, I_stu = Isym_on + Isym_off,
                             Icum_stu = Icum_on + Icum_off,
                             P_stu = P_on + P_off,
                             Pcum_stu = Pcum_on + Pcum_off,
@@ -440,7 +446,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 0)
 
 mod_2test <- dcm(param, init, control)
-mod_2test <- mutate_epi(mod_2test, I_stu = I_on_sym + I_off_sym,
+mod_2test <- mutate_epi(mod_2test, I_stu = Isym_on + Isym_off,
                             Icum_stu = Icum_on + Icum_off,
                             P_stu = P_on + P_off,
                             Pcum_stu = Pcum_on + Pcum_off,
@@ -473,7 +479,7 @@ param <- param.dcm(latent = latent.int,
                    screening = 0)
 
 mod_7test <- dcm(param, init, control)
-mod_7test <- mutate_epi(mod_7test, I_stu = I_on_sym + I_off_sym,
+mod_7test <- mutate_epi(mod_7test, I_stu = Isym_on + Isym_off,
                             Icum_stu = Icum_on + Icum_off,
                             P_stu = P_on + P_off,
                             Pcum_stu = Pcum_on + Pcum_off,
@@ -504,14 +510,71 @@ param <- param.dcm(latent = latent.int,
                    screening = 0)
 
 mod_nocont <- dcm(param, init, control)
-mod_nocont<- mutate_epi(mod_nocont, I_stu = I_on_sym + I_off_sym,
+mod_nocont<- mutate_epi(mod_nocont, I_stu = Isym_on + Isym_off,
                         Icum_stu = Icum_on + Icum_off,
                         P_stu = P_on + P_off,
                         Pcum_stu = Pcum_on + Pcum_off,
                         Qcum_stu = Qcum_on + Qcum_off,
                         Hcum_stu = Hcum_on + Hcum_off,
                         Dcum_stu = Dcum_on + Dcum_off)
+mod_nocont<-as.data.frame(mod_nocont)
 
+df_cum1<-mod_nocont%>%
+      filter(time == max(time)) %>%
+      group_by(run) %>%
+      summarize(
+        student_n = S_on + E_on + I_on + R_on + P_on + Q_on - Dcum_on +
+                    S_off + E_off + I_off + R_off + P_off + Q_off - Dcum_off,
+        student_cases = Icum_on + Icum_off,
+        student_hosps = Hcum_on + Hcum_off,
+        student_isos = Pcum_on + Pcum_off,
+        student_quas = Qcum_on + Qcum_off,
+        student_deaths = Dcum_on + Dcum_off,
+        saf_n = S_saf + E_saf + I_saf + R_saf + P_saf + Q_saf - Dcum_saf,
+        saf_cases = Icum_saf,
+        saf_hosps = Hcum_saf,
+        saf_deaths = Dcum_saf,
+        tests = Test
+      ) %>%
+      ungroup() %>%
+      mutate(tests_pc = tests / (student_n + saf_n))
+
+    df_peak1 <- mod_nocont %>%
+      group_by(run) %>%
+      summarize(
+        student_cases_peak = max(Isym_on + Isym_off, na.rm = TRUE),
+        student_isos_peak = max(P_on + P_off, na.rm = TRUE),
+        student_isos_days = sum(P_on + P_off, na.rm = TRUE),
+        student_quas_peak = max(Q_on + Q_off, na.rm = TRUE),
+        student_quas_days = sum(Q_on + Q_off, na.rm = TRUE),
+        saf_cases_peak = max(Isym_saf, na.rm = TRUE),
+        ) %>%
+      ungroup()
+
+    df_nocont <- full_join(df_cum1, df_peak1, by = c("run")) %>%
+      pivot_longer(
+        -c(run),
+        names_to = "measure",
+        values_to = "value"
+      ) %>%
+      group_by(measure) %>%
+      summarize(
+        low = quantile(value, 0.025, na.rm = TRUE),
+        med = quantile(value, 0.5, na.rm = TRUE),
+        high = quantile(value, 0.975, na.rm = TRUE)
+      ) %>%
+      mutate(value = paste0(
+        round(med,digits=0),
+        " (", round(low,digits=0), "-",
+        round(high, digits=0), ")",sep=""))
+
+saveRDS(df_nocont,"tables/res_nocont.RDS")
+
+     # %>%
+      #pivot_wider(id_cols = measure, values_from = value)
+```
+
+```{r}
 # Combine all scenarios for cumulative incidence, % reduction and ranges for staff and student
 list_res1<-lapply(list(
                       "base"=mod_base,
@@ -554,17 +617,22 @@ df_cum<-do.call("rbind",list_res1)%>%
 
 df_stu <- df_cum %>% filter(measure=="student_cases") %>%
   mutate(
-    perc_red = round((1-med/1233)*100,digits=0)
+    perc_red = round((1-med/3056)*100,digits=0)
   )
 
 df_saf <- df_cum %>% filter(measure=="saf_cases") %>%
   mutate(
-    perc_red = round((1-med/888)*100,digits=0)
+    perc_red = round((1-med/1046)*100,digits=0)
   )
 
 df_summary <- full_join(df_stu,df_saf)  %>%
     pivot_wider(id_cols = scenario, names_from = measure, values_from = c(value,perc_red))
 
 df_summary
+
+saveRDS(df_summary,"tables/res_summary.RDS")
 ```
+
+
+
 
