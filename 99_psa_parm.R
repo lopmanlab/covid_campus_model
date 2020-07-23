@@ -12,7 +12,9 @@ p_contacts_reached <- c(p_tab$Lower[which(p_tab$Var=="p_contacts_reached")],p_ta
 ili <-c(p_tab$Lower[which(p_tab$Var=="ili")],p_tab$Upper[which(p_tab$Var=="ili")])
 
 #beta distributions
-community <- betaExpert(best = p_tab$Value[which(p_tab$Var=="community")], lower=p_tab$Lower[which(p_tab$Var=="community")], upper= p_tab$Upper[which(p_tab$Var=="community")], p=0.95, method = "mean")
+under_report <- p_tab$Value[which(p_tab$Var == "under_report")]                   # under-report factor
+community <- betaExpert(best = p_tab$Value[which(p_tab$Var=="daily_new_case")] *under_report, lower=p_tab$Lower[which(p_tab$Var=="daily_new_case")]*under_report, 
+                        upper= p_tab$Upper[which(p_tab$Var=="daily_new_case")]*under_report, p=0.95, method = "mean")
 
 p_asympt_stu<- betaExpert(best = 1-p_tab$Value[which(p_tab$Var=="p_sympt_stu")], lower=1-p_tab$Upper[which(p_tab$Var=="p_sympt_stu")], upper= 1-p_tab$Lower[which(p_tab$Var=="p_sympt_stu")], p=0.95, method = "mean")
 p_asympt_saf<- betaExpert(best = 1-p_tab$Value[which(p_tab$Var=="p_sympt_saf")], lower=1-p_tab$Upper[which(p_tab$Var=="p_sympt_saf")], upper= 1-p_tab$Lower[which(p_tab$Var=="p_sympt_saf")], p=0.95, method = "mean")
@@ -58,7 +60,7 @@ p_death_saf.int <- qbeta(l[,16],p_death_saf$alpha,p_death_saf$beta)
 
 eff_npi.int <- qbeta(l[,17],eff_npi$alpha, eff_npi$beta)
 
-beta_student_to_student.int=R0_student_to_student.int/infectious
-beta_on_to_on.int = R0_on_to_on.int/infectious
-beta_saf.int = R0_saf.int/infectious
+beta_student_to_student.int <- as.numeric(R0_student_to_student.int/infectious/(N_on+N_off))
+beta_on_to_on.int = as.numeric((R0_student_to_student.int + R0_on_to_on.int) / infectious / N_on)  
+beta_saf.int = as.numeric(R0_saf.int/infectious/(N_on+N_off+N_saf)) 
 
