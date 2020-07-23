@@ -1,7 +1,7 @@
 ---
 title: "A model of COVID-19 transmission and control on university campuses"
 author: ""
-date: "`r Sys.Date()`"
+date: ""
 site: bookdown::bookdown_site
 documentclass: article
 output:
@@ -17,25 +17,27 @@ bibliography: Covid_campus.bib
 library('here')
 ```
 
+Ben Lopman, PhD^1^;     
+Carol Y. Liu, MSc^1^;     
+Adrien Le Guillou MD MPH^1,2^;  
+Andreas Handel PhD^3^;  
+Timothy L. Lash, DSc^1^;   
+Alexander P. Isakov MD MPH^4^;   
+Samuel M. Jenness, PhD^1^  
+  
+**Affiliations**  
+^1^ Emory University Rollins School of Public Health, Atlanta, GA 30322, USA  
+^2^ Department of Research and Public Health, Reims Teaching Hospitals, Robert Debré Hospital, Reims, France  
+^3^ College of Public Healh, University of Georgia, Athens, GA 30602, USA  
+^4^ Emory University School of Medicine, Atlanta, GA 30322, USA  
 
-
-
-
-Ben Lopman, PhD1; 
-Carol Y. Liu, MSc1; 
-Adrien Le Guillou MD MPH,1,2;
-Timothy L. Lash, DSc1; 
-Alexander P. Isakov MD MPH3; 
-Samuel M. Jenness, PhD1
-
-Affiliations
-1 Emory University Rollins School of Public Health, Atlanta, GA 30322, USA
-2 Department of Research and Public Health, Reims Teaching Hospitals, Robert Debré Hospital, Reims, France
-3 Emory University School of Medicine, Atlanta, GA 30322, USA
-
-
-Correspondence
-Ben Lopman, Emory University, 1520 Clifton Road, Atlanta, GA 30323. Email: blopman@emory.edu.  
+  
+**Correspondence**  
+Ben Lopman  
+Emory University  
+1520 Clifton Road  
+Atlanta, GA 30323 
+Email: blopman@emory.edu 
 
 ```{r, message=FALSE, echo=FALSE, warning= FALSE}
 #load parameter table so we can cite quantities below
