@@ -267,9 +267,9 @@ kable(df_out[,c("measure","base","test4","screen30","combo")], digits = 0, align
   kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
 
 
-df_out
-
 saveRDS(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_scen.RDS")
+write.csv(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_scen.csv")
+
 
 ```
 
