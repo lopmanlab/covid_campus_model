@@ -27,7 +27,7 @@ pal <- brewer_ramp(mod$control$nruns, "Spectral")
 
 
 # Transmission reduction  Scenarios
-tiff("Plots/4_transmission_explore.tiff", units="in", width=6, height=5, res=300)
+png("Plots/4_transmission_explore.png", units="in", width=6, height=4, res=500)
 m <- rbind(c(1,2))
 layout(m)
 par(mar = c(3,3,2,1), mgp = c(2,1,0))
