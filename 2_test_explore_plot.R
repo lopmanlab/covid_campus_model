@@ -3,7 +3,7 @@ source("99_dependencies.R")
 source("99_model_func.R")
 source("99_parm_init_control.R")
 
-tiff("Plots/2_test_explore.tiff", units="in", width=6, height=5, res=300)
+png("Plots/2_test_explore.png", units="in", width=6, height=5, res=500)
 
 m <- rbind(c(1, 2, 5), c(3,4,6))
 print(m)
