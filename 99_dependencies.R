@@ -12,7 +12,7 @@ package_list <- c(
   "lhs",
   "sensitivity",
   "boot",
-#  "prevalence",
+  #"prevalence",
   "kableExtra"
 )
 
