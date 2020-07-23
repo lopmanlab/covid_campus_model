@@ -28,6 +28,6 @@ Students <-> Students,2,0.7,2.5,SecondarySetting,,,Uniform,R0_student_to_student
 On campus students <-> On campus students,1,0.3,1.4,SecondarySetting,,,Uniform,R0_on_to_on
 All students <-> staff/faculty,0.5,0.15,0.7,SecondarySetting,,,Uniform,R0_saf
 Staff/faculty <-> staff/faculty,0.5,0.15,0.7,SecondarySetting,,,Uniform,
-Daily new cases in community (proportion),0.00026,0.00013,0.0005,UnderInput,https://dph.georgia.gov/covid-19-daily-status-report,,Beta,daily_new_case
+Daily new cases in community (proportion),0.00005,0.000025,0.0001,UnderInput,https://dph.georgia.gov/covid-19-daily-status-report,,Beta,daily_new_case
 Under-reporting factor,10,,,UnderInput,,,None,under_report
 Efficacy of NPIs,0.35,0.18,0.43,SecondarySetting,https://www.thelancet.com/action/showPdf?pii=S0140-6736%2820%2931142-9,assume 50% compliance,Beta,eff_npi
