@@ -35,7 +35,9 @@ server <- function(input, output, session) {
       beta_on_to_on           = beta_on_to_on,
       beta_saf                = beta_saf,
 
-      community               = input$community,
+      ## community               = input$daily_new_case * input$under_report,
+      daily_new_case          = input$daily_new_case,
+      under_report            = input$under_report,
       p_asympt_stu            = input$p_asympt_stu,
       p_asympt_saf            = input$p_asympt_saf,
 
@@ -220,7 +222,20 @@ server <- function(input, output, session) {
             width = NULL, title = name2lab("model_opts_trans", all_labs),
             status = "primary", solidHeader = TRUE,
 
-            sliderInput("basePar_eff_npi", name2lab("eff_npi", all_labs), 0, 1, 0.3)
+            sliderInput("basePar_eff_npi", name2lab("eff_npi", all_labs), 0, 1, 0.3),
+
+            fluidRow(
+              column(
+                width = 6,
+                numericInput("basePar_daily_new_case",
+                             name2lab("daily_new_case", all_labs), 5)
+              ),
+              column(
+                width = 6,
+                numericInput("basePar_under_report",
+                             name2lab("under_report", all_labs), 10)
+              )
+            )
           )
         )
       )
@@ -560,9 +575,14 @@ server <- function(input, output, session) {
                 0, 10, c(0.15, 0.7)
               ),
               sliderInput(
-                "sensRange_community",
-                name2lab("community", all_labs),
-                0, 0.01, c(0.00025, 0.001)
+                "sensRange_daily_new_case",
+                name2lab("daily_new_case", all_labs),
+                0, 50, c(2.5, 10)
+              ),
+              sliderInput(
+                "sensRange_under_report",
+                name2lab("under_report", all_labs),
+                0, 20, c(7, 13)
               ),
               sliderInput(
                 "sensRange_eff_npi",
@@ -684,6 +704,7 @@ server <- function(input, output, session) {
   })
 
   df_sens <- eventReactive(input$sens_run,{
+    Sys.sleep(0.01) # wait for with progress to start
     df <- tibble()
     nsims <- input$sens_set_size
 
@@ -816,6 +837,7 @@ server <- function(input, output, session) {
   slow_sensPlot_pop <- debounce(reactive(input$sensPlot_pop), 2000)
 
   df_plot_sens <- reactive({
+    Sys.sleep(0.02) # wait for previous notification to appear
     setProgress(3, detail = "Genreating plot")
 
     df_clean_sens() %>%
