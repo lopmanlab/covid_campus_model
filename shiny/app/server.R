@@ -716,6 +716,7 @@ server <- function(input, output, session) {
       )
 
       param <- param()
+      param$N <- input$sensIni_N_on + input$sensIni_N_off + input$sensIni_N_saf
 
       param[names(lhs_param())] <- map(lhs_param(), ~ .x[[i]])
 
