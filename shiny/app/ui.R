@@ -105,8 +105,12 @@ ui <- dashboardPage(
                   numericInput("latent", name2lab("latent", all_labs), 3),
                   numericInput("infectious", name2lab("infectious", all_labs), 7),
                   numericInput("isolation", name2lab("isolation", all_labs), 14),
-                  numericInput("community",
-                               name2lab("community", all_labs), 0.00033)
+                  ## numericInput("community",
+                  ##              name2lab("community", all_labs), 0.00033)
+                  numericInput("daily_new_case",
+                               name2lab("daily_new_case", all_labs), 5),
+                  numericInput("under_report",
+                               name2lab("under_report", all_labs), 10)
                 ),
                 column(
                   width = 4,
