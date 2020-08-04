@@ -106,6 +106,6 @@ plot(dfL2$contacts.reached, dfL2$Icum_saf, type = "b", col = pal[1], lwd = 1.5, 
 lines(dfL4$contacts.reached, dfL4$Icum_saf, type = "b", col = pal[2], lwd = 1.5, pch = 20)
 lines(dfL7$contacts.reached, dfL7$Icum_saf, type = "b", col = pal[3], lwd = 1.5, pch = 20)
 legend("topright", legend = c("2-Day Test Delay", "4-Day Test Delay", "7-Day Test Delay"), lwd = 3,
-        bty = "n", col = c(pal[1], pal[3], pal[2]), cex = 0.8)
+        bty = "n", col = c(pal[1], pal[2], pal[3]), cex = 0.8)
 
 dev.off()
