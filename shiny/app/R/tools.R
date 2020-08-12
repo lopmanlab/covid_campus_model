@@ -97,16 +97,16 @@ names(cp_pop_labs) <- map_chr(
 summ_labs <- c(
   # Summary table
   "student_n"          = "Total at Last Time Step",
-  "student_cases"      = "Cummulative Cases",
+  "student_cases"      = "Cumulative Cases",
   "student_cases_peak" = "Peak Incidence",
   "student_hosps"      = "Cumulative Hospitalizations",
   "student_isos"       = "Cumulative Isolations",
   "student_isos_peak"  = "Peak Isolations",
-  "student_isos_days"  = "Cummulative Days in Isolation",
-  "student_quas"       = "Cummulative Quarantines",
+  "student_isos_days"  = "Cumulative Days in Isolation",
+  "student_quas"       = "Cumulative Quarantines",
   "student_quas_peak"  = "Peak Quarantines",
-  "student_quas_days"  = "Cummulative Days Quarantined",
-  "student_deaths"     = "Cummulative Deaths"
+  "student_quas_days"  = "Cumulative Days Quarantined",
+  "student_deaths"     = "Cumulative Deaths"
 )
 
 summ_labs <- c(summ_labs,c(
