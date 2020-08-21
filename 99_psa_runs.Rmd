@@ -17,6 +17,7 @@ source("99_psa_optimizedistr.R")
 source("99_psa_parm.R")   #Note this overwrites initial parameters from parm_init_control
 source("99_psa_plot.R")
 options(scipen=999)
+
 ```
 
 ## Base case
@@ -50,7 +51,10 @@ mod_base <- mutate_epi(mod_base, I_stu = Isym_on + Isym_off,
                   Pcum_stu = Pcum_on + Pcum_off,
                   Qcum_stu = Qcum_on + Qcum_off,
                   Hcum_stu = Hcum_on + Hcum_off,
-                  Dcum_stu = Dcum_on + Dcum_off)
+                  Dcum_stu = Dcum_on + Dcum_off,
+                  Icum_stu_cam = lam_on*S_on)
+
+#df<-as.data.frame(mod_base)
 ```
 
 
@@ -617,12 +621,12 @@ df_cum<-do.call("rbind",list_res1)%>%
 
 df_stu <- df_cum %>% filter(measure=="student_cases") %>%
   mutate(
-    perc_red = round((1-med/3056)*100,digits=0)
+    perc_red = round((1-med/3067)*100,digits=0)
   )
 
 df_saf <- df_cum %>% filter(measure=="saf_cases") %>%
   mutate(
-    perc_red = round((1-med/1046)*100,digits=0)
+    perc_red = round((1-med/1062)*100,digits=0)
   )
 
 df_summary <- full_join(df_stu,df_saf)  %>%
