@@ -8,12 +8,11 @@ package_list <- c(
   "ggpubr",
   "dplyr",
   "gridExtra",
-  "tidyverse",
   "lhs",
   "sensitivity",
   "boot",
-  #"prevalence",
-  "kableExtra",
+  "prevalence",
+  "kableExtra"
 )
 
 
