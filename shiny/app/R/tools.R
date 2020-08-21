@@ -97,16 +97,16 @@ names(cp_pop_labs) <- map_chr(
 summ_labs <- c(
   # Summary table
   "student_n"          = "Total at Last Time Step",
-  "student_cases"      = "Cummulative Cases",
+  "student_cases"      = "Cumulative Cases",
   "student_cases_peak" = "Peak Incidence",
-  "student_hosps"      = "Cummulative Hospitalizations",
-  "student_isos"       = "Cummulative Isolations",
+  "student_hosps"      = "Cumulative Hospitalizations",
+  "student_isos"       = "Cumulative Isolations",
   "student_isos_peak"  = "Peak Isolations",
-  "student_isos_days"  = "Cummulative Days in Isolation",
-  "student_quas"       = "Cummulative Quarantines",
+  "student_isos_days"  = "Cumulative Days in Isolation",
+  "student_quas"       = "Cumulative Quarantines",
   "student_quas_peak"  = "Peak Quarantines",
-  "student_quas_days"  = "Cummulative Days Quarantined",
-  "student_deaths"     = "Cummulative Deaths"
+  "student_quas_days"  = "Cumulative Days Quarantined",
+  "student_deaths"     = "Cumulative Deaths"
 )
 
 summ_labs <- c(summ_labs,c(
@@ -127,8 +127,10 @@ all_labs <- c(
   "R0_student_to_student" = "R0 #1: Number of Students Infected by Each Student",
   "R0_on_to_on"           = "R0 #2: Number of Additional Students Infected by Students Living on Campus",
   "R0_saf"                = "R0 #3: Number of Students Infected by Staff/Faculty (and Staff/Faculty Infected by Students)",
-  "eff_npi"              = "Efficacy of Wearing Face Mask and Other Interventions",
+  "eff_npi"               = "Efficacy of Wearing Face Mask and Other Interventions",
   "community"             = "Daily Probability of Community Infection (Not Acquired on Campus)",
+  "daily_new_case"        = "Daily new community cases per 100,000 population",
+  "under_report"          = "Number of community infections per reported case",
   "p_asympt_saf"          = paste0("Proportion of Asymptomatic - ", pop_labs["saf"]),
   "p_asympt_stu"          = paste0("Proportion of Asymptomatic - ", pop_labs["stu"]),
   "p_hosp_stu"            = paste0("Probability of Hospitalization - ", pop_labs["stu"]),
