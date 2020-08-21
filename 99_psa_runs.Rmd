@@ -51,10 +51,9 @@ mod_base <- mutate_epi(mod_base, I_stu = Isym_on + Isym_off,
                   Pcum_stu = Pcum_on + Pcum_off,
                   Qcum_stu = Qcum_on + Qcum_off,
                   Hcum_stu = Hcum_on + Hcum_off,
-                  Dcum_stu = Dcum_on + Dcum_off,
-                  Icum_stu_cam = lam_on*S_on)
+                  Dcum_stu = Dcum_on + Dcum_off)
 
-#df<-as.data.frame(mod_base)
+
 ```
 
 
@@ -276,6 +275,28 @@ write.csv(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_sc
 
 
 ```
+
+```{r}
+## Distribution of proportion of cumulative cases due to campus transmission 
+
+df_cum1<-do.call("rbind",list_res)%>%
+      filter(time == max(time)) %>%
+      mutate(Icum_stu_camp = Icum_on_camp + Icum_off_camp,
+             prop_stu_camp = Icum_stu_camp/Icum_stu,
+             prop_saf_camp = Icum_saf_camp/Icum_saf) %>%
+      select(scenario, prop_stu_camp,prop_saf_camp)%>%
+      group_by(scenario) %>%
+        summarize(
+        low_stu = quantile(prop_stu_camp, 0.025, na.rm = TRUE),
+        med_stu = quantile(prop_stu_camp, 0.5, na.rm = TRUE),
+        high_stu = quantile(prop_stu_camp, 0.975, na.rm = TRUE),
+        low_saf = quantile(prop_saf_camp, 0.025, na.rm=TRUE),
+        med_saf = quantile(prop_saf_camp, 0.5, na.rm = TRUE),
+        high_saf = quantile(prop_saf_camp, 0.975, na.rm=TRUE)
+      ) 
+      
+```
+
 
 ```{r}
 #' ## PRCC
