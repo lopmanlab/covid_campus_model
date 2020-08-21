@@ -15,8 +15,8 @@ model <- function(t, t0, parms) {
     dQ_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached  - 1/isolation*Q_on
 
     dIcum_on = (1-p_asympt_stu)*(lam_on*S_on + community*S_on)
-    #dIcum_on_camp <- (1-p_asympt_stu) * lam_on*S_on
-    #dIcum_on_com <- (1-p_asympt_stu) *community * S_on
+    dIcum_on_camp <- (1-p_asympt_stu) * lam_on*S_on
+    dIcum_on_com <- (1-p_asympt_stu) *community * S_on
     dPcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity + screening*(E_on+I_on)*sensitivity
     dQcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached
     dHcum_on <- (p_hosp_stu)*(lam_on*S_on + community*S_on)
@@ -35,6 +35,8 @@ model <- function(t, t0, parms) {
     dQ_off <- testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_off
 
     dIcum_off <- (1-p_asympt_stu)*(lam_off*S_off + community*S_off)
+    dIcum_off_camp <- (1-p_asympt_stu) * lam_off*S_off
+    dIcum_off_com <- (1-p_asympt_stu) *community * S_off
     dPcum_off <- testing*(1-p_asympt_stu)*I_off*sensitivity + screening*(E_off+I_off)*sensitivity
     dQcum_off <-testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached
     dHcum_off <- (p_hosp_stu)*(lam_off*S_off + community*S_off)
@@ -53,6 +55,8 @@ model <- function(t, t0, parms) {
     dQ_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_saf
 
     dIcum_saf = (1-p_asympt_saf)*(lam_saf*S_saf + community*S_saf)
+    dIcum_saf_camp <- (1-p_asympt_saf) * lam_saf*S_saf
+    dIcum_saf_com <- (1-p_asympt_saf) *community * S_saf
     dPcum_saf <- testing*(1-p_asympt_saf)*lam_saf*S_saf*sensitivity
     dHcum_saf <- p_hosp_saf*(lam_saf*S_saf + community*S_saf)
     dDcum_saf <- p_death_saf*(lam_saf*S_saf + community*S_saf)
@@ -63,9 +67,9 @@ model <- function(t, t0, parms) {
                   1/latent*E_off - testing*(1-p_asympt_stu)*I_off*sensitivity - 1/infectious*I_off - screening*I_off*sensitivity)
                   
 
-    state_list <- c(dS_on,dE_on,dI_on,dIsym_on, dP_on,dR_on,dIcum_on, dPcum_on, dQ_on, dQcum_on, dHcum_on, dDcum_on,
-                    dS_off,dE_off,dI_off,dIsym_off,dP_off,dR_off,dIcum_off, dPcum_off, dQ_off, dQcum_off, dHcum_off, dDcum_off,
-                    dS_saf,dE_saf,dI_saf,dIsym_saf, dP_saf,dR_saf,dIcum_saf,dPcum_saf, dQ_saf, dHcum_saf, dDcum_saf, 
+    state_list <- c(dS_on,dE_on,dI_on,dIsym_on, dP_on,dR_on,dIcum_on, dPcum_on, dQ_on, dQcum_on, dHcum_on, dDcum_on,  dIcum_on_camp, dIcum_on_com,
+                    dS_off,dE_off,dI_off,dIsym_off,dP_off,dR_off,dIcum_off, dPcum_off, dQ_off, dQcum_off, dHcum_off, dDcum_off,dIcum_off_camp, dIcum_off_com,
+                    dS_saf,dE_saf,dI_saf,dIsym_saf, dP_saf,dR_saf,dIcum_saf,dPcum_saf, dQ_saf, dHcum_saf, dDcum_saf, dIcum_saf_camp, dIcum_saf_com,
                     dTest,lam_on,lam_off,lam_saf)
     out <- list(state_list)
     return(out)
