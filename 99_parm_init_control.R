@@ -72,7 +72,7 @@ P_off = 0
 R_off = 0
 Q_off = 0
 
-#N_saf = 15266               #staff and faculty
+N_saf = 15266               #staff and faculty
 E_saf=0
 I_saf=0
 P_saf = 0
