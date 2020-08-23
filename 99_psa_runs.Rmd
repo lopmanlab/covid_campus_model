@@ -7,6 +7,7 @@ output:
     df_print: paged
 ---
 
+
 ```{r}
 knitr::opts_chunk$set(echo = TRUE)
 # Load dependencies, functions and parameters
@@ -17,6 +18,7 @@ source("99_psa_optimizedistr.R")
 source("99_psa_parm.R")   #Note this overwrites initial parameters from parm_init_control
 source("99_psa_plot.R")
 options(scipen=999)
+options(digits=4)
 
 ```
 
@@ -279,12 +281,13 @@ write.csv(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_sc
 ```{r}
 ## Distribution of proportion of cumulative cases due to campus transmission 
 
-df_cum1<-do.call("rbind",list_res)%>%
+propcomm<-do.call("rbind",list_res)%>%
       filter(time == max(time)) %>%
+      #select(Icum_on_camp, Icum_off_camp,Icum_stu, Icum_saf_camp, Icum_saf) %>%
       mutate(Icum_stu_camp = Icum_on_camp + Icum_off_camp,
              prop_stu_camp = Icum_stu_camp/Icum_stu,
              prop_saf_camp = Icum_saf_camp/Icum_saf) %>%
-      select(scenario, prop_stu_camp,prop_saf_camp)%>%
+      select(scenario, Icum_stu_camp, Icum_stu, prop_stu_camp,prop_saf_camp)%>%
       group_by(scenario) %>%
         summarize(
         low_stu = quantile(prop_stu_camp, 0.025, na.rm = TRUE),
@@ -294,7 +297,9 @@ df_cum1<-do.call("rbind",list_res)%>%
         med_saf = quantile(prop_saf_camp, 0.5, na.rm = TRUE),
         high_saf = quantile(prop_saf_camp, 0.975, na.rm=TRUE)
       ) 
-      
+
+saveRDS(propcomm,"tables/propcomm.RDS")
+
 ```
 
 
