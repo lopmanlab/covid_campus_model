@@ -16,11 +16,11 @@ model <- function(t, t0, parms) {
     dP_on <- testing*(1-p_asympt_stu)*sensitivity*I_on + screening*(E_on+I_on)*sensitivity - 1/isolation*P_on
     dQ_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached  - 1/isolation*Q_on
     
-    dIcum_on <- (1-p_asympt_stu)*1/latent*E_on
+    dIcum_on = (1-p_asympt_stu)*(lam_on*S_on + community*S_on)
     dPcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity + screening*(E_on+I_on)*sensitivity
     dQcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached
-    dHcum_on <- lam_on*S_on*p_hosp_stu
-    dDcum_on <- lam_on*S_on*p_death_stu
+    dHcum_on <- (p_hosp_stu)*(lam_on*S_on + community*S_on)
+    dDcum_on <- p_death_stu*(lam_on*S_on + community*S_on)
     
     # Off campus students
     lam_off = (1-eff_npi)*(beta_student_to_student*(I_off+I_on) + beta_saf*I_saf)
@@ -34,11 +34,11 @@ model <- function(t, t0, parms) {
     dP_off <- testing*(1-p_asympt_stu)*I_off*sensitivity - 1/isolation*P_off + screening*(E_off+I_off)*sensitivity
     dQ_off <- testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_off
     
-    dIcum_off = (1-p_asympt_stu)*1/latent*E_off 
+    dIcum_off <- (1-p_asympt_stu)*(lam_off*S_off + community*S_off)
     dPcum_off <- testing*(1-p_asympt_stu)*I_off*sensitivity + screening*(E_off+I_off)*sensitivity
     dQcum_off <-testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached
-    dHcum_off <- lam_off*S_off*p_hosp_stu
-    dDcum_off <- lam_off*S_off*p_death_stu
+    dHcum_off <- (p_hosp_stu)*(lam_off*S_off + community*S_off)
+    dDcum_off <- p_death_stu * (lam_off*S_off + community*S_off)
     
     # Staff and faculty
     lam_saf = (1-eff_npi)*(beta_saf*(I_on+I_off+I_saf))
@@ -52,10 +52,11 @@ model <- function(t, t0, parms) {
     dP_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity - 1/isolation*P_saf + screening*(E_saf+I_saf)*sensitivity
     dQ_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_saf
     
-    dIcum_saf = (1-p_asympt_saf)*1/latent*E_saf 
+    dIcum_saf = (1-p_asympt_saf)*(lam_saf*S_saf + community*S_saf)
     dPcum_saf <- testing*(1-p_asympt_saf)*lam_saf*S_saf*sensitivity
-    dHcum_saf <- lam_saf*S_saf*p_hosp_saf
-    dDcum_saf <- lam_saf*S_saf*p_death_saf
+    dHcum_saf <- p_hosp_saf*(lam_saf*S_saf + community*S_saf)
+    dDcum_saf <- p_death_saf*(lam_saf*S_saf + community*S_saf)
+    
     
     #Calculated outputs
     dTest <- N*screening + ((I_on+I_off+I_saf)*testing) + N*ili*ifelse(testing > 0, 1, 0) #diagnostics performed
