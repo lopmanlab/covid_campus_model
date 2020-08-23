@@ -96,7 +96,7 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  Hcum_on =0,
                  Dcum_on=0,
                  Icum_on_camp=0,
-                 Icum_on_com=0,
+                 #Icum_on_com=0,
 
                  S_off=N_off-(E_off+I_off+R_off),
                  E_off=E_off,
@@ -111,7 +111,7 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  Hcum_off = 0,
                  Dcum_off =0,
                  Icum_off_camp=0,
-                 Icum_off_com=0,
+                 #Icum_off_com=0,
 
                  S_saf=N_saf-(E_saf+I_saf+R_saf),
                  E_saf=E_saf,
@@ -125,7 +125,7 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  Hcum_saf =0,
                  Dcum_saf =0,
                  Icum_saf_camp=0,
-                 Icum_saf_com=0,
+                 #Icum_saf_com=0,
 
                  Test = 0,
                  lam_on = 0,
