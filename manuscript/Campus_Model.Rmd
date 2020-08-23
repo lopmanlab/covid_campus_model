@@ -33,11 +33,11 @@ Samuel M. Jenness, PhD^1^
 
   
 **Correspondence**  
-Ben Lopman  
+Carol Liu 
 Emory University  
 1520 Clifton Road  
 Atlanta, GA 30323 
-Email: blopman@emory.edu 
+Email: carol.liu@emory.edu 
 
 
 **Funding**
@@ -61,6 +61,7 @@ nocont <- readRDS(here('tables/res_nocont.RDS'))
 
 res_scen <- readRDS(here('tables/res_scen.RDS'))
 
+propcomm <- readRDS(here('tables/propcomm.RDS'))
 
 ```
 
@@ -68,16 +69,16 @@ res_scen <- readRDS(here('tables/res_scen.RDS'))
 
 # Abstract
 
-Background
+**Background**
 University administrators are now facing decisions about if and how to safely return and maintain students, staff and faculty on campus throughout the 2020-21 school year. 
 
-Methods
+**Methods**
 To provide a framework to evaluate various strategies, we developed a susceptible-exposed-infectious-recovered (SEIR) deterministic compartmental transmission model of SARS-CoV-2 among university students, staff, and faculty. Our goals were to inform the immediate pandemic planning at our own university, and to provide a flexible modeling framework to inform the planning efforts at similar academic institutions. We parameterized the model to a medium-size university (like Emory University). Control strategies of isolation and quarantine are initiated by screening (regardless of symptoms) or testing (of symptomatic individuals). We explored a range of screening and testing frequencies and performed a probabilistic sensitivity analysis. 
 
-Results
-We found that monthly and weekly screening can reduce cumulative incidence by  `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen30")]`% and `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen7")]`% in students, respectively, while testing with a 2-, 4- and 7-day delay results in an `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test2")]`%, `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test4")]`% and `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test7")]`%reduction in cumulative incidence in students over the semester, respectively. Smaller reductions were observed among staff and faculty. Testing strategies required far fewer diagnostic assays than screening strategies. 
+**Results**
+We found that monthly and weekly screening can reduce cumulative incidence by  `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen30")]`% and `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen7")]`% in students, respectively, while testing with a 2-, 4- and 7-day delay results in an `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test2")]`%, `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test4")]`% and `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test7")]`%reduction in cumulative incidence in students over the semester, respectively. Smaller reductions were observed among staff and faculty. Under intervention scenarios, a significant proportion of cases were due to community introductions. Testing strategies required far fewer diagnostic assays than screening strategies. 
 
-Conclusions
+**Conclusions**
 Community-introduction of SARS-CoV-2 onto campus may be controlled with disease surveillance followed by testing, isolation, contract tracing and quarantine. Screening would need to be performed at least weekly to have substantial reductions beyond disease surveillance.  In addition to estimating health impacts, this model can predict the resource requirements in terms of diagnostic capacity and isolation/quarantine facilities associated with different strategies.
 
 
@@ -145,7 +146,7 @@ knitr::include_graphics(here('Plots/4_transmission_explore.png'))
 ```
 
 
-We next explored a wide range of screening intervals, from weekly to once during the semester (Figure \@ref(fig:screeningfig)). One-time screening, whereby the population is tested on average once during the 4-month semester, reduced cumulative student incidence overall by `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen116")]`%; monthly and weekly screening reduced cumulative student incidence by `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen30")]`% and `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen7")]`% respectively. For staff and faculty, one-time screening reduced cumulative incidence by `r res_sum$perc_red_saf_cases[which(res_sum$scenario == "screen116")]`%; monthly and weekly screening reduce cumulative incidence by `r res_sum$perc_red_saf_cases[which(res_sum$scenario == "screen30")]`% and `r res_sum$perc_red_saf_cases[which(res_sum$scenario == "screen7")]`% respectively. For students, the cumulative incidence ranged from `r res_sum$value_student_cases[which(res_sum$scenario == "screen7")]` with weekly screening to `r res_sum$value_student_cases[which(res_sum$scenario == "screen116")]` with one-time screening. For staff/faculty, the cumulative incidence ranged from `r res_sum$value_saf_cases[which(res_sum$scenario == "screen7")]` with weekly screening to `r res_sum$value_saf_cases[which(res_sum$scenario == "screen116")]` with one-time screening.
+We next explored a wide range of screening intervals, from weekly to once during the semester (Figure \@ref(fig:screeningfig)). One-time screening, whereby the population is tested on average once during the 4-month semester, reduced cumulative student incidence overall by `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen116")]`%; monthly and weekly screening reduced cumulative student incidence by `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen30")]`% and `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen7")]`% respectively. For staff and faculty, one-time screening reduced cumulative incidence by `r res_sum$perc_red_saf_cases[which(res_sum$scenario == "screen116")]`%; monthly and weekly screening reduce cumulative incidence by `r res_sum$perc_red_saf_cases[which(res_sum$scenario == "screen30")]`% and `r res_sum$perc_red_saf_cases[which(res_sum$scenario == "screen7")]`% respectively. For students, the cumulative incidence ranged from `r res_sum$value_student_cases[which(res_sum$scenario == "screen7")]` with weekly screening to `r res_sum$value_student_cases[which(res_sum$scenario == "screen116")]` with one-time screening. For staff/faculty, the cumulative incidence ranged from `r res_sum$value_saf_cases[which(res_sum$scenario == "screen7")]` with weekly screening to `r res_sum$value_saf_cases[which(res_sum$scenario == "screen116")]` with one-time screening. 
 
 ```{r screeningfig,  fig.cap='Impact of Screening Frequency on Projected Covid-19 Daily and Cumulative Incidence.', echo=FALSE}
 knitr::include_graphics(here('Plots/1_screen_explore.png'))
@@ -173,8 +174,11 @@ In the final scenarios, we combined the testing and screening rates under differ
 
 ```{r combfig,  fig.cap=' Impact of combined screening and testing of covid-19 cases among students. Vertical lines represent weekly and monthly screening.', echo=FALSE}
 knitr::include_graphics(here('Plots/3_testandscreen_explore.png'))
+
+
 ```
 
+Under intervention scenarios, reductions in campus transmission corresponds with an increase in proportion of cases due to community transmission. In the base scenario, community transmission accounted for `r round(100-propcomm$med_stu[which(propcomm$scenario == "base")]*100,digits=0)`% and `r round(100-propcomm$med_saf[which(propcomm$scenario == "base")]*100,digits=0)`% of cases among students and staff. Comparatively, under 30-day screening interval, 4-day test delay and combined 30-day screening interval, community transmission accounted for `r round(100-propcomm$med_stu[which(propcomm$scenario == "screen30")]*100,digits=0)`%, `r round(100-propcomm$med_stu[which(propcomm$scenario == "test4")]*100,digits=0)`%, `r round(100-propcomm$med_stu[which(propcomm$scenario == "combo")]*100,digits=0)`% cases among students, respectively, and `r round(100-propcomm$med_saf[which(propcomm$scenario == "screen30")]*100,digits=0)`%, `r round(100-propcomm$med_saf[which(propcomm$scenario == "test4")]*100,digits=0)`%, `r round(100-propcomm$med_saf[which(propcomm$scenario == "combo")]*100,digits=0)`% of cases among staff, respectively. 
 
 # Discussion
 
