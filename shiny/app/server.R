@@ -617,7 +617,7 @@ server <- function(input, output, session) {
               sliderInput(
                 "sensRange_p_asympt_stu",
                 name2lab("p_asympt_stu", all_labs),
-                0, 1 , c(0.27, 0.43)
+                0, 1 , c(0.57, 0.73)
               ),
               sliderInput(
                 "sensRange_p_hosp_stu",
