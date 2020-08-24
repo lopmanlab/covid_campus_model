@@ -1,5 +1,5 @@
 ---
-title: "A model of COVID-19 transmission and control on university campuses"
+title: "Disease surveillance and screening to control SARS-CoV-2 on university campuses: a modeling study"
 author: ""
 date: ""
 site: bookdown::bookdown_site
@@ -33,7 +33,8 @@ Samuel M. Jenness, PhD^1^
 
   
 **Correspondence**  
-Carol Liu 
+
+Carol Liu
 Emory University  
 1520 Clifton Road  
 Atlanta, GA 30323 
@@ -41,6 +42,7 @@ Email: carol.liu@emory.edu
 
 
 **Funding**
+
 BAL and AH acknowledge support from NIH/NIGMS (R01 GM124280 and 3R01GM124280-03S1).   
 BAL and CYL acknowledge support from NIH/NIAID (3R01AI143875-02S1) 
 BAL acknowledges support from NSF (2032084).
@@ -69,16 +71,16 @@ propcomm <- readRDS(here('tables/propcomm.RDS'))
 
 # Abstract
 
-**Background**
+Background
 University administrators are now facing decisions about if and how to safely return and maintain students, staff and faculty on campus throughout the 2020-21 school year. 
 
-**Methods**
+Methods
 To provide a framework to evaluate various strategies, we developed a susceptible-exposed-infectious-recovered (SEIR) deterministic compartmental transmission model of SARS-CoV-2 among university students, staff, and faculty. Our goals were to inform the immediate pandemic planning at our own university, and to provide a flexible modeling framework to inform the planning efforts at similar academic institutions. We parameterized the model to a medium-size university (like Emory University). Control strategies of isolation and quarantine are initiated by screening (regardless of symptoms) or testing (of symptomatic individuals). We explored a range of screening and testing frequencies and performed a probabilistic sensitivity analysis. 
 
-**Results**
+Results
 We found that monthly and weekly screening can reduce cumulative incidence by  `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen30")]`% and `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen7")]`% in students, respectively, while testing with a 2-, 4- and 7-day delay results in an `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test2")]`%, `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test4")]`% and `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test7")]`%reduction in cumulative incidence in students over the semester, respectively. Smaller reductions were observed among staff and faculty. Under intervention scenarios, a significant proportion of cases were due to community introductions. Testing strategies required far fewer diagnostic assays than screening strategies. 
 
-**Conclusions**
+Conclusions
 Community-introduction of SARS-CoV-2 onto campus may be controlled with disease surveillance followed by testing, isolation, contract tracing and quarantine. Screening would need to be performed at least weekly to have substantial reductions beyond disease surveillance.  In addition to estimating health impacts, this model can predict the resource requirements in terms of diagnostic capacity and isolation/quarantine facilities associated with different strategies.
 
 
@@ -133,7 +135,7 @@ pt = paramtable[,1:5]
 # Results
 
 We start by simulating transmission on campus (Figure \@ref(fig:npifig)) in which no diagnostic control measures are in place (no testing, isolation, contact tracing, or quarantine). 
-With R0 of 3.5 for on-campus student and 2.5 for off-campus, case prevalence peaks at `r round(nocont$med[which(nocont$measure == "student_cases_peak")])` cases (Range, 2.5th to 97.5th centiles: `r round(nocont$low[which(nocont$measure == "student_cases_peak")])` to `r round(nocont$high[which(nocont$measure == "student_cases_peak")])`) per day among students and `r round(nocont$med[which(nocont$measure == "saf_cases_peak")])` cases per day among staff/faculty (`r round(nocont$low[which(nocont$measure == "saf_cases_peak")])` to `r round(nocont$high[which(nocont$measure == "saf_cases_peak")])`), resulting in a cumulative of`r round(nocont$med[which(nocont$measure == "student_cases")])` (`r round(nocont$low[which(nocont$measure == "student_cases")])` to `r round(nocont$high[which(nocont$measure == "student_cases")])`) and `r round(nocont$med[which(nocont$measure == "saf_cases")])` (`r round(nocont$low[which(nocont$measure == "saf_cases")])` to `r round(nocont$high[which(nocont$measure == "saf_cases")])`) cases at the end of the semester in a population of about 15,000 each. With our baseline levels of facemask and social distancing efficacy (70%) but with no diagnostics, we estimate case prevalence peaks at `r res_scen$base[which(res_scen$measure=="student_cases_peak")]` per day among students and `r res_scen$base[which(res_scen$measure=="saf_cases_peak")]` cases per day among staff/faculty, resulting in a cumulative of `r res_scen$base[which(res_scen$measure=="student_cases")]` student cases and `r res_scen$base[which(res_scen$measure=="saf_cases")]` staff cases at the end of the semester.  This number of symptomatic cases is substantially lower than the number of infections since we assume that 35% (27 to 43%) of infected students and 51% (41 to 59%) of infected staff are symptomatic, given infection.(3) We use this scenario as the baseline counterfactual for all subsequent comparisons. 
+With R0 of 3.5 for on-campus student and 2.5 for off-campus, case prevalence peaks at `r round(nocont$med[which(nocont$measure == "student_cases_peak")])` cases (Range, 2.5th to 97.5th centiles: `r round(nocont$low[which(nocont$measure == "student_cases_peak")])` to `r round(nocont$high[which(nocont$measure == "student_cases_peak")])`) per day among students and `r round(nocont$med[which(nocont$measure == "saf_cases_peak")])` cases per day among staff/faculty (`r round(nocont$low[which(nocont$measure == "saf_cases_peak")])` to `r round(nocont$high[which(nocont$measure == "saf_cases_peak")])`), resulting in a cumulative of`r round(nocont$med[which(nocont$measure == "student_cases")])` (`r round(nocont$low[which(nocont$measure == "student_cases")])` to `r round(nocont$high[which(nocont$measure == "student_cases")])`) and `r round(nocont$med[which(nocont$measure == "saf_cases")])` (`r round(nocont$low[which(nocont$measure == "saf_cases")])` to `r round(nocont$high[which(nocont$measure == "saf_cases")])`) cases at the end of the semester in a population of about 15,000 each. With our baseline levels of facemask and social distancing efficacy (70%) but with no diagnostics, we estimate case prevalence peaks at `r res_scen$base[which(res_scen$measure=="student_cases_peak")]` per day among students and `r res_scen$base[which(res_scen$measure=="saf_cases_peak")]` cases per day among staff/faculty, resulting in a cumulative of `r res_scen$base[which(res_scen$measure=="student_cases")]` student cases and `r res_scen$base[which(res_scen$measure=="saf_cases")]` staff cases at the end of the semester.  This number of symptomatic cases is substantially lower than the number of infections since we assume that 35% (27% to 43%) of infected students and 51% (41% to 59%) of infected staff are symptomatic, given infection.(3) We use this scenario as the baseline counterfactual for all subsequent comparisons. 
 
 
 ```{r npifig,  fig.cap='Effect of non-pharmaceutical interventions (with no testing and screening) on COVID-19 prevalence among students and faculty.' , echo=FALSE}
