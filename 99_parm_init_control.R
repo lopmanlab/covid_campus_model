@@ -1,4 +1,5 @@
-parameter_table <- read.csv("99_ParameterTable_s.csv")
+#parameter_table <- read.csv("99_ParameterTable_s.csv") # Parameter table manuscript
+parameter_table <-read.csv("ParameterTable_EmorySpring.csv")   # Parameter table spring
 p_tab <- parameter_table[,1:9]
 p_tab$Value <-gsub(",","",p_tab$Value)
 p_tab$Value <- as.numeric(as.character(p_tab$Value))
@@ -72,7 +73,6 @@ P_off = 0
 R_off = 0
 Q_off = 0
 
-N_saf = 15266               #staff and faculty
 E_saf=0
 I_saf=0
 P_saf = 0
@@ -80,7 +80,8 @@ R_saf = 0
 Q_saf = 0
 
 testing=0
-screening=0
+screening_on=0              #screening interval for oncampus students
+screening =0             #screening intervals for off campus students and staff
 
 ## Initial conditions to model
 init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptible
@@ -134,4 +135,5 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  )
 
 # Control features
-control <- control.dcm(nsteps = 116, new.mod = model)
+#control <- control.dcm(nsteps = 116, new.mod = model)  #Time steps for manuscript
+control <- control.dcm(nsteps = 102, new.mod = model)    #Time steps for spring semester
