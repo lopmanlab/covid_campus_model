@@ -44,7 +44,8 @@ param <- param.dcm(latent = latent.int,
                    sensitivity = sensitivity.int,
                    eff_npi = eff_npi.int,
                    testing = 0,
-                   screening = 0)
+                   screening = 0,
+                   screening_on=0)
 
 mod_base <- dcm(param, init, control)
 mod_base <- mutate_epi(mod_base, I_stu = Isym_on + Isym_off,
@@ -82,7 +83,8 @@ param <- param.dcm(latent = latent.int,
                    sensitivity = sensitivity.int,
                    eff_npi = eff_npi.int,
                    testing = 1/4,
-                   screening = 0)
+                   screening = 0,
+                   screening_on =0)
 
 mod_4test <- dcm(param, init, control)
 mod_4test <- mutate_epi(mod_4test, I_stu = Isym_on + Isym_off,
@@ -118,7 +120,8 @@ param <- param.dcm(latent = latent.int,
                    sensitivity = sensitivity.int,
                    eff_npi = eff_npi.int,
                    testing = 0,
-                   screening = 1/30)
+                   screening = 1/30,
+                   screening_on=1/30)
 
 mod_30screen <- dcm(param, init, control)
 mod_30screen <- mutate_epi(mod_30screen, I_stu = Isym_on + Isym_off,
@@ -156,7 +159,8 @@ param <- param.dcm(latent = latent.int,
                    sensitivity = sensitivity.int,
                    eff_npi = eff_npi.int,
                    testing = 1/4,
-                   screening = 1/30)
+                   screening = 1/30,
+                   screening_on=1/30)
 
 mod_combo <- dcm(param, init, control)
 mod_combo <- mutate_epi(mod_combo, I_stu = Isym_on + Isym_off,
@@ -408,7 +412,8 @@ param <- param.dcm(latent = latent.int,
                    sensitivity = sensitivity.int,
                    eff_npi = eff_npi.int,
                    testing = 0,
-                   screening = 1/116)
+                   screening = 1/116,
+                   screening_on=1/116)
 
 mod_116screen <- dcm(param, init, control)
 mod_116screen <- mutate_epi(mod_116screen, I_stu = Isym_on + Isym_off,
@@ -441,7 +446,8 @@ param <- param.dcm(latent = latent.int,
                    sensitivity = sensitivity.int,
                    eff_npi = eff_npi.int,
                    testing = 0,
-                   screening = 1/7)
+                   screening = 1/7,
+                   screening_on=1/7)
 
 mod_7screen <- dcm(param, init, control)
 mod_7screen <- mutate_epi(mod_7screen, I_stu = Isym_on + Isym_off,
@@ -473,7 +479,8 @@ param <- param.dcm(latent = latent.int,
                    sensitivity = sensitivity.int,
                    eff_npi = eff_npi.int,
                    testing = 1/2,
-                   screening = 0)
+                   screening = 0,
+                   screening_on=0)
 
 mod_2test <- dcm(param, init, control)
 mod_2test <- mutate_epi(mod_2test, I_stu = Isym_on + Isym_off,
@@ -506,7 +513,8 @@ param <- param.dcm(latent = latent.int,
                    sensitivity = sensitivity.int,
                    eff_npi = eff_npi.int,
                    testing = 1/7,
-                   screening = 0)
+                   screening = 0,
+                   screening_on=0)
 
 mod_7test <- dcm(param, init, control)
 mod_7test <- mutate_epi(mod_7test, I_stu = Isym_on + Isym_off,
@@ -537,7 +545,8 @@ param <- param.dcm(latent = latent.int,
                    eff_npi = 0,
                    sensitivity = sensitivity.int,
                    testing = 0,
-                   screening = 0)
+                   screening = 0,
+                   screening_on=0)
 
 mod_nocont <- dcm(param, init, control)
 mod_nocont<- mutate_epi(mod_nocont, I_stu = Isym_on + Isym_off,
