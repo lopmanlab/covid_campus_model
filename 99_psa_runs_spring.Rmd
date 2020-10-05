@@ -1,0 +1,363 @@
+---
+title: "Emory Spring 2021 COVID Model"
+author: "A  model analysis of COVID-19 tranmssion and control at Emory University"
+date: "10/5/2020"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=F}
+knitr::opts_chunk$set(echo = F, warning=F, message=F)
+# Load dependencies, functions and parameters
+source("99_dependencies.R")
+source("99_model_func.R")
+source("99_parm_init_control.R")
+source("99_psa_optimizedistr.R")
+source("99_psa_parm.R")   #Note this overwrites initial parameters from parm_init_control
+source("99_psa_plot.R")
+options(scipen=999)
+options(digits=4)
+
+```
+
+## Authors
+*Ben Lopman, PhD. Carol Liu, MSc. Timothy Lash, DSc. Sam Jenness, PhD*
+
+**Department of Epidemiology, Rollins School of Public Health**
+**Emory University**
+
+## Summary
+Emory University is exploring prevention and control strategies for the Spring 2021 school semester in response to the COVID-19 pandemic.  A key question is to understand the impact of screening strategies targeting on-campuse students. To provide a framework to address this question, we use an susceptible-exposed-infectious-recovered (SEIR) type of deterministic model developed for the spring semester.  Compared to a static model, this approach has the advantage that it captures the transmission process, therefore estimates the indirect (transmission-mediated) effects of control strategies.  For example, by testing and identifying COVID-19 infected students, the model captures the effects of them being isolated, their contacts being quarantined, as well as all the infections averted by preventing the chains of transmission that would have otherwise occurred. 
+
+## Interventions
+Here we present three scenarios detailed below
+
+```{r}
+data.frame(Intervetion = c("No screening","Weekly screening","Biweekly screening"),
+                            Screen_on=c("None", "Weekly","Biweekly"),
+                            Screen_off = c("None","None","None")) %>%
+                            rename("Screening on-campus students" = Screen_on,
+                                   "Screening off-campus & staff" = Screen_off) %>%
+                            kable(digits = 2, align = "l") %>%
+                            kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+
+## Parameters
+This table shows the parameter inputs into the model and their ranges used in sensitivity analysis.  The 'value' column shows our base case scenario for what we expect to be the most likely set of conditions and interventions.  
+
+```{r param-table, echo=F}
+parameter_table %>% 
+  select(Parameter, Value,Lower, Upper) %>% 
+  filter(Parameter !="Under-reporting factor") %>%
+  replace(is.na(.),"") %>%
+  #mutate(Lower = as.character(Lower),
+   #      Upper = as.character(Upper))
+  kable(digits = 2, align = "l") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
+```
+
+
+```{r, echo=F}
+# No screening, 4-day test delay
+## Scenario with no screening, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
+                   testing = 1/4,
+                   screening_on = 0,
+                   screening=0)
+
+mod_noscreen <- dcm(param, init, control)
+mod_noscreen <- mutate_epi(mod_noscreen, I_stu = Isym_on + Isym_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+```
+
+
+```{r, echo=F}
+# Weekly screening for on-campus students, 4-day test delay
+## Scenario with weekly screening for on-campus, no screening for staff and off campus students, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
+                   testing = 1/4,
+                   screening_on = 1/7,
+                   screening=0)
+
+mod_7screen <- dcm(param, init, control)
+mod_7screen <- mutate_epi(mod_7screen, I_stu = Isym_on + Isym_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+```
+
+
+```{r echo=F}
+# Bieekly screening for on-campus students, 4-day test delay
+## Scenario with biweekly screening for on-campus, no screening for staff and off campus students, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
+                   testing = 1/4,
+                   screening_on = 1/3.5,
+                   screening=0)
+
+mod_3screen <- dcm(param, init, control)
+mod_3screen <- mutate_epi(mod_3screen, I_stu = Isym_on + Isym_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+```
+
+## Plots for all scenarios
+
+```{r fig.width=12, fig.height=12}
+#' 
+#' ## Plots of all scenarios and range
+## ----keyresult, echo=F---------------------------------------------------
+## Store key results
+#Cumulative staff and student infections for each run
+
+# Combine scenarios of interest into list of data frames
+list_res<-lapply(list("noscreen"=mod_noscreen,"screen7"=mod_7screen,"screen3"= mod_3screen),as.data.frame)
+
+list_res<-lapply(names(c(list_res)),function(x) {
+  list_res[[x]] %>%
+    mutate(scenario = x)
+})
+
+# Process the output into plots for active and cumulative cases for stadd and student
+# Default is median with IQR as upper and lower bounds but can be changed
+p1<-psa_plot(list_res[[1]],title1="Active cases-No Screen", title2="Total cases-No screen")
+p2<-psa_plot(list_res[[2]],title1="Active cases-Weekly Screen", title2 = "Total-Weekly screen")
+p3<-psa_plot(list_res[[3]], title1="Active cases-Biweekly Screen", title2="Total-Biweekly Screen")
+
+# Arrange plots for output
+
+#png("Plots/5_psa_plots12.png", units="in", width=6, height=5, res=500)
+grid.arrange(p1[[1]]+rremove("legend"),p1[[2]]+rremove("legend"),p2[[1]]+rremove("legend"),p2[[2]]+rremove("legend"),p3[[1]]+rremove("legend"),p3[[2]]+rremove("legend"))
+#dev.off()
+
+
+```
+
+## Summary results
+```{r}
+#' 
+#' ## Totals -- at end of the semester
+## ------------------------------------------------------------------------
+df_cum<-do.call("rbind",list_res)%>%
+      filter(time == max(time)) %>%
+      group_by(scenario, run) %>%
+      summarize(
+        student_n = S_on + E_on + I_on + R_on + P_on + Q_on - Dcum_on +
+                    S_off + E_off + I_off + R_off + P_off + Q_off - Dcum_off,
+        student_cases = Icum_on + Icum_off,
+        student_hosps = Hcum_on + Hcum_off,
+        student_isos = Pcum_on + Pcum_off,
+        student_quas = Qcum_on + Qcum_off,
+        student_deaths = Dcum_on + Dcum_off,
+        saf_n = S_saf + E_saf + I_saf + R_saf + P_saf + Q_saf - Dcum_saf,
+        saf_cases = Icum_saf,
+        saf_hosps = Hcum_saf,
+        saf_deaths = Dcum_saf,
+        tests = Test
+      ) %>%
+      ungroup() %>%
+      mutate(tests_pc = tests / (student_n + saf_n))
+
+    df_peak <- do.call("rbind",list_res) %>%
+      group_by(scenario, run) %>%
+      summarize(
+        student_cases_peak = max(Isym_on + Isym_off, na.rm = TRUE),
+        student_isos_peak = max(P_on + P_off, na.rm = TRUE),
+        student_isos_days = sum(P_on + P_off, na.rm = TRUE),
+        student_quas_peak = max(Q_on + Q_off, na.rm = TRUE),
+        student_quas_days = sum(Q_on + Q_off, na.rm = TRUE),
+        saf_cases_peak = max(Isym_saf, na.rm = TRUE),
+        ) %>%
+      ungroup()
+
+    df_out <- full_join(df_cum, df_peak, by = c("scenario", "run")) %>%
+      pivot_longer(
+        -c(scenario, run),
+        names_to = "measure",
+        values_to = "value"
+      ) %>%
+      group_by(measure, scenario) %>%
+      summarize(
+        low = quantile(value, 0.025, na.rm = TRUE),
+        med = quantile(value, 0.5, na.rm = TRUE),
+        high = quantile(value, 0.975, na.rm = TRUE)
+      ) %>%
+      mutate(value = paste0(
+        round(med,digits=0),
+        " (", round(low,digits=0), "-",
+        round(high, digits=0), ")",sep="")
+        ) %>%
+      pivot_wider(id_cols = measure, names_from = scenario, values_from = value)
+
+ 
+var_order <- data.frame(measure=c("student_cases","student_cases_peak","student_hosps","student_deaths","student_isos","student_isos_peak","student_isos_days",
+               "student_quas","student_quas_peak","student_quas_days","saf_cases","saf_cases_peak","saf_hosps","saf_deaths","tests","tests_pc"),
+               Measure= c("StudentCases","StudentCasesPeak","StudentHosps","StudentDeaths","StudentIsolate","StudentIsolatePeak","StudentIsolateDays",
+               "StudentQuarantined","StudentQuaPeak","StudentQuarantinedDays","StaffCases","StaffCasesPeak","StaffHosps","StaffDeaths","Tests","TestsPerCapita")) %>%
+            mutate(measure= as.character(measure))
+
+df_out<-var_order %>% left_join(df_out, by="measure") %>%
+          rename("No screening" = "noscreen",
+                 "Weekly screening" = "screen7",
+                  "Biweekly screening" = "screen3") 
+
+
+kable(df_out[,c("Measure","No screening","Weekly screening","Biweekly screening")], digits = 0, align = "c") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
+
+
+#saveRDS(df_out[,c("measure","noscreen","screen7","screen3")],"tables/res_scen.RDS")
+#write.csv(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_scen.csv")
+
+
+```
+
+
+```{r include=F}
+## Distribution of proportion of cumulative cases due to campus transmission 
+
+propcomm<-do.call("rbind",list_res)%>%
+      filter(time == max(time)) %>%
+      #select(Icum_on_camp, Icum_off_camp,Icum_stu, Icum_saf_camp, Icum_saf) %>%
+      mutate(Icum_stu_camp = Icum_on_camp + Icum_off_camp,
+             prop_stu_camp = Icum_stu_camp/Icum_stu,
+             prop_saf_camp = Icum_saf_camp/Icum_saf) %>%
+      select(scenario, Icum_stu_camp, Icum_stu, prop_stu_camp,prop_saf_camp)%>%
+      group_by(scenario) %>%
+        summarize(
+        low_stu = quantile(prop_stu_camp, 0.025, na.rm = TRUE),
+        med_stu = quantile(prop_stu_camp, 0.5, na.rm = TRUE),
+        high_stu = quantile(prop_stu_camp, 0.975, na.rm = TRUE),
+        low_saf = quantile(prop_saf_camp, 0.025, na.rm=TRUE),
+        med_saf = quantile(prop_saf_camp, 0.5, na.rm = TRUE),
+        high_saf = quantile(prop_saf_camp, 0.975, na.rm=TRUE)
+      ) 
+
+kable(propcomm,  align = "c") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
+
+
+```
+
+## Model description
+
+This is a model of transmission of SARS-COV-2 among Emory students, staff and faculty. The model includes the following features and assumptions.
+
+* Three populations with different degree of interactions among them
+  + Students living **on campus**
+  + Students living **off campus**
+  + Staff and faculty
+* We assume that students living on campus have a higher risk than those living off campus (R0 = 3.5 and 2.5 respectively).  Staff/faculty can be infected by students and can infect other staff/faculty, but we only track infections among staff/faculty acquired from others in the campus community. 
+* Staff and faculty have higher risk of severe illness and death (given infection) than students
+* A fraction are *asymptomatic*.  We assume (conservatively) that asymptomatically-infected persons are as infectious as those with symptoms. However, asymptomatic infection is more common among students (given their generally younger age) than staff/faculty.
+* There is a daily risk of infection constantly being introduced on campus -- this is based on case detections in Fulton and Dekalb Co.
+* The model runs from the day classes start (Aug 26) to the end of term (Dec 19)
+
+* Interventions are initiated by diagnotics.  Infected persons can be identified by PCR through either testing or screening, as defined below.
+
+* Diagnostics.  For both control strategies, we assume that only a fraction of people tested are positive -- positives are immediately isolated upon testing.  We assume that the PCR diagnostic has imperfect sensitivity.
+  + **Screening**: **All** students, staff and faculty are tested at a given frequency (ranging from weekly to once per semester) using RT-PCR. We assume that there is no contact tracing and quarantine initiated by **screening**.
+  + **Testing**: **Symptomatic** students, staff and faculty come forward and are tested using RT-PCR.  Most people have symptoms that are non-covid. We assume that only a fraction of people tested are positive -- those people are immediately *isolated*  We assume that the diagnostic has imperfect sensitivity.  Testing also results in contact tracing.  When a case is detected, (a proportion of) their contacts are *quarantined*.  Some of those quaranted contacts might have been incubating but are now no longer able to infect since they are under quarantine. There is evidence that PCR sensitivity increases, reaching a peak around day 7 of infection (or day 4 of infectiousness), then declines again.  We include the trade off of early testing where cases are detected faster, with a lower sensitivity of the diagnostic. 
+
+* We assume that the infectiouness (R0) is between 2.5 and 3.5 for students and that non-pharmaceutical interventions reduce R0 by 65%
+
+* We perform a probabilstic sensitivity analysis to determine the range of credible outcomes, given uncertainty in model parameters. 
+* Note that in all projections, we assume that infections are continuously imported onto campus.  When interventions are effective, the majority of cases are importations rather than transmission on campus.
+
+```{r include=F}
+#' ## Gut checks for sampled distributions
+#' 
+## ------------------------------------------------------------------------
+list.int<-list(R0_student_to_student=R0_student_to_student.int,R0_on_to_on = R0_on_to_on.int,R0_saf = R0_saf.int,
+               community = community.int,p_asympt_stu = p_asympt_stu.int,p_asympt_saf = p_asympt_saf.int,contacts = contacts.int,
+               ili = ili.int,sensitivity = sensitivity.int, p_contact_reached = p_contacts_reached.int,latent = latent.int,infectious = infectious.int,
+               p_hosp_stu = p_hosp_stu.int,p_hosp_saf = p_hosp_saf.int,p_death_stu = p_death_stu.int,p_death_saf=p_death_saf.int,
+               eff_npi = eff_npi.int,beta_student_to_student = beta_student_to_student.int,beta_on_to_on = beta_on_to_on.int,beta_saf = beta_saf.int)
+
+par(mfrow = c(2,2))
+for (i in 1:length(list.int)){
+  p1<-plot(density(x=list.int[[i]]),main=names(list.int[i]))
+  print(p1)
+}  
+
+summary_parm<-as.data.frame(matrix(data=0,nrow=length(list.int),ncol=3))
+colnames(summary_parm) <- c("2.5%","50%","97.5%")
+
+for (i in 1:length(list.int)){
+  summary_parm[i,]<-quantile(list.int[[i]],p=c(0.025,0.5,0.975))
+  row.names(summary_parm)[i] <- names(list.int[i])
+}
+
+summary_parm
+
+
+#' 
+#' Think for the most part, these are aligned with the parameter table apart from a few like the upper bound of sensitivity 
+#' 
+```
