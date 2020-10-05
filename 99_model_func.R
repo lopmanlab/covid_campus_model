@@ -6,18 +6,18 @@ model <- function(t, t0, parms) {
     lam_on = (1-eff_npi)*(beta_student_to_student*(I_off+I_on)+ beta_on_to_on*I_on + beta_saf*I_saf)
     
     dS_on <- -lam_on*S_on - community*S_on - testing*(1-p_asympt_stu)*I_on*sensitivity*(contacts-R0_on_to_on-R0_student_to_student)*p_contacts_reached + 1/isolation*Q_on*((contacts-R0_on_to_on-R0_student_to_student)/contacts)
-    dE_on <-  lam_on*S_on + community*S_on - 1/latent*E_on  - screening*E_on*sensitivity - testing*(1-p_asympt_stu)*I_on*sensitivity*(R0_on_to_on+R0_student_to_student)*p_contacts_reached #last term represents contract tracing
-    dI_on <- 1/latent*E_on - testing*(1-p_asympt_stu)*sensitivity*I_on - 1/infectious*I_on - screening*I_on*sensitivity
-    dIsym_on <- (1-p_asympt_stu)*(1/latent*E_on - testing*(1-p_asympt_stu)*sensitivity*I_on - 1/infectious*I_on - screening*I_on*sensitivity)
+    dE_on <-  lam_on*S_on + community*S_on - 1/latent*E_on  - screening_on*E_on*sensitivity - testing*(1-p_asympt_stu)*I_on*sensitivity*(R0_on_to_on+R0_student_to_student)*p_contacts_reached #last term represents contract tracing
+    dI_on <- 1/latent*E_on - testing*(1-p_asympt_stu)*sensitivity*I_on - 1/infectious*I_on - screening_on*I_on*sensitivity
+    dIsym_on <- (1-p_asympt_stu)*(1/latent*E_on - testing*(1-p_asympt_stu)*sensitivity*I_on - 1/infectious*I_on - screening_on*I_on*sensitivity)
     dR_on <- 1/infectious*I_on + 1/isolation*P_on + 1/isolation*Q_on*((R0_on_to_on+R0_student_to_student)/contacts)
     
-    dP_on <- testing*(1-p_asympt_stu)*sensitivity*I_on + screening*(E_on+I_on)*sensitivity - 1/isolation*P_on
+    dP_on <- testing*(1-p_asympt_stu)*sensitivity*I_on + screening_on*(E_on+I_on)*sensitivity - 1/isolation*P_on
     dQ_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached  - 1/isolation*Q_on
 
     dIcum_on = (1-p_asympt_stu)*(lam_on*S_on + community*S_on)
     dIcum_on_camp <- (1-p_asympt_stu) * lam_on*S_on
     #dIcum_on_com <- (1-p_asympt_stu) *community * S_on
-    dPcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity + screening*(E_on+I_on)*sensitivity
+    dPcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity + screening_on*(E_on+I_on)*sensitivity
     dQcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached
     dHcum_on <- (p_hosp_stu)*(lam_on*S_on + community*S_on)
     dDcum_on <- p_death_stu*(lam_on*S_on + community*S_on)
@@ -62,7 +62,7 @@ model <- function(t, t0, parms) {
     dDcum_saf <- p_death_saf*(lam_saf*S_saf + community*S_saf)
 
     #Calculated outputs
-    dTest <- N*screening + ((I_on+I_off+I_saf)*testing) + N*ili*ifelse(testing > 0, 1, 0) #diagnostics performed
+    dTest <- (N_off+N_saf)*screening + N_on*screening_on+((I_on+I_off+I_saf)*testing) + N*ili*ifelse(testing > 0, 1, 0) #diagnostics performed
     dCase_stu =   (1-p_asympt_saf)*(1/latent*E_on - testing*(1-p_asympt_stu)*sensitivity*I_on - 1/infectious*I_on - screening*I_on*sensitivity +
                   1/latent*E_off - testing*(1-p_asympt_stu)*I_off*sensitivity - 1/infectious*I_off - screening*I_off*sensitivity)
                   
