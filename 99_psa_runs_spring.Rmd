@@ -2,9 +2,7 @@
 title: "Emory Spring 2021 COVID Model"
 author: "A  model analysis of COVID-19 tranmssion and control at Emory University"
 date: "10/5/2020"
-output:
-  html_document:
-    df_print: paged
+output: html_document
 ---
 
 ```{r setup, include=F}
@@ -308,11 +306,12 @@ kable(propcomm,  align = "c") %>%
 ## Model description
 
 ### Spring model updates
-*We adapted the model so that on-campus students are screened. Staff/faculty and students residing off-campus are not. 
-*We assume that symptomatic people are tested on their 4th day of infection, on average.
-*Contacts are reduced substantially, inline with the numbers Neel provided. However, we did not include different number of contact for staff/faculty and students.
-*We updated the student mortality rates in line with lower CDC estimates. However, we did not change the staff/faculty value – that’s not changed much, according to the CDC recommended model parameters. 
-*For the range of community introduction values we used: Emory’s testing and screening case counts (combined) for the lower value and Fulton County’s current rate, assuming 5x infection:reported case ratio, as per CDC sero-surveillance.
+
+* We adapted the model so that on-campus students are screened. Staff/faculty and students residing off-campus are not. 
+* We assume that symptomatic people are tested on their 4th day of infection, on average.
+* Contacts are reduced substantially, inline with the numbers Neel provided. However, we did not include different number of contact for staff/faculty and students.
+* We updated the student mortality rates in line with lower CDC estimates. However, we did not change the staff/faculty value – that’s not changed much, according to the CDC recommended model parameters. 
+* For the range of community introduction values we used: Emory’s testing and screening case counts (combined) for the lower value and Fulton County’s current rate, assuming 5x infection:reported case ratio, as per CDC sero-surveillance.
 
 ### General model description
 This is a model of transmission of SARS-COV-2 among Emory students, staff and faculty. The model includes the following features and assumptions.
