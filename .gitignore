@@ -6,3 +6,5 @@
 *.Rproj
 .DS_Store
 renv/
+99_psa_runs_spring1.log
+99_psa_runs_spring1.tex
