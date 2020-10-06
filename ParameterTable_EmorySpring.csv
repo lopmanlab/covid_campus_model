@@ -1,6 +1,6 @@
 Parameter,Value,Lower,Upper,Change Status for Shiny,Source,Notes,Distribution,Var,Updated,
 Populations,,,,,,,,,,
-Total students,"10,000",,,UnderInput,,,,N,Y,
+Total students,"12,000",,,UnderInput,,,,N,Y,
 Students living on campus,"2,000", ,,UnderInput,,ranges from (low) a room or apartment that results in housing to serve one person regardless of the number of rooms in the unit to (high) the number of beds Emory fills in a normal semester,Uniform,N_on,Y,
 Staff and faculty,"15,000",,,UnderInput,,,,N_saf,Y,
 Natural history and clinical,,,,,,,,,,
