@@ -14,7 +14,7 @@ Proportion symptomatic - students,0.35,0.27,0.43,AdvancedSetting,https://cmmid.g
 Proportion symptomatic - staff/faculty,0.51,0.41,0.59,AdvancedSetting,https://cmmid.github.io/topics/covid19/reports/20200426-Main-Age_dependence_v2_BUNDLED.pdf,,Beta,p_sympt_saf,,
 Testing and quarantine,,,,,,,,,,
 Time from onset of infectiousness to testing (1/days),2,7,1,InterventionScenario,,"First day is asymptomatic, so when this value is 2, testing is on first day of disease",Uniform,testing,,
-Screening frequency (1/days),30,120,1,InterventionScenario,,"Monthly, range is once per semester to daily",Uniform,screening,,
+Screening frequency (1/days),7,None,3.5,InterventionScenario,,"Monthly, range is once per semester to daily",Uniform,screening,,
 Duration of quarantine (days),14,,,InterventionScenario,,,,isolation,,
 Number of contacts per case,2,1,7,InterventionScenario,Mossong et al; Prem et al,NEED Source,Uniform,contacts,Y,Based on median and 10-90th centils of Emory data
 Proportion of contacts reached,0.75,0.5,1,,,,Uniform,p_contacts_reached,,
@@ -29,7 +29,7 @@ On campus students <-> On campus students,1,0.3,1.4,SecondarySetting,,,Uniform,R
 All students <-> staff/faculty,0.5,0.15,0.7,SecondarySetting,,,Uniform,R0_saf,,
 Staff/faculty <-> staff/faculty,0.5,0.15,0.7,SecondarySetting,,,Uniform,,,
 Daily rate of community introduction ,0.00026,0.00007,0.00045,SecondarySetting,https://covid.cdc.gov/covid-data-tracker/#national-lab,,Normal,daily_new_case,Y,"lower bound based on Emory testing, best based on Fulton beginning of Oct; upper is 10x Fulton (too high?)"
-Efficacy of NPIs,0.35,0.18,0.43,SecondarySetting,https://www.thelancet.com/action/showPdf?pii=S0140-6736%2820%2931142-9,assume 50% compliance,Beta,eff_npi,,
+Risk reduction of NPIs,0.35,0.18,0.43,SecondarySetting,https://www.thelancet.com/action/showPdf?pii=S0140-6736%2820%2931142-9,assume 50% compliance,Beta,eff_npi,,
 Under-reporting factor,1,,,,,,,under_report,,
 Time,,,,,,,,,,
 Semester Duration (days),102,,,,,,,,,
