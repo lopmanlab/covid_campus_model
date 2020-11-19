@@ -1,5 +1,5 @@
 ---
-title: "Emory Spring 2021 COVID Model"
+title: "Emory ATLANTA Spring 2021 COVID Model"
 author: "A  model analysis of COVID-19 tranmssion and control at Emory University"
 date: "10/5/2020"
 output: pdf_document
@@ -348,8 +348,8 @@ df_cum %>%
   arrange(Week) %>% 
   relocate(Week, Tests, FluCases)->ili_test
 
-ili_test %>% 
-  select(-FluCases) -> ili_test   # removing this until we are confident in the flu % positive
+# ili_test %>% 
+#   select(-FluCases) -> ili_test   # removing this until we are confident in the flu % positive
 
 kable(ili_test,  align = "c") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
