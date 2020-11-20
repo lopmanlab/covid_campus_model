@@ -14,11 +14,11 @@ model <- function(t, t0, parms) {
     dR_on <- 1/infectious*I_on + 1/isolation*P_on + 1/isolation*Q_on*((R0_on_to_on+R0_student_to_student)/contacts)
     
     dP_on <- testing*(1-p_asympt_stu)*sensitivity*I_on + screening*(E_on+I_on)*sensitivity - 1/isolation*P_on
-    dQ_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached  - 1/isolation*Q_on
+    dQ_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached  + screening_on*(E_on+I_on)*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_on
     
     dIcum_on = (1-p_asympt_stu)*(lam_on*S_on + community*S_on)
     dPcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity + screening*(E_on+I_on)*sensitivity
-    dQcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached
+    dQcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached + screening_on*(E_on+I_on)*sensitivity*contacts*p_contacts_reached
     dHcum_on <- (p_hosp_stu)*(lam_on*S_on + community*S_on)
     dDcum_on <- p_death_stu*(lam_on*S_on + community*S_on)
     
@@ -32,11 +32,11 @@ model <- function(t, t0, parms) {
     dR_off <- 1/infectious*I_off + 1/isolation*P_off + 1/isolation*Q_off*(R0_student_to_student/contacts)
     
     dP_off <- testing*(1-p_asympt_stu)*I_off*sensitivity - 1/isolation*P_off + screening*(E_off+I_off)*sensitivity
-    dQ_off <- testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_off
+    dQ_off <- testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached + screening*(E_off+I_off)*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_off
     
     dIcum_off <- (1-p_asympt_stu)*(lam_off*S_off + community*S_off)
     dPcum_off <- testing*(1-p_asympt_stu)*I_off*sensitivity + screening*(E_off+I_off)*sensitivity
-    dQcum_off <-testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached
+    dQcum_off <-testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached + screening*(E_off+I_off)*sensitivity*contacts*p_contacts_reached
     dHcum_off <- (p_hosp_stu)*(lam_off*S_off + community*S_off)
     dDcum_off <- p_death_stu * (lam_off*S_off + community*S_off)
     
@@ -50,7 +50,7 @@ model <- function(t, t0, parms) {
     dR_saf <- 1/infectious*I_saf + 1/isolation*P_saf + 1/isolation*Q_saf*(R0_saf/contacts)
     
     dP_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity - 1/isolation*P_saf + screening*(E_saf+I_saf)*sensitivity
-    dQ_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_saf
+    dQ_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_saf + screening*(E_saf+I_saf)*sensitivity*contacts*p_contacts_reached
     
     dIcum_saf = (1-p_asympt_saf)*(lam_saf*S_saf + community*S_saf)
     dPcum_saf <- testing*(1-p_asympt_saf)*lam_saf*S_saf*sensitivity
