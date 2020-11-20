@@ -1,5 +1,6 @@
-parameter_table <- read.csv("99_ParameterTable_s.csv") # Parameter table manuscript
-#parameter_table <-read.csv("ParameterTable_EmorySpring.csv")   # Parameter table spring
+#parameter_table <- read.csv("99_ParameterTable_s.csv") # Parameter table manuscript
+parameter_table <-read.csv("ParameterTable_EmorySpring.csv")   # Parameter table spring
+#parameter_table <-read.csv("ParameterTable_OxfordSpring.csv")   # Parameter table spring
 p_tab <- parameter_table[,1:9]
 p_tab$Value <-gsub(",","",p_tab$Value)
 p_tab$Value <- as.numeric(as.character(p_tab$Value))
@@ -52,6 +53,8 @@ p_death_saf <- p_tab$Value[which(p_tab$Var == "p_death_saf")]                   
 contacts <- p_tab$Value[which(p_tab$Var == "contacts")]                           # contacts per case
 p_contacts_reached <- p_tab$Value[which(p_tab$Var == "p_contacts_reached")]       # proportion of contacts reached
 ili <- p_tab$Value[which(p_tab$Var == "ili")]                                     # daily ili
+p_ili_flu <- p_tab$Value[which(p_tab$Var == "p_ili_flu")]                         # Proportion ILI flu positive
+
 sensitivity  <- p_tab$Value[which(p_tab$Var == "sensitivity")]                    # PCR sensitivity on day 4
 sensitivity_2  <- p_tab$Value[which(p_tab$Var == "sensitivity_2")]                # PCR sensitivity on day 2
 sensitivity_7  <- p_tab$Value[which(p_tab$Var == "sensitivity_7")]                # PCR sensitivity on day 7
@@ -135,5 +138,5 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  )
 
 # Control features
-control <- control.dcm(nsteps = 116, new.mod = model)  #Time steps for manuscript
-#control <- control.dcm(nsteps = 102, new.mod = model)    #Time steps for spring semester
+#control <- control.dcm(nsteps = 116, new.mod = model)  #Time steps for manuscript
+control <- control.dcm(nsteps = 102, new.mod = model)    #Time steps for spring semester

@@ -1,8 +1,8 @@
 ---
-title: "Emory Spring 2021 COVID Model"
+title: "Emory ATLANTA Spring 2021 COVID Model"
 author: "A  model analysis of COVID-19 tranmssion and control at Emory University"
 date: "10/5/2020"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=F}
@@ -46,10 +46,11 @@ data.frame(Intervention = c("No screening","Weekly screening","Biweekly screenin
 This table shows the parameter inputs into the model and their ranges used in sensitivity analysis.  The 'value' column shows our base case scenario for what we expect to be the most likely set of conditions and interventions.  
 
 ```{r param-table, echo=F}
-parameter_table %>% 
-  select(Parameter, Value,Lower, Upper) %>% 
+parameter_table %>%
+  select(Parameter, Value,Lower, Upper) %>%
   filter(Parameter !="Under-reporting factor") %>%
-  replace(is.na(.),"") %>%
+  filter(Value !="0.00026") %>%     #something dodgy about daily rate parameter, wont render
+  replace(is.na(.),"")  %>% 
   #mutate(Lower = as.character(Lower),
    #      Upper = as.character(Upper))
   kable(digits = 2, align = "l") %>%
@@ -300,6 +301,58 @@ propcomm<-do.call("rbind",list_res)%>%
 kable(propcomm,  align = "c") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
 
+
+```
+
+## Weekly distribution of tests and influenza cases
+* Testing data is based on the average weekly distribution of ILI care provided by Emory Student Health Services from 2016 to 2020.  
+* The fraction of tests for ILI that are flu cases is based on the % positive by week from the 2020 season (pre-COVID).  This can be updated in order to be more repreentative
+* These numbers are likely severe overestimates, because we assume that anyone with ILI gets tested and the flu positivity rates applies to all these tests even though many will be mild.
+* There is **no uncertainty or variability** from ILI testing or flu data included in the model.  The simulation intervals only reflect variability in other parameters, as in previous version of the model.
+
+
+``` {r}
+read.csv("99_param_ili_flu_tests.csv") -> t
+
+df_cum %>% 
+  filter(scenario=="noscreen") %>% 
+  select(scenario, run, tests) %>% 
+  left_join(t, by = "scenario") %>% 
+  mutate(across(starts_with("ili_"), ~ .x * tests)) %>% 
+  mutate(across(starts_with("flu_"), ~ .x * tests)) %>% 
+  select(-tests) %>% 
+  pivot_longer(
+    -c(scenario, run),
+    names_to = "measure",
+    values_to = "value"
+  )   %>% 
+  group_by(measure, scenario) %>%
+  summarize(
+    low = quantile(value, 0.025, na.rm = TRUE),
+    med = quantile(value, 0.5, na.rm = TRUE),
+    high = quantile(value, 0.975, na.rm = TRUE)
+  ) %>%
+  mutate(value = paste0(
+    round(med,digits=0),
+    " (", round(low,digits=0), "-",
+    round(high, digits=0), ")",sep="")
+  ) %>%
+  pivot_wider(id_cols = measure, names_from = scenario, values_from = value) %>% 
+  dplyr::mutate(new_id = str_extract(measure, "\\-*\\d+\\.*\\d*")) %>% 
+  dplyr::mutate(outcome= str_extract(measure, "[a-z]{1,3}")) %>% 
+  ungroup() %>% 
+  dplyr::select(-measure) %>% 
+  tidyr::spread(outcome, noscreen, convert = TRUE) %>% 
+  rename(Week = new_id, Tests = ili, FluCases = flu) %>% 
+  mutate(Week = as.numeric(Week)) %>% 
+  arrange(Week) %>% 
+  relocate(Week, Tests, FluCases)->ili_test
+
+# ili_test %>% 
+#   select(-FluCases) -> ili_test   # removing this until we are confident in the flu % positive
+
+kable(ili_test,  align = "c") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
 
 ```
 
