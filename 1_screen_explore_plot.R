@@ -31,7 +31,7 @@ dfonce <- as.data.frame(mod, run = length(screen.int))
 df <- as.data.frame(mod)
 start.date <- as.Date("2020-08-26")
 df$date <- start.date + df$time
-df$scrInt <- rep(screen.int, each = 116)
+df$scrInt <- rep(screen.int, each = 102)
 df <- select(df, c(-run, -time))
 dfLast <- filter(df, date == "2020-12-20")
 
