@@ -276,8 +276,8 @@ kable(df_out[,c("measure","base","test4","screen30","combo")], digits = 0, align
   kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
 
 
-saveRDS(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_scen.RDS")
-write.csv(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_scen.csv")
+#saveRDS(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_scen.RDS")
+#write.csv(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_scen.csv")
 
 
 ```
@@ -302,7 +302,7 @@ propcomm<-do.call("rbind",list_res)%>%
         high_saf = quantile(prop_saf_camp, 0.975, na.rm=TRUE)
       ) 
 
-saveRDS(propcomm,"tables/propcomm.RDS")
+#saveRDS(propcomm,"tables/propcomm.RDS")
 
 ```
 
@@ -476,7 +476,7 @@ param <- param.dcm(latent = latent.int,
                    contacts = contacts.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
-                   sensitivity = sensitivity.int,
+                   sensitivity = sensitivity_2.int,
                    eff_npi = eff_npi.int,
                    testing = 1/2,
                    screening = 0,
@@ -510,7 +510,7 @@ param <- param.dcm(latent = latent.int,
                    contacts = contacts.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
-                   sensitivity = sensitivity.int,
+                   sensitivity = sensitivity_7.int,
                    eff_npi = eff_npi.int,
                    testing = 1/7,
                    screening = 0,
@@ -607,7 +607,7 @@ df_cum1<-mod_nocont%>%
         " (", round(low,digits=0), "-",
         round(high, digits=0), ")",sep=""))
 
-saveRDS(df_nocont,"tables/res_nocont.RDS")
+#saveRDS(df_nocont,"tables/res_nocont.RDS")
 
      # %>%
       #pivot_wider(id_cols = measure, values_from = value)
@@ -669,7 +669,7 @@ df_summary <- full_join(df_stu,df_saf)  %>%
 
 df_summary
 
-saveRDS(df_summary,"tables/res_summary.RDS")
+#saveRDS(df_summary,"tables/res_summary.RDS")
 ```
 
 
