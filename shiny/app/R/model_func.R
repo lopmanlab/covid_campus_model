@@ -18,7 +18,6 @@ model <- function(t, t0, parms) {
 
     dIcum_on = (1-p_asympt_stu)*(lam_on*S_on + community*S_on)
     dPcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity + screening*(E_on+I_on)*sensitivity
-#    dQcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached + screening_on*(E_on+I_on)*sensitivity*contacts*p_contacts_reached
     dQcum_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached + (E_on+I_on)*sensitivity*contacts*p_contacts_reached
     dHcum_on <- (p_hosp_stu)*(lam_on*S_on + community*S_on)
     dDcum_on <- p_death_stu*(lam_on*S_on + community*S_on)
