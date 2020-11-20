@@ -75,3 +75,44 @@ model <- function(t, t0, parms) {
     return(out)
   })
 }
+
+model_scenarios<- function(testing =0, screening=0, screening_on=0,p_contacts_reached = p_contacts_reached.int,sensitivity_input=sensitivity.int) {
+  param <- param.dcm(latent = latent.int,
+                     infectious = infectious.int,
+                     isolation = isolation,
+                     beta_student_to_student = beta_student_to_student.int,
+                     beta_on_to_on = beta_on_to_on.int,
+                     beta_saf = beta_saf.int,
+                     community = community.int,
+                     p_asympt_stu = p_asympt_stu.int,
+                     p_asympt_saf = p_asympt_saf.int,
+                     p_hosp_stu = p_hosp_stu.int,
+                     p_hosp_saf = p_hosp_saf.int,
+                     p_death_stu = p_death_stu.int,
+                     p_death_saf = p_death_saf.int,
+                     contacts = contacts.int,
+                     ili = ili.int,
+                     sensitivity = sensitivity_input,
+                     eff_npi = eff_npi.int,
+                     testing = testing,
+                     screening = screening,
+                     screening_on=screening_on,
+                     p_contacts_reached = p_contacts_reached)
+  
+  mod <- dcm(param, init, control)
+  mod <- mutate_epi(mod, I_stu = Isym_on + Isym_off,
+                    Icum_stu = Icum_on + Icum_off,
+                    P_stu = P_on + P_off,
+                    Pcum_stu = Pcum_on + Pcum_off,
+                    Qcum_stu = Qcum_on + Qcum_off,
+                    Hcum_stu = Hcum_on + Hcum_off,
+                    Dcum_stu = Dcum_on + Dcum_off)
+  
+  return(as.data.frame(mod)) %>%
+    group_by(time) %>%
+    summarize(med_stud_active = quantile(I_stu, 0.5, na.rm = TRUE),
+              med_stud_cum = quantile(Icum_stu, 0.5, na.rm = TRUE),
+              med_saf_active = quantile(I_saf, 0.5, na.rm =TRUE),
+              med_saf_cum = quantile(Icum_saf,0.5,na.rm=TRUE))
+  
+}
