@@ -1,6 +1,6 @@
 set.seed(234567)
-total.set.size <- 100
-l <- randomLHS(total.set.size, 17)
+total.set.size <- 1000
+l <- randomLHS(total.set.size, 19)
 
 # Uniform distributions
 R0_s_s <- c(p_tab$Lower[which(p_tab$Var=="R0_student_to_student")],p_tab$Upper[which(p_tab$Var=="R0_student_to_student")]) # number of other students that a student infects, on average
@@ -26,6 +26,9 @@ p_death_stu <- betaExpert(best = p_tab$Value[which(p_tab$Var=="p_death_stu")], l
 p_death_saf <- betaExpert(best = p_tab$Value[which(p_tab$Var=="p_death_saf")], lower=p_tab$Lower[which(p_tab$Var=="p_death_saf")], upper= p_tab$Upper[which(p_tab$Var=="p_death_saf")], p=0.95, method = "mean")
 
 sensitivity <- betaExpert(best = p_tab$Value[which(p_tab$Var=="sensitivity")], lower=p_tab$Lower[which(p_tab$Var=="sensitivity")], upper= p_tab$Upper[which(p_tab$Var=="sensitivity")], p=0.95, method = "mean")
+sensitivity_2 <- betaExpert(best = p_tab$Value[which(p_tab$Var=="sensitivity_2")], lower=p_tab$Lower[which(p_tab$Var=="sensitivity_2")], upper= p_tab$Upper[which(p_tab$Var=="sensitivity_2")], p=0.95, method = "mean")
+sensitivity_7<- betaExpert(best = p_tab$Value[which(p_tab$Var=="sensitivity_7")], lower=p_tab$Lower[which(p_tab$Var=="sensitivity_7")], upper= p_tab$Upper[which(p_tab$Var=="sensitivity_7")], p=0.95, method = "mean")
+
 
 eff_npi <- betaExpert(best = p_tab$Value[which(p_tab$Var=="eff_npi")],lower=p_tab$Lower[which(p_tab$Var=="eff_npi")],upper=p_tab$Upper[which(p_tab$Var=="eff_npi")],p=0.95, method="mean")
 
@@ -46,6 +49,9 @@ p_asympt_saf.int <- qbeta(l[,6],p_asympt_saf$alpha,p_asympt_saf$beta)
 contacts.int <- round((l[,7]*(contacts[2]-contacts[1]))+contacts[1],3)
 ili.int <- round((l[,8]*(ili[2]-ili[1]))+ili[1],5)
 sensitivity.int <-qbeta(l[,9],sensitivity$alpha,sensitivity$beta)
+sensitivity_2.int <-qbeta(l[,18],sensitivity_2$alpha,sensitivity_2$beta)
+sensitivity_7.int <-qbeta(l[,19],sensitivity_7$alpha,sensitivity_7$beta)
+
 
 p_contacts_reached.int <- round((l[,10]*(p_contacts_reached[2]-p_contacts_reached[1]))+p_contacts_reached[1],5)   # We only include this in PSA of scenarios with screening and testing. 
 
