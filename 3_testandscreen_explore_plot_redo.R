@@ -59,7 +59,7 @@ p3 <- ggplot(data = test_list[test_list$contacts ==1,], aes(x=screen, y=med_stud
   ylab("")+ ggtitle("100% Contacts Traced") + theme + ylim(0,2200)+
   theme(legend.position = c(0.7, 0.8),legend.title = element_blank(), legend.text=element_text(size=10),legend.key.size = unit(0.3, "cm"))
 
-png("Plots/3_testandscreen_explore_redo.png", units="in", width=9, height=5, res=800)
+png("Plots/3_testandscreen_explore_redo_new.png", units="in", width=9, height=5, res=800)
 grid.arrange(
   p1,p2,p3,
   widths = c(2, 2, 2),
