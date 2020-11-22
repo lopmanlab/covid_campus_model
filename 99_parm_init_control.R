@@ -1,5 +1,5 @@
-#parameter_table <- read.csv("99_ParameterTable_s.csv") # Parameter table manuscript
-parameter_table <-read.csv("ParameterTable_EmorySpring.csv")   # Parameter table spring
+parameter_table <- read.csv("99_ParameterTable_s.csv") # Parameter table manuscript
+#parameter_table <-read.csv("ParameterTable_EmorySpring.csv")   # Parameter table spring
 #parameter_table <-read.csv("ParameterTable_OxfordSpring.csv")   # Parameter table spring
 p_tab <- parameter_table[,1:9]
 p_tab$Value <-gsub(",","",p_tab$Value)
@@ -138,5 +138,5 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  )
 
 # Control features
-#control <- control.dcm(nsteps = 116, new.mod = model)  #Time steps for manuscript
-control <- control.dcm(nsteps = 102, new.mod = model)    #Time steps for spring semester
+control <- control.dcm(nsteps = 116, new.mod = model)  #Time steps for manuscript
+#control <- control.dcm(nsteps = 102, new.mod = model)    #Time steps for spring semester

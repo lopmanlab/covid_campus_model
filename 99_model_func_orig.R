@@ -3,17 +3,17 @@ model <- function(t, t0, parms) {
     # ODEs
     # On campus students
     lam_on = (1-eff_npi)*(beta_student_to_student*(I_off+I_on)+ beta_on_to_on*I_on + beta_saf*I_saf)
-    #dS_on <- -lam_on*S_on - community*S_on - testing*(1-p_asympt_stu)*I_on*sensitivity*(contacts-R0_on_to_on-R0_student_to_student)*p_contacts_reached + 1/isolation*Q_on*((contacts-R0_on_to_on-R0_student_to_student)/contacts)
-    dS_on <- -lam_on*S_on - community*S_on - (testing*(1-p_asympt_stu)*I_on+screening_on*(E_on+I_on))*sensitivity*(contacts-R0_on_to_on-R0_student_to_student)*p_contacts_reached + 1/isolation*Q_on*((contacts-R0_on_to_on-R0_student_to_student)/contacts)
-    #dE_on <-  lam_on*S_on + community*S_on - 1/latent*E_on  - screening_on*E_on*sensitivity - testing*(1-p_asympt_stu)*I_on*sensitivity*(R0_on_to_on+R0_student_to_student)*p_contacts_reached #last term represents contract tracing
-    dE_on <-  lam_on*S_on + community*S_on - 1/latent*E_on  - screening_on*E_on*sensitivity - (testing*(1-p_asympt_stu)*I_on+screening_on*(E_on+I_on))*sensitivity*(R0_on_to_on+R0_student_to_student)*p_contacts_reached #last term represents contract tracing
+    dS_on <- -lam_on*S_on - community*S_on - testing*(1-p_asympt_stu)*I_on*sensitivity*(contacts-R0_on_to_on-R0_student_to_student)*p_contacts_reached + 1/isolation*Q_on*((contacts-R0_on_to_on-R0_student_to_student)/contacts)
+    #dS_on <- -lam_on*S_on - community*S_on - (testing*(1-p_asympt_stu)*I_on+screening_on*(E_on+I_on))*sensitivity*(contacts-R0_on_to_on-R0_student_to_student)*p_contacts_reached + 1/isolation*Q_on*((contacts-R0_on_to_on-R0_student_to_student)/contacts)
+    dE_on <-  lam_on*S_on + community*S_on - 1/latent*E_on  - screening_on*E_on*sensitivity - testing*(1-p_asympt_stu)*I_on*sensitivity*(R0_on_to_on+R0_student_to_student)*p_contacts_reached #last term represents contract tracing
+    #dE_on <-  lam_on*S_on + community*S_on - 1/latent*E_on  - screening_on*E_on*sensitivity - (testing*(1-p_asympt_stu)*I_on+screening_on*(E_on+I_on))*I_on*sensitivity*(R0_on_to_on+R0_student_to_student)*p_contacts_reached #last term represents contract tracing
     dI_on <- 1/latent*E_on - testing*(1-p_asympt_stu)*sensitivity*I_on - 1/infectious*I_on - screening_on*I_on*sensitivity
     #dIsym_on <- (1-p_asympt_stu)*(1/latent*E_on - testing*(1-p_asympt_stu)*sensitivity*I_on - 1/infectious*I_on - screening_on*I_on*sensitivity)
     dIsym_on <- (1-p_asympt_stu)*(1/latent*E_on - testing*(1-p_asympt_stu)*sensitivity*I_on - 1/infectious*I_on - screening_on*I_on*sensitivity)
     dR_on <- 1/infectious*I_on + 1/isolation*P_on + 1/isolation*Q_on*((R0_on_to_on+R0_student_to_student)/contacts)
     dP_on <- testing*(1-p_asympt_stu)*sensitivity*I_on + screening_on*(E_on+I_on)*sensitivity - 1/isolation*P_on
-    #dQ_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached  - 1/isolation*Q_on
-    dQ_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached  + screening_on*(E_on+I_on)*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_on
+    dQ_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached  - 1/isolation*Q_on
+    #dQ_on <- testing*(1-p_asympt_stu)*I_on*sensitivity*contacts*p_contacts_reached  + screening_on*(E_on+I_on)*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_on
     dIcum_on = (1-p_asympt_stu)*(lam_on*S_on + community*S_on)
     dIcum_on_camp <- (1-p_asympt_stu) * lam_on*S_on
     #dIcum_on_com <- (1-p_asympt_stu) *community * S_on
@@ -23,16 +23,16 @@ model <- function(t, t0, parms) {
     dDcum_on <- p_death_stu*(lam_on*S_on + community*S_on)
     # Off campus students
     lam_off = (1-eff_npi)*(beta_student_to_student*(I_off+I_on) + beta_saf*I_saf)
-    #dS_off <- -lam_off*S_off - community*S_off - testing*(1-p_asympt_stu)*I_off*sensitivity*(contacts - R0_student_to_student)*p_contacts_reached + 1/isolation*Q_off*((contacts-R0_student_to_student)/contacts)
-    dS_off <- -lam_off*S_off - community*S_off - (testing*(1-p_asympt_stu)*I_off+screening*(E_off+I_off))*sensitivity*(contacts - R0_student_to_student)*p_contacts_reached + 1/isolation*Q_off*((contacts-R0_student_to_student)/contacts)
-    #dE_off <-  lam_off*S_off + community*S_off - (1/latent)*E_off - screening*E_off*sensitivity - testing*(1-p_asympt_stu)*I_off*sensitivity*(R0_student_to_student)*p_contacts_reached
-    dE_off <-  lam_off*S_off + community*S_off - (1/latent)*E_off - screening*E_off*sensitivity - (testing*(1-p_asympt_stu)*I_off+screening*(E_off+I_off))*sensitivity*(R0_student_to_student)*p_contacts_reached
+    dS_off <- -lam_off*S_off - community*S_off - testing*(1-p_asympt_stu)*I_off*sensitivity*(contacts - R0_student_to_student)*p_contacts_reached + 1/isolation*Q_off*((contacts-R0_student_to_student)/contacts)
+    #dS_off <- -lam_off*S_off - community*S_off - (testing*(1-p_asympt_stu)*I_off+screening*(E_off+I_off))*sensitivity*(contacts - R0_student_to_student)*p_contacts_reached + 1/isolation*Q_off*((contacts-R0_student_to_student)/contacts)
+    dE_off <-  lam_off*S_off + community*S_off - (1/latent)*E_off - screening*E_off*sensitivity - testing*(1-p_asympt_stu)*I_off*sensitivity*(R0_student_to_student)*p_contacts_reached
+    #dE_off <-  lam_off*S_off + community*S_off - (1/latent)*E_off - screening*E_off*sensitivity - (testing*(1-p_asympt_stu)*I_off+screening*(E_off+I_off))*sensitivity*(R0_student_to_student)*p_contacts_reached
     dI_off <- 1/latent*E_off - testing*(1-p_asympt_stu)*I_off*sensitivity - 1/infectious*I_off - screening*I_off*sensitivity
     dIsym_off <- (1-p_asympt_stu)*(1/latent*E_off - testing*(1-p_asympt_stu)*I_off*sensitivity - 1/infectious*I_off - screening*I_off*sensitivity)
     dR_off <- 1/infectious*I_off + 1/isolation*P_off + 1/isolation*Q_off*(R0_student_to_student/contacts)
     dP_off <- testing*(1-p_asympt_stu)*I_off*sensitivity - 1/isolation*P_off + screening*(E_off+I_off)*sensitivity
-    #dQ_off <- testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_off
-    dQ_off <- testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached + screening*(E_off+I_off)*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_off
+    dQ_off <- testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_off
+    #dQ_off <- testing*(1-p_asympt_stu)*I_off*sensitivity*contacts*p_contacts_reached + screening*(E_off+I_off)*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_off
     dIcum_off <- (1-p_asympt_stu)*(lam_off*S_off + community*S_off)
     dIcum_off_camp <- (1-p_asympt_stu) * lam_off*S_off
     #dIcum_off_com <- (1-p_asympt_stu) *community * S_off
@@ -42,16 +42,16 @@ model <- function(t, t0, parms) {
     dDcum_off <- p_death_stu * (lam_off*S_off + community*S_off)
     # Staff and faculty
     lam_saf = (1-eff_npi)*(beta_saf*(I_on+I_off+I_saf))
-    #dS_saf <- -lam_saf*S_saf - community*S_saf - testing*(1-p_asympt_saf)*I_saf*sensitivity*(contacts-R0_saf)*p_contacts_reached + 1/isolation*Q_saf*((contacts-R0_saf)/contacts)
-    dS_saf <- -lam_saf*S_saf - community*S_saf - (testing*(1-p_asympt_saf)*I_saf+screening*(E_saf+I_saf))*sensitivity*(contacts-R0_saf)*p_contacts_reached + 1/isolation*Q_saf*((contacts-R0_saf)/contacts)
-    #dE_saf <-  lam_saf*S_saf + community*S_saf - 1/latent*E_saf - screening*E_saf*sensitivity - testing*(1-p_asympt_saf)*I_saf*sensitivity*(R0_saf)*p_contacts_reached
-    dE_saf <-  lam_saf*S_saf + community*S_saf - 1/latent*E_saf - screening*E_saf*sensitivity -(testing*(1-p_asympt_saf)*I_saf+screening*(E_saf+I_saf))*sensitivity*(R0_saf)*p_contacts_reached
+    dS_saf <- -lam_saf*S_saf - community*S_saf - testing*(1-p_asympt_saf)*I_saf*sensitivity*(contacts-R0_saf)*p_contacts_reached + 1/isolation*Q_saf*((contacts-R0_saf)/contacts)
+    #dS_saf <- -lam_saf*S_saf - community*S_saf - (testing*(1-p_asympt_saf)*I_saf+screening*(E_saf+I_saf))*sensitivity*(contacts-R0_saf)*p_contacts_reached + 1/isolation*Q_saf*((contacts-R0_saf)/contacts)
+    dE_saf <-  lam_saf*S_saf + community*S_saf - 1/latent*E_saf - screening*E_saf*sensitivity - testing*(1-p_asympt_saf)*I_saf*sensitivity*(R0_saf)*p_contacts_reached
+    #dE_saf <-  lam_saf*S_saf + community*S_saf - 1/latent*E_saf - screening*E_saf*sensitivity -(testing*(1-p_asympt_saf)*I_saf+screening*(E_saf+I_saf))*sensitivity*(R0_saf)*p_contacts_reached
     dI_saf <- 1/latent*E_saf - testing*(1-p_asympt_saf)*I_saf*sensitivity- 1/infectious*I_saf - screening*I_saf*sensitivity
     dIsym_saf <- (1-p_asympt_saf)*(1/latent*E_saf - testing*(1-p_asympt_saf)*I_saf*sensitivity- 1/infectious*I_saf - screening*I_saf*sensitivity)
     dR_saf <- 1/infectious*I_saf + 1/isolation*P_saf + 1/isolation*Q_saf*(R0_saf/contacts)
     dP_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity - 1/isolation*P_saf + screening*(E_saf+I_saf)*sensitivity
-    #dQ_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_saf
-    dQ_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_saf + screening*(E_saf+I_saf)*sensitivity*contacts*p_contacts_reached
+    dQ_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_saf
+    #dQ_saf <- testing*(1-p_asympt_saf)*I_saf*sensitivity*contacts*p_contacts_reached - 1/isolation*Q_saf + screening*(E_saf+I_saf)*sensitivity*contacts*p_contacts_reached
     dIcum_saf = (1-p_asympt_saf)*(lam_saf*S_saf + community*S_saf)
     dIcum_saf_camp <- (1-p_asympt_saf) * lam_saf*S_saf
     #dIcum_saf_com <- (1-p_asympt_saf) *community * S_saf
