@@ -60,7 +60,7 @@ p5 <- ggplot(data=dfLast, aes(x=scenario, y=value)) + geom_line(aes(colour=facto
   xlab("Screen Interval (Days)") +ylab("Cumulative Cases") + ggtitle("Cumulative cases")+ xlim(0,120)+
   theme(legend.position = c(0.7, 0.1),legend.title = element_blank(), legend.text=element_text(size=8),legend.key.size = unit(0.3, "cm"))
 
-png("Plots/1_screen_explore_redo.png", units="in", width=6, height=5, res=500)
+png("Plots/1_screen_explore_redo_psa_new.png", units="in", width=6, height=5, res=500)
 grid.arrange(
   p1,p2,p3,p4,p5,
   widths = c(2, 2, 2),
