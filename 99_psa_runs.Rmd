@@ -199,11 +199,11 @@ p4 <- psa_plot(list_res[[4]], title1= "Active cases-Comb. test & screen", title2
 
 # Arrange plots for output
 
-png("Plots/5_psa_plots12.png", units="in", width=6, height=5, res=500)
+png("Plots/5_psa_plots_redo1.png", units="in", width=6, height=5, res=500)
 grid.arrange(p1[[1]]+rremove("legend"),p1[[2]]+rremove("legend"),p2[[1]]+rremove("legend"),p2[[2]]+rremove("legend"))
 dev.off()
 
-png("Plots/5_psa_plots22.png", units="in", width=6, height=5, res=500)
+png("Plots/5_psa_plots_redo2.png", units="in", width=6, height=5, res=500)
 grid.arrange(p3[[1]]+rremove("legend"),p3[[2]]+rremove("legend"),p4[[1]]+rremove("legend"),p4[[2]]+rremove("legend"))
 dev.off()
 
@@ -344,7 +344,7 @@ df_res$output <-rep(rep(c("stud","staff"),each =13),1)
 df_res$output <-as.factor(df_res$output)
 df_res$var<-rep(colnames(variable),2)
 
-png("Plots/5_prcc2.png", units="in", width=7, height=5, res=300)
+png("Plots/5_prcc_redo.png", units="in", width=7, height=5, res=300)
 ggplot(data=df_res, aes(x= var,y = original,fill=output)) +
   geom_bar(position="dodge",stat="identity") +
   scale_fill_grey()+
