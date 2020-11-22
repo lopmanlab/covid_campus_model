@@ -1,6 +1,6 @@
 # Load packages, data files and functions
 source("99_dependencies.R")
-source("99_model_func.R")
+#source("99_model_func_orig.R")
 source("99_parm_init_control.R")
 
 ## Screen explore 1
@@ -14,7 +14,8 @@ param <- param.dcm(latent = latent,
                    contacts = contacts,
                    sensitivity = sensitivity,
                    testing = 0,
-                   screening = 1/screen.int)
+                   screening = 1/screen.int,
+                   screening_on = 1/screen.int)
 mod <- dcm(param, init, control)
 mod <- mutate_epi(mod, I_stu = Isym_on + Isym_off,
                   Icum_stu = Icum_on + Icum_off,
@@ -31,11 +32,11 @@ dfonce <- as.data.frame(mod, run = length(screen.int))
 df <- as.data.frame(mod)
 start.date <- as.Date("2020-08-26")
 df$date <- start.date + df$time
-df$scrInt <- rep(screen.int, each = 102)
+df$scrInt <- rep(screen.int, each = 116)
 df <- select(df, c(-run, -time))
 dfLast <- filter(df, date == "2020-12-20")
 
-png("Plots/1_screen_explore.png", units="in", width=6, height=5, res=500)
+png("Plots/1_screen_explorenopsa_orig.png", units="in", width=6, height=5, res=500)
 m <- rbind(c(1,2,5), c(3,4,5))
 print(m)
 layout(m)
@@ -75,7 +76,8 @@ param <- param.dcm(latent = latent,
                    contacts = contacts,
                    sensitivity = sensitivity,
                    testing = 0,
-                   screening = 0)
+                   screening = 0,
+                   screening_on=0)
 base<- dcm(param, init, control)
 base <- mutate_epi(base, I_stu = Isym_on + Isym_off,
                    Icum_stu = Icum_on + Icum_off,
