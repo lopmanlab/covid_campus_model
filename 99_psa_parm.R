@@ -1,5 +1,5 @@
 set.seed(234567)
-total.set.size <- 1000
+total.set.size <- 100
 l <- randomLHS(total.set.size, 19)
 
 # Uniform distributions
