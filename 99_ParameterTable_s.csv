@@ -16,7 +16,7 @@ Testing and quarantine,,,,,,,,
 Time from onset of infectiousness to testing (1/days),2,7,1,InterventionScenario,,"First day is asymptomatic, so when this value is 2, testing is on first day of disease",Uniform,testing
 Screening frequency (1/days),30,120,1,InterventionScenario,,"Monthly, range is once per semester to daily",Uniform,screening
 Duration of quarantine (days),14,,,InterventionScenario,,,,isolation
-Number of contacts per case,14,12,16,InterventionScenario,Mossong et al; Prem et al,NEED Source,Uniform,contacts
+Number of contacts per case,2,1,7,InterventionScenario,Mossong et al; Prem et al,NEED Source,Uniform,contacts
 Proportion of contacts reached,0.75,0.5,1,,,,Uniform,p_contacts_reached
 Proportion experiencing ILI symptoms per day,0.00333,0.003,0.003667,InterventionScenario,Nichol et al; Guh et al,,Uniform,ili
 PCR Sensitivity ,,,,,,,,
