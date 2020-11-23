@@ -14,6 +14,7 @@ param <- param.dcm(latent = latent,
                    contacts = contacts,
                    sensitivity = sensitivity,
                    testing = 0,
+                   npi_eff = 0; 
                    screening = screening)
 mod <- dcm(param, init, control)
 mod <- mutate_epi(mod, I_stu = Isym_on + Isym_off,
