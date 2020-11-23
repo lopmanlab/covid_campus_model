@@ -103,11 +103,20 @@ model_scenarios<- function(testing =0, screening=0, screening_on=0,p_contacts_re
                     Hcum_stu = Hcum_on + Hcum_off,
                     Dcum_stu = Dcum_on + Dcum_off)
   
-  return(as.data.frame(mod)) %>%
+  return(as.data.frame(mod))%>%
     group_by(time) %>%
     summarize(med_stud_active = quantile(I_stu, 0.5, na.rm = TRUE),
               med_stud_cum = quantile(Icum_stu, 0.5, na.rm = TRUE),
               med_saf_active = quantile(I_saf, 0.5, na.rm =TRUE),
               med_saf_cum = quantile(Icum_saf,0.5,na.rm=TRUE))
   
+}
+
+getcases <- function(x){
+    x%>%
+    group_by(time) %>%
+    summarize(med_stud_active = quantile(I_stu, 0.5, na.rm = TRUE),
+              med_stud_cum = quantile(Icum_stu, 0.5, na.rm = TRUE),
+              med_saf_active = quantile(I_saf, 0.5, na.rm =TRUE),
+              med_saf_cum = quantile(Icum_saf,0.5,na.rm=TRUE))
 }
