@@ -46,11 +46,11 @@ theme <- theme_classic()+ theme(legend.position = "none",
                                 axis.title = element_text(size=13))
 
 p1 <- ggplot(data = test_list[test_list$contacts ==0,], aes(x=screen, y=med_stud_cum))+geom_line(aes(colour=factor(test)),size=1.0,linetype= "twodash") + 
-  scale_color_manual(values=pal) + scale_x_continuous(name = "Screening interval(days)",breaks = c(7,30,60,90,120), labels =c(7,30,60,90,120)) +
+  scale_color_manual(values=pal) + scale_x_continuous(name = "Screening interval(Days)",breaks = c(7,30,60,90,120), labels =c(7,30,60,90,120)) +
   ylab("Cumulative student cases")+ ggtitle("0% Contacts Traced") + theme + ylim(0,2200)
 
 p2 <- ggplot(data = test_list[test_list$contacts ==0.5,], aes(x=screen, y=med_stud_cum))+geom_line(aes(colour=factor(test)),size=1.0, linetype = "twodash") + 
-  scale_color_manual(values=pal) + scale_x_continuous(name = "Screening interval(days)",breaks = c(7,30,60,90,120), labels =c(7,30,60,90,120)) +
+  scale_color_manual(values=pal) + scale_x_continuous(name = "Screening interval(Days)",breaks = c(7,30,60,90,120), labels =c(7,30,60,90,120)) +
   ylab("")+ ggtitle("50% Contacts Traced") + theme + ylim(0,2200)
 
 p3 <- ggplot(data = test_list[test_list$contacts ==1,], aes(x=screen, y=med_stud_cum))+geom_line(aes(colour=factor(test)),size=1.0, linetype = "twodash") + 
