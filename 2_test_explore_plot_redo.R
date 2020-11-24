@@ -1,5 +1,4 @@
 ## FIgure 3 rerun
-
 knitr::opts_chunk$set(echo = TRUE)
 # Load dependencies, functions and parameters
 source("99_dependencies.R")
@@ -44,13 +43,13 @@ theme <- theme_classic()+ theme(legend.position = "none",
 p1 <- ggplot(data = test_df, aes(x=time, y=med_stud_active))+geom_line(aes(colour=factor(scenario)),size=0.8) + 
   scale_color_manual(values=pal) +xlab("") +ylab("Student cases")+ ggtitle("Active cases") + theme + ylim(0,80)
 p2<-ggplot(data = test_df, aes(x=time, y=med_stud_cum)) + geom_line(aes(colour=factor(scenario)),size=0.8)+
-  scale_color_manual(values=pal) +xlab("") +ylab("") + ggtitle("Cumulative cases") + theme+ ylim(0,1400)
+  scale_color_manual(values=pal) +xlab("") +ylab("") + ggtitle("Cumulative cases") + theme+ ylim(0,1500)
 p3<-ggplot(data = test_df, aes(x=time, y=med_saf_active)) + geom_line(aes(colour=factor(scenario)),size=0.8)+
   scale_color_manual(values=pal)+ylab("Staff/faculty cases")+xlab("Time (Days)") +theme + ylim(0,80)
 
 p4<-ggplot(data = test_df, aes(x=time, y=med_saf_cum)) + geom_line(aes(colour=factor(scenario)),size=0.8)+
   scale_color_manual(values=pal)+
-  xlab("Time (Days)")+ylab("") + ylim(0,1400)+
+  xlab("Time (Days)")+ylab("") + ylim(0,1500)+
   theme
 
 
