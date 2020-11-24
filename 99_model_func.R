@@ -71,13 +71,14 @@ model <- function(t, t0, parms) {
   })
 }
 
-model_scenarios<- function(testing =0, screening=0, screening_on=0,p_contacts_reached = p_contacts_reached.int,sensitivity_input=sensitivity.int) {
+model_scenarios<- function(testing =0, screening=0, screening_on=0,p_contacts_reached = p_contacts_reached.int,
+                           sensitivity_input=sensitivity.int, r.int =1,eff_npi.int=eff_npi.int) {
   param <- param.dcm(latent = latent.int,
                      infectious = infectious.int,
                      isolation = isolation,
-                     beta_student_to_student = beta_student_to_student.int,
-                     beta_on_to_on = beta_on_to_on.int,
-                     beta_saf = beta_saf.int,
+                     beta_student_to_student = r.int*beta_student_to_student.int,
+                     beta_on_to_on = r.int*beta_on_to_on.int,
+                     beta_saf = r.int*beta_saf.int,
                      community = community.int,
                      p_asympt_stu = p_asympt_stu.int,
                      p_asympt_saf = p_asympt_saf.int,
@@ -103,12 +104,7 @@ model_scenarios<- function(testing =0, screening=0, screening_on=0,p_contacts_re
                     Hcum_stu = Hcum_on + Hcum_off,
                     Dcum_stu = Dcum_on + Dcum_off)
   
-  return(as.data.frame(mod))%>%
-    group_by(time) %>%
-    summarize(med_stud_active = quantile(I_stu, 0.5, na.rm = TRUE),
-              med_stud_cum = quantile(Icum_stu, 0.5, na.rm = TRUE),
-              med_saf_active = quantile(I_saf, 0.5, na.rm =TRUE),
-              med_saf_cum = quantile(Icum_saf,0.5,na.rm=TRUE))
+  return(as.data.frame(mod))
   
 }
 
