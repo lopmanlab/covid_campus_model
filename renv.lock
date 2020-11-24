@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.0.2",
+    "Version": "4.0.3",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -25,15 +25,10 @@
     },
     "EpiModel": {
       "Package": "EpiModel",
-      "Version": "1.8.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteUsername": "statnet",
-      "RemoteRepo": "EpiModel",
-      "RemoteRef": "master",
-      "RemoteSha": "b5ba4fc7c7ffc0a15f7476a0a0d6c81990837ce2",
-      "RemoteHost": "api.github.com",
-      "Hash": "57be5321c3657ba70f338edf4ed2bee3"
+      "Version": "2.0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "f773d42fae4fe40b8ea5f389e909db93"
     },
     "MASS": {
       "Package": "MASS",
@@ -576,10 +571,10 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "0.10.0",
+      "Version": "0.11.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0d3f1c2b63e70b3d918246b4e2ca59b7"
+      "Hash": "1c3ef87cbb81c23ac96797781ec7aecc"
     },
     "rlang": {
       "Package": "rlang",
@@ -699,6 +694,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "6f60d625fd1c55eb93b3e49cb5ce0803"
+    },
+    "tergmLite": {
+      "Package": "tergmLite",
+      "Version": "2.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "330a5fd83c328ff24106dfd26fbc4ee0"
     },
     "testthat": {
       "Package": "testthat",
