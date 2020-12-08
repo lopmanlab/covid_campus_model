@@ -67,7 +67,7 @@ p5 <- ggplot(data=dfLast, aes(x=scenario, y=value)) + geom_line(aes(colour=facto
   scale_x_continuous(name = "Screening interval (days)",breaks = c(0,30,60,90,120), labels =c(0,30,60,90,120))+ ggtitle("e")+
   theme(legend.position = c(0.7, 0.08),legend.title = element_blank(), legend.text=element_text(size=8),legend.key.size = unit(0.3, "cm"))
 
-png("Plots/11222020/fig2_screen_explore_redo_psa_new.png", units="in", width=6, height=5, res=800)
+png("Plots/fig2_screen_explore_redo.png", units="in", width=6, height=5, res=800)
 grid.arrange(
   p1,p2,p3,p4,p5,
   widths = c(2, 2, 2),
@@ -78,8 +78,5 @@ dev.off()
 
 saveRDS(screen_df,"Plots/11222020/res_fig2.RDS")
 saveRDS(screen_list,"Plots/11222020/res_fig2_rawmodeloutputs.RDS")
-
-
-
 
 
