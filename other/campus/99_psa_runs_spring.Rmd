@@ -7,13 +7,13 @@ output: pdf_document
 
 ```{r setup, include=F}
 knitr::opts_chunk$set(echo = F, warning=F, message=F)
-# Load dependencies, functions and parameters
-source("99_dependencies.R")
-source("99_model_func.R")
-source("99_parm_init_control.R")
-source("99_psa_optimizedistr.R")
-source("99_psa_parm.R")   #Note this overwrites initial parameters from parm_init_control
-source("99_psa_plot.R")
+# Load dependencies, functions and parameters, all files in the main folder, apart from 99_parm_init_control that pulls directly from Emory campus folder so that the inputs for the campus can be pulled properly. Number of PSA runs is determined in 99_psa_parm.R
+source("../../99_dependencies.R")
+source("../../99_model_func.R")
+source("99_parm_init_control.R") 
+source("../../99_psa_optimizedistr.R")
+source("../../99_psa_parm.R")   #Note this overwrites initial parameters from parm_init_control
+source("../../99_psa_plot.R")
 options(scipen=999)
 options(digits=4)
 
