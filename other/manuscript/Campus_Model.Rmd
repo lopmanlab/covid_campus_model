@@ -1,0 +1,246 @@
+---
+title: "Disease surveillance and screening to control SARS-CoV-2 on university campuses: a modeling study"
+author: ""
+date: ""
+site: bookdown::bookdown_site
+documentclass: article
+output:
+  bookdown::word_document2: 
+    reference_docx: EmoryCampusModel_Preprint_v2.docx
+    toc: false
+bibliography: campus_cite.bib
+csl: ieee.csl
+---
+
+
+```{r, message=FALSE, echo=FALSE, warning= FALSE}
+library('here')
+```
+
+Ben Lopman, PhD^1^;     
+Carol Y. Liu, MSc^1^;     
+Adrien Le Guillou MD MPH^1,2^;  
+Andreas Handel PhD^3^;  
+Timothy L. Lash, DSc^1^;   
+Alexander P. Isakov MD MPH^4^;   
+Samuel M. Jenness, PhD^1^  
+  
+**Affiliations**  
+^1^ Emory University Rollins School of Public Health, Atlanta, GA 30322, USA  
+^2^ Department of Research and Public Health, Reims Teaching Hospitals, Robert Debré Hospital, Reims, France  
+^3^ College of Public Healh, University of Georgia, Athens, GA 30602, USA  
+^4^ Emory University School of Medicine, Atlanta, GA 30322, USA  
+
+  
+**Correspondence**  
+
+Carol Liu
+Emory University  
+1520 Clifton Road  
+Atlanta, GA 30323 
+Email: carol.liu@emory.edu 
+
+
+
+
+
+```{r, message=FALSE, echo=FALSE, warning= FALSE}
+#load parameter table so we can cite quantities below
+p_tab <- read.csv(here('99_ParameterTable_s.csv'))
+#parameter values and their names in model from CSV file
+pars = as.numeric(as.character(p_tab$Value))
+names(pars) = p_tab$Var
+
+#Load results to cite
+res_sum <- readRDS(here('tables/res_summary.RDS'))
+
+nocont <- readRDS(here('tables/res_nocont.RDS'))
+
+res_scen <- readRDS(here('tables/res_scen.RDS'))
+
+propcomm <- readRDS(here('tables/propcomm.RDS'))
+
+```
+
+
+
+# Abstract
+
+*Background*
+University administrators face decisions about how to safely return and maintain students, staff and faculty on campus throughout the 2020-21 school year. 
+
+*Methods*
+We developed a susceptible-exposed-infectious-recovered (SEIR) deterministic compartmental transmission model of SARS-CoV-2 among university students, staff, and faculty. Our goals were to inform planning at our own university, and to provide a flexible modeling framework to inform the planning efforts at similar academic institutions. Control strategies of isolation and quarantine are initiated by screening (regardless of symptoms) or testing (of symptomatic individuals). We explored a range of screening and testing frequencies and performed a probabilistic sensitivity analysis.
+
+*Results*
+We found that among students, monthly and weekly screening can reduce cumulative incidence by  `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen30")]`% and `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen7")]`%, respectively, while testing with a 2-, 4- and 7-day delay results in an `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test2")]`%, `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test4")]`% and `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test7")]`% reduction in cumulative incidence. Smaller reductions were observed among staff and faculty.
+
+*Conclusions*
+Community-introduction of SARS-CoV-2 onto campus may be controlled with testing, isolation, contract tracing and quarantine. Screening would need to be performed at least weekly to have substantial reductions beyond disease surveillance. This model can also inform resource requirements of diagnostic capacity and isolation/quarantine facilities associated with different strategies.
+
+
+
+
+# Introduction
+In an unprecedented response to the COVID-19 pandemic, schools including institutions of higher education) in almost every nation closed in the first half of 2020.(1)  For boarding institutions like universities, this involved both transitioning classes into online teaching as well as closing dormitories by sending students off-campus. School closure as a non-pharmaceutical intervention has been aimed at reducing contact among students, family members, teachers, and school staff.(2) Closure is thought to be an effective means of reducing disease transmission based on the understanding that younger people are important in transmission of respiratory viruses, like influenza. Closure of schools early in a pandemic may often be more impactful than delayed closing.(2) According to UNESCO, approximately 70% of the global student population has been affected, with closures of pre-school, primary, secondary, and higher education institutions.(1) Since SARS-CoV-2 infections are particularity severe among older adults while younger people still get infected and transmit,(3) university populations are unique in these degree of mixing across these age groups. Prior to the emergence of SARS-CoV-2, contact data on transmission of influenza, and other respiratory virus, provided the basis of current recommendations. Universities are important and unique in that they are frequently residential, involve students traveling long distances to attend, and are assets to their regional economies.
+University administrators are now facing decisions regarding if and how to safely return students, staff, and faculty to campus. As of the end of July 2020, approximately one-third of US universities are planning for primarily in-person instruction for Fall 2020.(4) Universities considering campus re-opening need to estimate the resources necessary to interrupt and mitigate on-campus transmission by projecting the number of possible cases, needs for screening and testing, and boarding requirements for persons needing isolation and quarantine. To provide a framework to evaluate these questions, we developed a susceptible-exposed-infectious-recovered (SEIR) type of deterministic compartmental model. This model captures the transmission process and can therefore estimate the direct and indirect (i.e. transmission-mediated) effects of control strategies. For example, through model simulations, we estimated how testing and identifying SARS-CoV-2 infected students results in them being isolated, their contacts being quarantined, as well as all the infections averted by preventing the chains of transmission that would have otherwise occurred. We go beyond previous campus modeling studies(5) in that we included the entire university community of students, staff and faculty as well as model the process of contact tracing and quarantine.  Our goals were to support the immediate pandemic planning at our own university and to provide a flexible modeling framework to inform the efforts at similar academic institutions.
+
+
+
+# Results
+
+We start by simulating transmission on campus (Figure \@ref(fig:npifig)) in which no diagnostic control measures are in place (no testing, isolation, contact tracing, or quarantine). 
+With R0 of 3.5 for on-campus student and 2.5 for off-campus, case prevalence peaks at `r round(nocont$med[which(nocont$measure == "student_cases_peak")])` cases (Range, 2.5th to 97.5th centiles: `r round(nocont$low[which(nocont$measure == "student_cases_peak")])` to `r round(nocont$high[which(nocont$measure == "student_cases_peak")])`) per day among students and `r round(nocont$med[which(nocont$measure == "saf_cases_peak")])` cases per day among staff/faculty (`r round(nocont$low[which(nocont$measure == "saf_cases_peak")])` to `r round(nocont$high[which(nocont$measure == "saf_cases_peak")])`), resulting in a cumulative of`r round(nocont$med[which(nocont$measure == "student_cases")])` (`r round(nocont$low[which(nocont$measure == "student_cases")])` to `r round(nocont$high[which(nocont$measure == "student_cases")])`) and `r round(nocont$med[which(nocont$measure == "saf_cases")])` (`r round(nocont$low[which(nocont$measure == "saf_cases")])` to `r round(nocont$high[which(nocont$measure == "saf_cases")])`) cases at the end of the semester in a population of about 15,000 each. With our baseline levels of facemask and social distancing efficacy (70%) but with no diagnostics, we estimate case prevalence peaks at `r res_scen$base[which(res_scen$measure=="student_cases_peak")]` per day among students and `r res_scen$base[which(res_scen$measure=="saf_cases_peak")]` cases per day among staff/faculty, resulting in a cumulative of `r res_scen$base[which(res_scen$measure=="student_cases")]` student cases and `r res_scen$base[which(res_scen$measure=="saf_cases")]` staff cases at the end of the semester.  This number of symptomatic cases is substantially lower than the number of infections since we assume that 35% (27% to 43%) of infected students and 51% (41% to 59%) of infected staff are symptomatic, given infection.(3) We use this scenario as the baseline counterfactual for all subsequent comparisons. 
+
+
+```{r npifig,  fig.cap='Effect of non-pharmaceutical interventions (with no testing and screening) on COVID-19 prevalence among students and faculty.' , echo=FALSE}
+knitr::include_graphics(here('Plots/4_transmission_explore.png'))
+```
+
+```{r basetable,  echo=FALSE}
+#basetable=readRDS(here('tables/uncertain_baseline_table.Rds'))
+#knitr::kable(basetable, caption = 'Cumulative outcomes at end of the semester. Values are medians and 2.5 and 97.5th percentiles of 1,000 model runs, sampled over #parameter model ranges.')
+```
+
+
+We next explored a wide range of screening intervals, from weekly to once during the semester (Figure \@ref(fig:screeningfig)). One-time screening, whereby the population is tested on average once during the 4-month semester, reduced cumulative student incidence overall by `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen116")]`%; monthly and weekly screening reduced cumulative student incidence by `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen30")]`% and `r res_sum$perc_red_student_cases[which(res_sum$scenario == "screen7")]`% respectively. For staff and faculty, one-time screening reduced cumulative incidence by `r res_sum$perc_red_saf_cases[which(res_sum$scenario == "screen116")]`%; monthly and weekly screening reduce cumulative incidence by `r res_sum$perc_red_saf_cases[which(res_sum$scenario == "screen30")]`% and `r res_sum$perc_red_saf_cases[which(res_sum$scenario == "screen7")]`% respectively. For students, the cumulative incidence ranged from `r res_sum$value_student_cases[which(res_sum$scenario == "screen7")]` with weekly screening to `r res_sum$value_student_cases[which(res_sum$scenario == "screen116")]` with one-time screening. For staff/faculty, the cumulative incidence ranged from `r res_sum$value_saf_cases[which(res_sum$scenario == "screen7")]` with weekly screening to `r res_sum$value_saf_cases[which(res_sum$scenario == "screen116")]` with one-time screening. 
+
+```{r screeningfig,  fig.cap='Impact of Screening Frequency on Projected Covid-19 Daily and Cumulative Incidence.', echo=FALSE}
+knitr::include_graphics(here('Plots/1_screen_explore.png'))
+```
+
+
+```{r screentable,  echo=FALSE}
+#screentable=readRDS(here('tables/uncertain_screening_table.Rds'))
+#knitr::kable(screentable, caption = 'Cumulative outcomes at end of the semester. Monlthy screening frequency. Values are medians and 2.5 and 97.5th percentiles of #1,000 model runs, sampled over parameter model ranges.')
+```
+
+
+We then consider a testing-only strategy, which also includes contact tracing and quarantine. Assuming different delays between symptom-onset and receiving the tests, results are shown in Figure \@ref(fig:testingfig). We again plot the total number of cases among students and staff, with other parameter values at their base values. Here, with week-delayed testing (the least optimistic scenario), the expected cumulative incidence would be `r res_sum$value_student_cases[which(res_sum$scenario == "test7")]` for students and `r res_sum$value_saf_cases[which(res_sum$scenario == "test7")]` for staff/faculty. With a four-day delay testing interval, the expected cumulative incidence would be `r res_sum$value_student_cases[which(res_sum$scenario == "test4")]` for students and `r res_sum$value_saf_cases[which(res_sum$scenario == "test7")]` for staff/faculty. With a two-day delay testing interval, the expected cumulative incidence would be `r res_sum$value_student_cases[which(res_sum$scenario == "test2")]` for students and `r res_sum$value_saf_cases[which(res_sum$scenario == "test2")]` for staff/faculty. These scenarios represent a `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test7")]`%, `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test4")]`% and `r res_sum$perc_red_student_cases[which(res_sum$scenario == "test2")]`% reduction in cumulative incidence over the semester among students and a `r res_sum$perc_red_saf_cases[which(res_sum$scenario == "test7")]`%, `r res_sum$perc_red_saf_cases[which(res_sum$scenario == "test4")]`% and `r res_sum$perc_red_saf_cases[which(res_sum$scenario == "test2")]`% reduction in cumulative incidence among staff & faculty. Figure 3 also shows the general relationship between “contact tracing” success and cumulative incidence assuming either a 2-day, 4-day, or 7-day delay in testing/quarantine following symptoms. Although the testing interval can reduce the cumulative incidence, the greater impact of this testing scenario is achieved by the number of contacts reached.
+
+```{r testingfig,  fig.cap=' Impact of testing, contact tracing and quarantine at a range of testing delay intervals. Daily and cumulative Covid-19 incidence on university campus', echo=FALSE}
+knitr::include_graphics(here('Plots/2_test_explore.png'))
+```
+
+```{r testtable,  echo=FALSE}
+#testtable=readRDS(here('tables/uncertain_testing_table.Rds'))
+#knitr::kable(testtable, caption = 'Cumulative outcomes at end of the semester. Testing delay of 4 days. Values are medians and 2.5 and 97.5th percentiles of 1,000 #model runs, sampled over parameter model ranges.')
+```
+
+In the final scenarios, we combined the testing and screening rates under different assumptions of contact tracing related to testing (Figure \@ref(fig:combfig)). Our model scenarios below varied the interval for screening between 1 week (7 days) and 1 semester (120 days) and testing at 2-, 4- and 7-day delay, with the efficacy of contact tracing ranging from 0 to 100%. These figure panels show cumulative incidence at the end of the semester for students only. When combined with testing, screening generally has little effect unless it is performed at least monthly.
+
+```{r combfig,  fig.cap=' Impact of combined screening and testing of covid-19 cases among students. Vertical lines represent weekly and monthly screening.', echo=FALSE}
+knitr::include_graphics(here('Plots/3_testandscreen_explore.png'))
+
+
+```
+
+Under intervention scenarios, reductions in campus transmission corresponds with an increase in proportion of cases due to community transmission. In the base scenario, community transmission accounted for `r round(100-propcomm$med_stu[which(propcomm$scenario == "base")]*100,digits=0)`% and `r round(100-propcomm$med_saf[which(propcomm$scenario == "base")]*100,digits=0)`% of cases among students and staff. Comparatively, under 30-day screening interval, 4-day test delay and combined 30-day screening interval, community transmission accounted for `r round(100-propcomm$med_stu[which(propcomm$scenario == "screen30")]*100,digits=0)`%, `r round(100-propcomm$med_stu[which(propcomm$scenario == "test4")]*100,digits=0)`%, `r round(100-propcomm$med_stu[which(propcomm$scenario == "combo")]*100,digits=0)`% cases among students, respectively, and `r round(100-propcomm$med_saf[which(propcomm$scenario == "screen30")]*100,digits=0)`%, `r round(100-propcomm$med_saf[which(propcomm$scenario == "test4")]*100,digits=0)`%, `r round(100-propcomm$med_saf[which(propcomm$scenario == "combo")]*100,digits=0)`% of cases among staff, respectively. 
+
+# Discussion
+
+We find that unmitigated transmission of SARS-CoV-2 in a university population of around 30,000 staff, faculty, and students would lead to thousands of illnesses, many hospitalizations, and likely some deaths.  This is clearly an unacceptable outcome by administrators and the university community. Combined with measures to reduce transmission, a testing strategy whereby symptomatic students, staff, and faculty are identified, administered viral testing, and isolated may be effective at controlling transmission. The success of this strategy relies on contact tracing and quarantining most contacts of infected individuals. Screening would have to be performed at least monthly to have much of an impact on the course of the outbreak on campus and increases the sample collection and assay requirements considerably. However, because we assume the campus community is not a closed population and that there is an ongoing risk of importation of virus, there are considerable numbers of cases even under the most optimistic scenario. Furthermore, this scenario requires substantial financial and clinical capacity resources. Overall, we recommend that these results be interpreted qualitatively, since there is considerable uncertainty in these projections stemming from lack of precision of parameter inputs (e.g. true R0 in this population).
+
+There are a number of limitations to this modeling analysis. First, we lack empirical data about the efficacy of any prevention and control measures aside from testing that are implemented on campus. Smaller class sizes, staggered class times, use of face coverings, use of other protective equipment, and general behavior change are not separately considered in this model.(7) If such data become available in campus population or populations that can serve as a good proxy, model parameters can be refined. Moving more students to off-campus housing had little effect on our projections because we made the assumption that transmission on-campus (R0 = 3.5) is only moderately higher than off campus (R0 = 2.5). This assumption is based on risk factor data on influenza-like illness among students during the 2009 H1N1 outbreak, but if more data become available, we could revisit this assumption.(18) In our model, the campus outbreak could not go extinct because we assumed a constant rate of introduction from the community. Depending on levels of student, staff, and faculty behavior off-campus and the general prevalence in the surrounding community (the Atlanta metropolitan area in our model), this could be an under- or overestimate of risk on campus. We have not explicitly included a scenario in which all or a subset of students (e.g., those residing on campus) are screened upon return to campus. We did not include this because we reasoned that the continued risk of importation onto campus would overwhelm the risk from initial number infected. Given our assumptions that student prevalence is the same as among the general population, screening on return would have limited effect, but would increase requirements by ~4,500 to 15,000 tests, depending on the breadth of testing of the student body. Finally, we have not included seasonal effects whereby virus becomes more transmissible in Fall or alternative semester dates (e.g., end of classes at Thanksgiving break) whereby the period of campus transmission is reduced.
+While we present numerical results for our university at a specific point in time, the model can be re-parameterized for other institutions and can be updated as the epidemiol0gical situation shifts. We updated the model a number of times in discussions with our university leadership. Results from this framework have been influential in their ongoing decision-making. Community risk is a parameter that we updated as the local area incidence has increased. This is sure to change over time, and this will vary from place to place as the model is used by other university planners. Local data on reported incidence and estimates of under-reporting should be used to parameterize this value. Similarly, population immunity will increase as the pandemic progresses. Sero-survey data can inform the proportion of the university community that is immune upon campus opening. These parameters may be easily updated in our accompanying web application  (https://epimodel.shinyapps.io/covid-university/).
+
+In conclusion, we present a model of SARS-CoV-2 transmission and control to assist universities in planning potential impacts and resource needs. Our model is conservative (meaning that it may overestimate the COVID burden on campus) in that we assume a high reproductive number that is not reduced through non-pharmaceutical interventions. Our study comes to a different conclusion than another model of COVID-19 control on university campuses(5). Paltiel et al found that very frequent screening was necessary to achieve substantial disease control. However, that model did not include symptom-based surveillance leading to contact tracing efforts, as our model did.  Contact tracing initiated by detection of cases can be highly impactful, but we also show that mitigation success required identifying a large proportion of contacts. Moreover, they did not model risk to faculty and staff, which we consider critical given their higher probability of severe disease and death owing to older age.(3) In summary, we find that community-introduction of SARS-CoV-2 infection onto campus can be controlled with effective testing, isolation, contract tracing and quarantine, consistent with observations that this strategy has been successful in the general population where implemented properly (e.g., South Korea).(19) 
+ 
+# Methods
+
+We developed a dynamic model of transmission of SARS-CoV-2 among students, staff and faculty, Figure 5A represents the schematic of disease structure. We parameterized the model for our institution, Emory University, a medium-size private university in Atlanta, Georgia (numbers are for the main campus only). The model can be applicable to other colleges and universities; a public web application allows for key initial conditions and model parameters, such as student and staff population sizes and level of community risk, to be varied as background conditions change (https://epimodel.shinyapps.io/covid-university/). The main features and assumptions are described in the following sections. Table 1 provides a full list of all parameter values; the model equations are shown in Supplementary Information.
+
+## Population Structure and Transmission
+
+We modeled three distinct population groups with different degrees of interactions among them: students living on-campus; students living off-campus; and staff and faculty (Figure 5B). We assumed that staff/faculty can be infected by students and can infect other staff/faculty, with a reproduction number (before non-pharmaceutical intervention [NPI] such as mask-wearing or social distancing) of 0.5. Student-to-student interactions leads to transmission at a higher rate, we assumed a reproduction number (before NPI) of 2. We assumed that students living on campus have a further increased transmission potential to other on-campus students, because congregate living is typical on most college campuses. We therefore assumed those students infect on average 1 additional on-campus student.
+Universities are planning an array of measures to limit transmission on campus. These may include mask-wearing; other personal protective equipment; smaller class sizes; staggered class times; enhanced cleaning protocols; enhanced hygiene; canceling large social gatherings; fewer students living in dorms and restricting off-campus movements.(6) We lack data on the efficacy of all these non-pharmaceutical interventions, especially in this specific population, but we assumed that they will have an effect on transmission. We parameterized these non-pharmaceutical controls based on a systematic review of the effect of social distancing and face coverings(7) (and assuming 50% compliance), and we explored a range of values around this parameter.
+Staff and faculty had a higher risk of severe illness and death (given infection) than students, based on accumulating evidence of age-differences in the case-fatality rate.(8) We then standardized using the student and staff/faculty age-structure at our institution. [For a full list of parameter values, see Table 1.] We further assumed that a fraction of cases was asymptomatic and that the probability of symptoms was greater for staff/faculty given their older age distribution than students. We assumed that asymptomatic infected persons were as infectious as those with symptoms; this assumption may overestimate the real transmission rate in this group.(9) We assumed that infectiousness begins on the third day after infection; this latent period is shorter than the incubation period(10) to represent pre-symptomatic transmission.
+We do not track transmission in the wider community explicitly, but incorporated introduction of virus onto campus from the community. We modeled this as a constant daily rate of infection being introduced on campus. In our model parameterization, this was based on confirmed COVID-19 cases in Fulton and Dekalb Counties that surround our institution in early June (around 100 per day) and the combined population of the two counties.(11) We further assumed that infection incidence was ten-times that of reported cases.(9) The model runs for a semester from the day classes start (August 26) to the end of term (December 19), or 116 days. We did not assume reduced transmission over traditional Fall or Thanksgiving breaks or consider alternative schedules.
+
+
+## Intervention Design 
+
+In the model, control was initiated by SARS-CoV-2 diagnostics. Infected persons can be identified by reverse transcription polymerase chain reaction (RT-PCR) through either testing or screening, defined as follows. *Screening* is a strategy in which students, staff, and faculty are tested at a given frequency ranging from weekly to once per semester regardless of the presence of symptoms. *Testing* is a strategy whereby symptomatic students, staff, and faculty present for clinical care and are tested using RT-PCR. We assumed a background level of persons with influenza-like symptoms caused by infections other than SARS-CoV-2 (12,13) who will test negative. Those with COVID-19 who test positive are immediately isolated. However, we assumed that the diagnostic has imperfect sensitivity that varies based on what date of illness the test is performed.(14) There is evidence that PCR sensitivity varies over the course of infection, reaching a peak around day 7 of infection (or day 4 of infectiousness), then declines again. Therefore, we examined the impact of variation in the testing interval, defined as the average lag time between symptom onset and quarantine. Because infectiousness begins one day before symptom onset in the model, we simulated testing intervals ranging from a two-day to a one-week test delay. These testing scenarios are in the absence of any screening to isolate the causal effects of this more intensive intervention.
+
+Following both screening and testing, those diagnosed positive for COVID-19 were immediately isolated in the model. Case isolation involves a complete reduction in their contact rate for the duration of infection. Positive test results also lead to contact tracing. Contact tracing was simulated by assuming public health authorities could elicit `r pars["contacts
+"]` contacts per case detected with `r 100*pars["p_contacts_reached"]`% of those successfully traced and quarantined. Quarantine, like isolation, was modeled as a complete reduction in the contact rate for the duration of infection. Some of those quarantined contacts might have been incubating but are now no longer able to infect since they are under quarantine.
+
+
+
+```{r schematic,  fig.cap='Schematic of A) Disease Structure and B) Student and Staff/Faculty Transmission Pathways.', echo=FALSE}
+knitr::include_graphics(here('Plots/schematic.png'))
+```
+
+
+## Parameterization and Analysis 
+
+In our base models, we simulated SARS-CoV-2 transmission and interventions for the Fall 2020 semester. Our main base model assumed NPI interventions but no screening- or testing-based control. Counterfactual scenarios then varied the screening and testing rates, and the completeness of contact tracing. Our primary outcomes were both active cases per day and cumulative cases across the semester. The model tracked both total cases in each campus group (students versus staff/faculty) as well as severe cases and COVID-related mortality.
+Given uncertainty in model parameters, we performed a probabilistic sensitivity analysis to estimate the range of credible outcomes. In the probabilistic sensitivity analysis, we took 1,000 parameter draws using Latin Hypercube Sampling from the distributions in Table 1. Outcome distributions for the 2.5th and 97.5th percentiles of those samples are provided in Supplementary Information and Table 2. We then used partial rank correlation coefficient to determine how much the modeled variation in cumulative incidence among students and faculty/staff depends on random parameter values.
+
+The model was built and simulated in the *EpiModel* package in the R statistical computing platform (13); the *LHS* package was used to perform Latin Hypercube Sampling. We also built an interactive web app for model exploration using the R Shiny framework. It can be accessed at https://epimodel.shinyapps.io/covid-university/.
+
+No human subjects were involved in this work.  We report a modeling study using only aggregate data from published sources.  
+
+
+```{r paramtable,  echo=FALSE}
+paramtable=read.csv(here('99_ParameterTable_s.csv'))
+pt = paramtable[,1:5]
+#knitr::kable(pt, caption = 'Model parameters and ranges.')
+```
+
+# References
+
+# Author contributions
+
+BAL and API conceived the idea. BAL, CYL and SMJ designed models, carried out simulations and analyzed results with input on methodology and results interpretation from API, AH, TLL and ALG. BAL lead writing the manuscript and all authors provided critical feedback to shape the research, analysis and manuscript.
+
+# Competing interests
+
+BAL and AH acknowledge support from NIH/NIGMS (R01 GM124280 and 3R01GM124280-03S1).   BAL and CYL acknowledge support from NIH/NIAID (3R01AI143875-02S1). BAL acknowledges support from NSF (2032084). SMJ acknowledges support from NIH (R01 AI138783).
+
+# Supplementary Information I. Model equations
+
+\begin{align*}
+  \frac{dS_{i}}{dt} &= -\lambda_{i} S_{i}- comm* S_{i}- test*sens_{t}*(1-p_{asym_{i}}) I_{i}* (cont - Ro_{i}) p.cont + \frac{1}{isol.} Q_{i} (cont - \frac{R0_{i}}{cont}) \\
+  \frac{dE_{i}}{dt} &= \lambda_{i} S_{i}+ comm* S_{i}-\alpha E_{i} - screen* sens_{t} E_{i}-test* sens_{t} (1-p_{asym_{i}}) I_{i} Ro_{i} \\
+  \frac{dI_{i}}{dt} &= \alpha E_{i}-\gamma I_{i} - screen* sens_{t} I_{t} - test*sens_{t}(1-p_{asym_{i}}) I_{i}\\
+  \frac{dP_{i}}{dt} &= test * sens_{t}(1-p_{asym_{i}})I_{i} + screen* sens_{t} (E_{i}+I_{i}) - \delta P_{i}\\
+  \frac{dQ_{i}}{dt} &= test*sens_{t}*(1-p_{asym_{i}}) I_{i}* (cont* p.cont) - \delta Q_{i}\\
+  \frac{dR_{i}}{dt} &= \gamma I_{i} + \delta P_{i} + \delta Q_{i} \frac{Ro_{i}}{cont}\\
+\end{align*}
+
+Where  i &= on (students living on campus); off (students living off campus); saf (staff and faculty), and
+
+\begin{align*}
+  \lambda_{on} &= (1-eff_{npi})(\beta_{stu,stu}(I_{on}+I_{off})+\beta_{on,on} I_{on} +\beta_{saf} I_{saf})\\
+  \lambda_{off} &= (1-eff_{npi})(\beta_{stu,stu}(I_{on}+I_{off})+\beta_{saf} I_{saf})\\
+  \lambda_{saf} &= (1-eff_{npi})(\beta_{saf}(I_{on}+I_{off}+I_{saf}))
+\end{align*}
+
+
+
+# Supplementary Information II. Estimated active and cumulative cases under intervention scenarios with 25th and 75th centile range
+
+```{r uncertainfig1, echo=FALSE}
+knitr::include_graphics(here('Plots/5_psa_plots12.png'))
+
+```
+
+```{r uncertainfig2,  fig.cap='Estimated active and cumulative cases under intervention scenarios with 25th and 75th centile range.', echo=FALSE, echo=FALSE}
+knitr::include_graphics(here('Plots/5_psa_plots22.png'))
+
+```
+
+
+# Supplementary Information III. Partial rank correlation coefficient of key model inputs. 
+
+```{r prcfig,  fig.cap='Partial rank correlation coefficient of key model inputs.', echo=FALSE}
+knitr::include_graphics(here('Plots/5_prcc2.png'))
+
+```
+
+
+
+
+
+ 
