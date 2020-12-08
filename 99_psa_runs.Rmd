@@ -398,7 +398,7 @@ for (i in 1:ncol(results)){
 }
 
 df_res<-as.data.frame(do.call(rbind,pcc_res)) %>% select(original)
-df_res$output <-rep(rep(c("stud","staff"),each =13),1)
+df_res$output <-rep(rep(c("Student","Staff"),each =13),1)
 df_res$output <-as.factor(df_res$output)
 df_res$var<-rep(colnames(variable),2)
 
@@ -408,7 +408,7 @@ ggplot(data=df_res, aes(x= var,y = original,fill=output)) +
   scale_fill_grey()+
   scale_x_discrete(limits=colnames(variable),labels=variable_name)+
   coord_flip() + theme_classic()+
-  ggtitle("Partial Rank Correlation Coefficient of variables")+xlab("Variable")+ylab("")+theme(legend.title=element_blank())
+  ggtitle("Partial rank correlation coefficient of variables")+xlab("Variable")+ylab("")+theme(legend.title=element_blank())
 dev.off()
 
 saveRDS(pcc_res,"tables/pcc_res.RDS")
