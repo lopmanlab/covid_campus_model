@@ -327,14 +327,51 @@ saveRDS(propcomm,"tables/propcomm.RDS")
 
 ```
 
-
 ```{r}
 #' ## PRCC
 ## ----prcc----------------------------------------------------------------
 results<-data.frame(matrix(ncol=2,nrow=total.set.size))
 results[,1]<-as.data.frame(mod_combo) %>% filter(time==116) %>% select(Icum_stu)
 results[,2]<-as.data.frame(mod_combo) %>% filter(time==116) %>% select(Icum_saf)
+```
 
+```{r}
+## Scatter plots for PRCC assumption check
+
+
+df <- data.frame(matrix(nrow=1000,ncol=18))
+for (i in 1:18){
+  df[,i] <- mod_combo$param[i]
+  colnames(df)[i] <- names(mod_combo$param[i])
+}
+
+df <- cbind(df,results)
+df<- df %>% select(-isolation)
+colnames(df)[18:19]<- c("cum_stud","cum_staff")
+df$sim <- seq(1:1000)
+df <- df%>% rename("beta_stu_to_stu"="beta_student_to_student")
+
+png("Plots/5_input_output_scatterplots_stud.png", units="in", width=8, height=7, res=700)
+df %>% select(-cum_staff) %>% melt(id.vars = c("sim","cum_stud")) %>%
+  ggplot(aes(x=value, y= cum_stud)) + geom_point() + facet_wrap(~variable, scales = "free")+
+ theme_bw()+theme(plot.title = element_text(size=7),
+        axis.text.x = element_text(size=7, angle=45))+ylab("Cumulative student cases")
+dev.off()
+
+png("Plots/5_input_output_scatterplots_staff.png", units="in", width=8, height=7, res=700)
+df %>% select(-cum_stud) %>% melt(id.vars = c("sim","cum_staff")) %>%
+  ggplot(aes(x=value, y= cum_staff)) + geom_point() + facet_wrap(~variable, scales = "free") +theme_bw()+
+ theme(plot.title = element_text(size=7),
+  axis.text.x = element_text(size=7, angle=45))+ylab("Cumulative staff cases")
+dev.off()
+
+
+
+```
+
+
+```{r}
+# Actual PRCC test
 variable <- data.frame(R0_StoS = R0_student_to_student.int,
                 R0_OntoOn = R0_on_to_on.int,
                 R0_saf = R0_saf.int,
