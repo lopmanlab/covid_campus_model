@@ -29,7 +29,7 @@ All students <-> all students,2,0.7,2.5,SecondarySetting,,,Uniform,R0_student_to
 On campus students <-> On campus students,1,0.3,1.4,SecondarySetting,,,Uniform,R0_on_to_on,,
 All students <-> staff/faculty,0.5,0.15,0.7,SecondarySetting,,,Uniform,R0_saf,,
 Staff/faculty <-> staff/faculty,0.5,0.15,0.7,SecondarySetting,,,Uniform,,,
-Daily rate of community introduction ,0.00026,0.00007,0.00045,SecondarySetting,https://covid.cdc.gov/covid-data-tracker/#national-lab,,Normal,daily_new_case,Y,"lower bound based on Emory testing, best based on Fulton beginning of Oct; upper is 10x Fulton (too high?)"
+Daily rate of community introduction ,0.000719,0.00007,0.001,SecondarySetting,https://covid.cdc.gov/covid-data-tracker/#national-lab,,Normal,daily_new_case,Y,"lower bound based on Emory testing, best based on Fulton and Dekalb mid december, upper is 1.5x Fulton (too low?)"
 Risk reduction of NPIs,0.35,0.18,0.43,SecondarySetting,https://www.thelancet.com/action/showPdf?pii=S0140-6736%2820%2931142-9,assume 50% compliance,Beta,eff_npi,,
 Under-reporting factor,1,,,,,,,under_report,,
 Time,,,,,,,,,,
