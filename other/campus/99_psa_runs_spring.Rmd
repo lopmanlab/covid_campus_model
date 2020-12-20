@@ -1,8 +1,11 @@
 ---
 title: "Emory ATLANTA Spring 2021 COVID Model"
 author: "A  model analysis of COVID-19 tranmssion and control at Emory University"
-date: "10/5/2020"
-output: pdf_document
+date: "12/19/2020"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=F}
@@ -31,14 +34,16 @@ Emory University is exploring prevention and control strategies for the Spring 2
 ## Interventions
 Here we present three scenarios detailed below
 
-```{r}
-data.frame(Intervention = c("No screening","Weekly screening","Biweekly screening"),
-                            Screen_on=c("None", "Weekly","Biweekly"),
-                            Screen_off = c("None","None","None")) %>%
+```{r eval =F}
+data.frame(Intervention = c("No screening","Screen 5000 per week","Screen 15,000 per week",
+                            "Screen 30,000 per week", "Screen on-campus students weekly"),
+                            Screen_on=c("None", "Every 6 weeks","Biweekly","Weekly","Weekly"),
+                            Screen_off = c("None", "Every 6 weeks","Biweekly","Weekly", "None")) %>%
                             rename("Screening on-campus students" = Screen_on,
                                    "Screening off-campus & staff" = Screen_off) %>%
                             kable(digits = 2, align = "l") %>%
                             kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
 ```
 
 
@@ -120,8 +125,8 @@ param <- param.dcm(latent = latent.int,
                    screening_on = 1/7,
                    screening=0)
 
-mod_7screen <- dcm(param, init, control)
-mod_7screen <- mutate_epi(mod_7screen, I_stu = Isym_on + Isym_off,
+mod_7screenon <- dcm(param, init, control)
+mod_7screenon <- mutate_epi(mod_7screenon, I_stu = Isym_on + Isym_off,
                   Icum_stu = Icum_on + Icum_off,
                   P_stu = P_on + P_off,
                   Pcum_stu = Pcum_on + Pcum_off,
@@ -131,7 +136,7 @@ mod_7screen <- mutate_epi(mod_7screen, I_stu = Isym_on + Isym_off,
 ```
 
 
-```{r echo=F}
+```{r include=F}
 # Bieekly screening for on-campus students, 4-day test delay
 ## Scenario with biweekly screening for on-campus, no screening for staff and off campus students, four day testing, contact tracing as variable parameter
 param <- param.dcm(latent = latent.int,
@@ -166,41 +171,120 @@ mod_3screen <- mutate_epi(mod_3screen, I_stu = Isym_on + Isym_off,
                   Dcum_stu = Dcum_on + Dcum_off)
 ```
 
-## Plots for all scenarios
+```{r echo=F}
+# Screen 5000 of students and staff per week, 4 day test delay, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
+                   testing = 1/4,
+                   screening_on = 1/42,
+                   screening=1/42)
 
-```{r fig.width=12, fig.height=12}
-#' 
-#' ## Plots of all scenarios and range
-## ----keyresult, echo=F---------------------------------------------------
-## Store key results
-#Cumulative staff and student infections for each run
+mod_42screen <- dcm(param, init, control)
+mod_42screen <- mutate_epi(mod_42screen, I_stu = Isym_on + Isym_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+```
 
+```{r echo=F}
+# Screen 5000 of students and staff per week, 4 day test delay, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
+                   testing = 1/4,
+                   screening_on = 1/14,
+                   screening=1/14)
+
+mod_14screen <- dcm(param, init, control)
+mod_14screen <- mutate_epi(mod_14screen, I_stu = Isym_on + Isym_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+```
+
+
+```{r echo=F}
+# Screen 5000 of students and staff per week, 4 day test delay, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = eff_npi.int,
+                   testing = 1/4,
+                   screening_on = 1/7,
+                   screening=1/7)
+
+mod_7screen <- dcm(param, init, control)
+mod_7screen <- mutate_epi(mod_7screen, I_stu = Isym_on + Isym_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+```
+
+
+## Summary results
+```{r}
 # Combine scenarios of interest into list of data frames
-list_res<-lapply(list("noscreen"=mod_noscreen,"screen7"=mod_7screen,"screen3"= mod_3screen),as.data.frame)
+list_res<-lapply(list("noscreen"=mod_noscreen,"screen7on"=mod_7screenon,"screen42"= mod_42screen, "screen14"=mod_14screen, "screen7" = mod_7screen),as.data.frame)
 
 list_res<-lapply(names(c(list_res)),function(x) {
   list_res[[x]] %>%
     mutate(scenario = x)
 })
 
-# Process the output into plots for active and cumulative cases for stadd and student
-# Default is median with IQR as upper and lower bounds but can be changed
-p1<-psa_plot(list_res[[1]],title1="Active cases-No Screen", title2="Total cases-No screen")
-p2<-psa_plot(list_res[[2]],title1="Active cases-Weekly Screen", title2 = "Total-Weekly screen")
-p3<-psa_plot(list_res[[3]], title1="Active cases-Biweekly Screen", title2="Total-Biweekly Screen")
-
-# Arrange plots for output
-
-#png("Plots/5_psa_plots12.png", units="in", width=6, height=5, res=500)
-grid.arrange(p1[[1]]+rremove("legend"),p1[[2]]+rremove("legend"),p2[[1]]+rremove("legend"),p2[[2]]+rremove("legend"),p3[[1]]+rremove("legend"),p3[[2]]+rremove("legend"))
-#dev.off()
-
-
-```
-
-## Summary results
-```{r}
-#' 
 #' ## Totals -- at end of the semester
 ## ------------------------------------------------------------------------
 df_cum<-do.call("rbind",list_res)%>%
@@ -258,21 +342,25 @@ df_cum<-do.call("rbind",list_res)%>%
 var_order <- data.frame(measure=c("student_cases","student_cases_peak","student_hosps","student_deaths","student_isos","student_isos_peak","student_isos_days",
                "student_quas","student_quas_peak","student_quas_days","saf_cases","saf_cases_peak","saf_hosps","saf_deaths","tests","tests_pc"),
                Measure= c("StudentCases","StudentCasesPeak","StudentHosps","StudentDeaths","StudentIsolate","StudentIsolatePeak","StudentIsolateDays",
-               "StudentQuarantined","StudentQuaPeak","StudentQuarantinedDays","StaffCases","StaffCasesPeak","StaffHosps","StaffDeaths","Tests","TestsPerCapita")) %>%
+               "StudentQuarantined","StudentQuaPeak","StudentQuarantined Days","StaffCases","StaffCasesPeak","StaffHosps","StaffDeaths","Tests","TestsPerCapita")) %>%
             mutate(measure= as.character(measure))
 
 df_out<-var_order %>% left_join(df_out, by="measure") %>%
           rename("No screening" = "noscreen",
-                 "Weekly screening" = "screen7",
-                  "Biweekly screening" = "screen3") 
+                 "Screen 30000 per week (All)" = "screen7",
+                  "Screen 5000 per week (All)" = "screen42",
+                  "Screen 15000 per week (All)" = "screen14",
+                  "Screen on-campus students only weekly"="screen7on") 
 
 
-kable(df_out[,c("Measure","No screening","Weekly screening","Biweekly screening")], digits = 0, align = "c") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
+kable(df_out[,c("Measure","No screening","Screen 5000 per week (All)","Screen 15000 per week (All)", "Screen 30000 per week (All)", "Screen on-campus students only weekly")], digits = 0, align = "c") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  column_spec(1, width = "3cm") %>%
+  column_spec(2:6, width="2.5cm")
 
 
 #saveRDS(df_out[,c("measure","noscreen","screen7","screen3")],"tables/res_scen.RDS")
-#write.csv(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_scen.csv")
+#write.csv(df_out[,c("measure","base","test4","screen30","combo")],"res_scen.csv")
 
 
 ```
@@ -306,7 +394,7 @@ kable(propcomm,  align = "c") %>%
 
 ## Weekly distribution of tests and influenza cases
 * Testing data is based on the average weekly distribution of ILI care provided by Emory Student Health Services from 2016 to 2020.  
-* The fraction of tests for ILI that are flu cases is based on the % positive by week from the 2020 season (pre-COVID).  This can be updated in order to be more repreentative
+* The fraction of tests for ILI that are flu cases is based on the % positive by week from the 2020 season (pre-COVID).  This can be updated in order to be more representative
 * These numbers are likely severe overestimates, because we assume that anyone with ILI gets tested and the flu positivity rates applies to all these tests even though many will be mild.
 * There is **no uncertainty or variability** from ILI testing or flu data included in the model.  The simulation intervals only reflect variability in other parameters, as in previous version of the model.
 
@@ -356,15 +444,45 @@ kable(ili_test,  align = "c") %>%
 
 ```
 
+
+
+```{r fig.width=12, fig.height=12, include=F}
+## Plots for all scenarios#' 
+#' ## Plots of all scenarios and range
+## ----keyresult, echo=F---------------------------------------------------
+## Store key results
+#Cumulative staff and student infections for each run
+
+
+
+# Process the output into plots for active and cumulative cases for stadd and student
+# Default is median with IQR as upper and lower bounds but can be changed
+p1<-psa_plot(list_res[[1]],title1="Active cases-No Screen", title2="Total cases-No screen")
+p2<-psa_plot(list_res[[2]],title1="Active cases-Weekly Screening for on-campus students only", title2 = "Total-Weekly On-campus students")
+p3<-psa_plot(list_res[[3]], title1="Active cases-Screen 5000 (staff and students) per week", title2="Total-Screen 5000 per week")
+p4<-psa_plot(list_res[[4]], title1="Active cases-Screen 15000 (staff and students) per week", title2="Total-Screen 15000 per week")
+p5<-psa_plot(list_res[[5]], title1="Active cases-Screen 30000 (staff and students) per week", title2="Total-Screen 30000 per week")
+
+
+# Arrange plots for output
+
+#png("Plots/5_psa_plots12.png", units="in", width=6, height=5, res=500)
+grid.arrange(p1[[1]]+rremove("legend"),p1[[2]]+rremove("legend"),p3[[1]]+rremove("legend"),p3[[2]]+rremove("legend"),p4[[1]]+rremove("legend"),p4[[2]]+rremove("legend"),p5[[1]]+rremove("legend"),p5[[2]]+rremove("legend"),p2[[1]]+rremove("legend"),p2[[2]]+rremove("legend"),ncol=2, nrow=5)
+#dev.off()
+
+
+```
+
 ## Model description
 
 ### Spring model updates
 
-* We adapted the model so that on-campus students are screened. Staff/faculty and students residing off-campus are not. 
+* We adapted the model with scenarios where all students and staff are screened at intervals of 5000 per week, 15000 per week and 30000 per week.
+* We also include a previous scenario requested by Emory which was to conduct weekly screening for on-campus students only
 * We assume that symptomatic people are tested on their 4th day of infection, on average.
 * Contacts are reduced substantially, inline with the numbers Neel provided. However, we did not include different number of contact for staff/faculty and students.
 * We updated the student mortality rates in line with lower CDC estimates. However, we did not change the staff/faculty value – that’s not changed much, according to the CDC recommended model parameters. 
-* For the range of community introduction values we used: Emory’s testing and screening case counts (combined) for the lower value and Fulton County’s current rate, assuming 5x infection:reported case ratio, as per CDC sero-surveillance.
+* For the range of community introduction values we used: Emory’s testing and screening case counts (combined) for the lower value and Fulton and Dekalb County’s current rate of daily infections (averaged over the past 14 days). We assume 2x infection:reported case ratio, as per CDC sero-surveillance.
 
 ### General model description
 This is a model of transmission of SARS-COV-2 among Emory students, staff and faculty. The model includes the following features and assumptions.
