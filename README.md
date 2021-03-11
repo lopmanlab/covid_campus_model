@@ -11,7 +11,7 @@ Code in this repository was used for the simulations and results presented our p
 
 | File                   | Description |
 | ---------------------- | ------------- |
-| [Transmission scenarios](.../1_transmission_explore.R)| Explores different transmission scenarios |
+| [Transmission scenarios](1_transmission_explore.R)| Explores different transmission scenarios |
 | [Screening scenarios](.../2_screen_explore.R)           |Explores a range of screening intervals and with an outcome of total and cumulative cases in staff and students|
 | [Testing scenarios](.../3_test_explore.R)        |Explores a range of testing interval (time from symptom-onset to testing and subsequent isolation)|
 | [Screen and test scenarios](.../4_testandscreen_explore.R) |Explores combinations of screening and testing intervals |
@@ -31,7 +31,7 @@ Code in this repository was used for the simulations and results presented our p
 ## Outputs
 | File                   | Description |
 | ---------------------- | ------------- |
-| [Plots](.../Plots.R)         | Folder containing figures from model outputs  |
+| [Plots](Plots.R)         | Folder containing figures from model outputs  |
 
 
 # Shiny web app
