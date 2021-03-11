@@ -7,15 +7,15 @@ Code in this repository was used for the simulations and results presented our p
 * [Interactive web tool](https://epimodel.shinyapps.io/covid-university/)
 
 # Code description
-## Model runs and sensitivity analysis
+## Model runs for figures in paper
 
 | File                   | Description |
 | ---------------------- | ------------- |
-| [Screening scenarios](.../1_screen_explore_plot.R)           |Explores a range of screening intervals and with an outcome of total and cumulative cases in staff and students|
-| [Testing scenarios](.../2_test_explore_plot.R)        |Explores a range of testing interval (time from symptom-onset to testing and subsequent isolation)|
-| [Screen and test scenarios](.../3_testandscreen_explore_plot.R) |Explores combinations of screening and testing intervals |
-| [Transmission scenarios](.../4_transmission_explore_plot.R)| Explores different transmission scenarios |
-| [Probabilistic sensitivity analysis (PSA)](.../99_psa_parm.R)         |Probabilistic sensitivty analysis where distributions are assigned to key parameters and latin-hypercube sampling is used to sample from the parameter space. Produces outputs for base and three intervention scenarios |
+| [Transmission scenarios](.../1_transmission_explore.R)| Explores different transmission scenarios |
+| [Screening scenarios](.../2_screen_explore.R)           |Explores a range of screening intervals and with an outcome of total and cumulative cases in staff and students|
+| [Testing scenarios](.../3_test_explore.R)        |Explores a range of testing interval (time from symptom-onset to testing and subsequent isolation)|
+| [Screen and test scenarios](.../4_testandscreen_explore.R) |Explores combinations of screening and testing intervals |
+
 
 ## Functions, parameters and initials
 
