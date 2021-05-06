@@ -1,0 +1,752 @@
+---
+title: "Emory ATLANTA Fall 2021 COVID-19 Model, including vaccination"
+author: "A  model analysis of COVID-19 tranmssion and control at Emory University"
+date: "4/16/2021"
+output: pdf_document
+classoption: landscape
+---
+
+```{r setup, include=F}
+knitr::opts_chunk$set(echo = F, warning=F, message=F)
+# Load dependencies, functions and parameters
+source("99_dependencies.R")
+source("99_model_func.R")
+source("99_parm_init_control.R")
+source("99_psa_optimizedistr.R")
+source("99_psa_parm.R")   #Note this overwrites initial parameters from parm_init_control
+source("99_psa_plot.R")
+options(scipen=999)
+options(digits=4)
+```
+
+## Summary
+This iteration of the model builds on the Spring and Fall 2020 versions, but now includes vaccination as well as pre-existing immunity from prior natural infections.  See =[model publication](https://www.nature.com/articles/s41598-021-85252-z) and [online model ](https://epimodel.shinyapps.io/covid-university/) for more details of the base model. 
+
+Vaccination is modeled in a simple way, such that successfully vaccinated individuals are protected from both infection and COVID-19 disease. Vaccine efficacy (or the proportion of vaccines who respond to vaccination) is `r 100*ve`%. In addition, we assume that `r 100*p_imm`% have been previously infected with previous infection providing `r 100*ve`% protection. 
+
+We explore vaccine coverage ranging from 50% to 90%.  For now, students and staff are vaccinated at the same level in each simulation, though with the mandate for students, their coverage is likelt to be higher.  
+
+Baseline scenarios assume non-pharmaceuticals interventions (NPIs) remain in place and that screening of asymptomatic people in performed weekly.
+
+
+```{r, echo=F}
+# 50% Vaccine coverage with NPIs and screening
+## Scenario with no screening, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = 0.6,
+                   testing = testing,
+                   screening_on = 1/7,
+                   screening=1/7)
+
+mod_50 <- dcm(param, init_5, control)
+mod_50 <- mutate_epi(mod_50, I_stu = Isym_on + Isym_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+```
+
+```{r, echo=F}
+# 50% Vaccine coverage with NPIs; no screening
+## Scenario with no screening, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = 0.6,
+                   testing = testing,
+                   screening_on = 0,
+                   screening=0)
+
+mod_50_noscreen <- dcm(param, init_5, control)
+mod_50_noscreen <- mutate_epi(mod_50_noscreen, I_stu = Isym_on + Isym_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+```
+
+```{r, echo=F}
+# 50% Vaccine coverage with NPIs; no screening
+## Scenario with no screening, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = 0,
+                   testing = testing,
+                   screening_on = 1/7,
+                   screening=1/7)
+
+mod_50_nonpi <- dcm(param, init_5, control)
+mod_50_nonpi <- mutate_epi(mod_50_nonpi, I_stu = Isym_on + Isym_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+```
+
+```{r, echo=F}
+# 50% Vaccine coverage with NPIs; no screening
+## Scenario with no screening, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = 0,
+                   testing = testing,
+                   screening_on = 0,
+                   screening=0)
+
+mod_50_nonpi_noscreen <- dcm(param, init_5, control)
+mod_50_nonpi_noscreen <- mutate_epi(mod_50_nonpi_noscreen, I_stu = Isym_on + Isym_off,
+                  Icum_stu = Icum_on + Icum_off,
+                  P_stu = P_on + P_off,
+                  Pcum_stu = Pcum_on + Pcum_off,
+                  Qcum_stu = Qcum_on + Qcum_off,
+                  Hcum_stu = Hcum_on + Hcum_off,
+                  Dcum_stu = Dcum_on + Dcum_off)
+```
+
+
+
+
+```{r, echo=F}
+# 70% Vaccine coverage with NPIs and screening
+## Scenario with no screening, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = 0.6,
+                   testing = testing,
+                   screening_on = 1/7,
+                   screening=1/7)
+
+mod_70 <- dcm(param, init_7, control)
+mod_70 <- mutate_epi(mod_70, I_stu = Isym_on + Isym_off,
+                     Icum_stu = Icum_on + Icum_off,
+                     P_stu = P_on + P_off,
+                     Pcum_stu = Pcum_on + Pcum_off,
+                     Qcum_stu = Qcum_on + Qcum_off,
+                     Hcum_stu = Hcum_on + Hcum_off,
+                     Dcum_stu = Dcum_on + Dcum_off)
+```
+
+```{r, echo=F}
+# 50% Vaccine coverage with NPIs; no screening
+## Scenario with no screening, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = 0.6,
+                   testing = testing,
+                   screening_on = 0,
+                   screening=0)
+
+mod_70_noscreen <- dcm(param, init_7, control)
+mod_70_noscreen <- mutate_epi(mod_70_noscreen, I_stu = Isym_on + Isym_off,
+                              Icum_stu = Icum_on + Icum_off,
+                              P_stu = P_on + P_off,
+                              Pcum_stu = Pcum_on + Pcum_off,
+                              Qcum_stu = Qcum_on + Qcum_off,
+                              Hcum_stu = Hcum_on + Hcum_off,
+                              Dcum_stu = Dcum_on + Dcum_off)
+```
+
+```{r, echo=F}
+# 50% Vaccine coverage with NPIs; no screening
+## Scenario with no screening, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = 0,
+                   testing = testing,
+                   screening_on = 1/7,
+                   screening=1/7)
+
+mod_70_nonpi <- dcm(param, init_7, control)
+mod_70_nonpi <- mutate_epi(mod_70_nonpi, I_stu = Isym_on + Isym_off,
+                           Icum_stu = Icum_on + Icum_off,
+                           P_stu = P_on + P_off,
+                           Pcum_stu = Pcum_on + Pcum_off,
+                           Qcum_stu = Qcum_on + Qcum_off,
+                           Hcum_stu = Hcum_on + Hcum_off,
+                           Dcum_stu = Dcum_on + Dcum_off)
+```
+
+```{r, echo=F}
+# 70% Vaccine coverage with NPIs; no screening
+## Scenario with no screening, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = 0,
+                   testing = testing,
+                   screening_on = 0,
+                   screening=0)
+
+mod_70_nonpi_noscreen <- dcm(param, init_7, control)
+mod_70_nonpi_noscreen <- mutate_epi(mod_70_nonpi_noscreen, I_stu = Isym_on + Isym_off,
+                                    Icum_stu = Icum_on + Icum_off,
+                                    P_stu = P_on + P_off,
+                                    Pcum_stu = Pcum_on + Pcum_off,
+                                    Qcum_stu = Qcum_on + Qcum_off,
+                                    Hcum_stu = Hcum_on + Hcum_off,
+                                    Dcum_stu = Dcum_on + Dcum_off)
+```
+
+```{r, echo=F}
+# 90% Vaccine coverage with NPIs and screening
+## Scenario with no screening, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = 0.6,
+                   testing = testing,
+                   screening_on = 1/7,
+                   screening=1/7)
+
+mod_90 <- dcm(param, init_9, control)
+mod_90 <- mutate_epi(mod_90, I_stu = Isym_on + Isym_off,
+                     Icum_stu = Icum_on + Icum_off,
+                     P_stu = P_on + P_off,
+                     Pcum_stu = Pcum_on + Pcum_off,
+                     Qcum_stu = Qcum_on + Qcum_off,
+                     Hcum_stu = Hcum_on + Hcum_off,
+                     Dcum_stu = Dcum_on + Dcum_off)
+```
+
+```{r, echo=F}
+# 50% Vaccine coverage with NPIs; no screening
+## Scenario with no screening, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = 0.6,
+                   testing = testing,
+                   screening_on = 0,
+                   screening=0)
+
+mod_90_noscreen <- dcm(param, init_9, control)
+mod_90_noscreen <- mutate_epi(mod_90_noscreen, I_stu = Isym_on + Isym_off,
+                              Icum_stu = Icum_on + Icum_off,
+                              P_stu = P_on + P_off,
+                              Pcum_stu = Pcum_on + Pcum_off,
+                              Qcum_stu = Qcum_on + Qcum_off,
+                              Hcum_stu = Hcum_on + Hcum_off,
+                              Dcum_stu = Dcum_on + Dcum_off)
+```
+
+```{r, echo=F}
+# 90% Vaccine coverage with NPIs; no screening
+## Scenario with no screening, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = 0,
+                   testing = testing,
+                   screening_on = 1/7,
+                   screening=1/7)
+
+mod_90_nonpi <- dcm(param, init_9, control)
+mod_90_nonpi <- mutate_epi(mod_90_nonpi, I_stu = Isym_on + Isym_off,
+                           Icum_stu = Icum_on + Icum_off,
+                           P_stu = P_on + P_off,
+                           Pcum_stu = Pcum_on + Pcum_off,
+                           Qcum_stu = Qcum_on + Qcum_off,
+                           Hcum_stu = Hcum_on + Hcum_off,
+                           Dcum_stu = Dcum_on + Dcum_off)
+```
+
+```{r, echo=F}
+# 50% Vaccine coverage with NPIs; no screening
+## Scenario with no screening, four day testing, contact tracing as variable parameter
+param <- param.dcm(latent = latent.int,
+                   infectious = infectious.int,
+                   isolation = isolation,
+                   beta_student_to_student = beta_student_to_student.int,
+                   beta_on_to_on = beta_on_to_on.int,
+                   beta_saf = beta_saf.int,
+                   community = community.int,
+                   p_asympt_stu = p_asympt_stu.int,
+                   p_asympt_saf = p_asympt_saf.int,
+                   p_hosp_stu = p_hosp_stu.int,
+                   p_hosp_saf = p_hosp_saf.int,
+                   p_death_stu = p_death_stu.int,
+                   p_death_saf = p_death_saf.int,
+                   contacts = contacts.int,
+                   p_contacts_reached = p_contacts_reached.int,
+                   ili = ili.int,
+                   sensitivity = sensitivity.int,
+                   eff_npi = 0,
+                   testing = testing,
+                   screening_on = 0,
+                   screening=0)
+
+mod_90_nonpi_noscreen <- dcm(param, init_9, control)
+mod_90_nonpi_noscreen <- mutate_epi(mod_90_nonpi_noscreen, I_stu = Isym_on + Isym_off,
+                                    Icum_stu = Icum_on + Icum_off,
+                                    P_stu = P_on + P_off,
+                                    Pcum_stu = Pcum_on + Pcum_off,
+                                    Qcum_stu = Qcum_on + Qcum_off,
+                                    Hcum_stu = Hcum_on + Hcum_off,
+                                    Dcum_stu = Dcum_on + Dcum_off)
+```
+
+
+## Plots for 70% Coverage scenarios
+
+```{r fig.width=12, fig.height=12}
+#' 
+#' ## Plots of all scenarios and range
+## ----keyresult, echo=F---------------------------------------------------
+## Store key results
+#Cumulative staff and student infections for each run
+
+# Combine scenarios of interest into list of data frames
+list_res_50<-lapply(list("50covg"=mod_50,"NoNPI"=mod_50_nonpi,"NoScreen"=mod_50_noscreen, "NoNPIScreen"=mod_50_nonpi_noscreen),as.data.frame)
+
+list_res_70<-lapply(list("70covg"=mod_70,"NoNPI"=mod_70_nonpi,"NoScreen"=mod_70_noscreen, "NoNPIScreen"=mod_70_nonpi_noscreen),as.data.frame)
+
+list_res_90<-lapply(list("90covg"=mod_90,"NoNPI"=mod_90_nonpi,"NoScreen"=mod_90_noscreen, "NoNPIScreen"=mod_90_nonpi_noscreen),as.data.frame)
+
+list_res_50<-lapply(names(c(list_res_50)),function(x) {
+  list_res_50[[x]] %>%
+    mutate(scenario = x)
+})
+
+list_res_70<-lapply(names(c(list_res_70)),function(x) {
+  list_res_70[[x]] %>%
+    mutate(scenario = x)
+})
+
+list_res_90<-lapply(names(c(list_res_90)),function(x) {
+  list_res_90[[x]] %>%
+    mutate(scenario = x)
+})
+# Process the output into plots for active and cumulative cases for stadd and student
+# Default is median with IQR as upper and lower bounds but can be changed
+p1<-psa_plot(list_res_70[[1]],title1="Active cases-70% coverage", title2="Total cases-70% coverage")
+p2<-psa_plot(list_res_70[[2]],title1="...without NPIs", title2 = "...without NPIsn")
+p3<-psa_plot(list_res_70[[3]],title1="...without Screening", title2 = "...without Screening")
+p4<-psa_plot(list_res_70[[4]],title1="...without NPIs or screening", title2 = "...without NPIs or screening")
+
+# Arrange plots for output
+
+#png("Plots/5_psa_plots12.png", units="in", width=6, height=5, res=500)
+grid.arrange(p1[[1]]+rremove("legend"),p1[[2]]+rremove("legend"),
+             p2[[1]]+rremove("legend"),p2[[2]]+rremove("legend"),
+             p3[[1]]+rremove("legend"),p3[[2]]+rremove("legend"),
+             p4[[1]]+rremove("legend"),p4[[2]]+rremove("legend"),
+             ncol = 2)
+#dev.off()
+```
+
+\newpage
+## Summary results -- 50% Vaccine Coverage
+
+
+```{r}
+#' 
+#' ## Totals -- at end of the semester
+## ------------------------------------------------------------------------
+df_cum<-do.call("rbind",list_res_50)%>%
+      filter(time == max(time)) %>%
+      group_by(scenario, run) %>%
+      summarize(
+        student_n = S_on + E_on + I_on + R_on + P_on + Q_on - Dcum_on +
+                    S_off + E_off + I_off + R_off + P_off + Q_off - Dcum_off,
+        student_cases = Icum_on + Icum_off,
+        student_hosps = Hcum_on + Hcum_off,
+        student_isos = Pcum_on + Pcum_off,
+        student_quas = Qcum_on + Qcum_off,
+        student_deaths = Dcum_on + Dcum_off,
+        saf_n = S_saf + E_saf + I_saf + R_saf + P_saf + Q_saf - Dcum_saf,
+        saf_cases = Icum_saf,
+        saf_hosps = Hcum_saf,
+        saf_deaths = Dcum_saf,
+        tests = Test
+      ) %>%
+      ungroup() %>%
+      mutate(tests_pc = tests / (student_n + saf_n))
+
+    df_peak <- do.call("rbind",list_res_50) %>%
+      group_by(scenario, run) %>%
+      summarize(
+        student_cases_peak = max(Isym_on + Isym_off, na.rm = TRUE),
+        student_isos_peak = max(P_on + P_off, na.rm = TRUE),
+        student_isos_days = sum(P_on + P_off, na.rm = TRUE),
+        student_quas_peak = max(Q_on + Q_off, na.rm = TRUE),
+        student_quas_days = sum(Q_on + Q_off, na.rm = TRUE),
+        saf_cases_peak = max(Isym_saf, na.rm = TRUE),
+        ) %>%
+      ungroup()
+
+    df_out <- full_join(df_cum, df_peak, by = c("scenario", "run")) %>%
+      pivot_longer(
+        -c(scenario, run),
+        names_to = "measure",
+        values_to = "value"
+      ) %>%
+      group_by(measure, scenario) %>%
+      summarize(
+        low = quantile(value, 0.025, na.rm = TRUE),
+        med = quantile(value, 0.5, na.rm = TRUE),
+        high = quantile(value, 0.975, na.rm = TRUE)
+      ) %>%
+      mutate(value = paste0(
+        round(med,digits=0),
+        " (", round(low,digits=0), "-",
+        round(high, digits=0), ")",sep="")
+        ) %>%
+      pivot_wider(id_cols = measure, names_from = scenario, values_from = value)
+
+var_order <- data.frame(measure=c("student_cases","student_cases_peak","student_hosps","student_deaths","student_isos","student_isos_peak","student_isos_days",
+               "student_quas","student_quas_peak","student_quas_days","saf_cases","saf_cases_peak","saf_hosps","saf_deaths","tests","tests_pc"),
+               Measure= c("StudentCases","StudentCasesPeak","StudentHosps","StudentDeaths","StudentIsolate","StudentIsolatePeak","StudentIsolateDays",
+               "StudentQuarantined","StudentQuaPeak","StudentQuarantinedDays","StaffCases","StaffCasesPeak","StaffHosps","StaffDeaths","Tests","TestsPerCapita")) %>%
+            mutate(measure= as.character(measure))
+
+df_out<-var_order %>% left_join(df_out, by="measure") %>%
+          rename("50% coverage" = "50covg",
+                 "...without NPIs" = "NoNPI",
+                 "...without screening" = "NoScreen",
+                 "...without NPIs or screening"= "NoNPIScreen") 
+
+kable(df_out[,c("Measure",
+                "50% coverage",
+                 "...without NPIs",
+                 "...without screening",
+                 "...without NPIs or screening")], digits = 0, align = "c") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
+```
+
+\newpage
+## Summary results -- 70% Vaccine Coverage
+
+```{r}
+#' 
+#' ## Totals -- at end of the semester
+## ------------------------------------------------------------------------
+df_cum<-do.call("rbind",list_res_70)%>%
+  filter(time == max(time)) %>%
+  group_by(scenario, run) %>%
+  summarize(
+    student_n = S_on + E_on + I_on + R_on + P_on + Q_on - Dcum_on +
+      S_off + E_off + I_off + R_off + P_off + Q_off - Dcum_off,
+    student_cases = Icum_on + Icum_off,
+    student_hosps = Hcum_on + Hcum_off,
+    student_isos = Pcum_on + Pcum_off,
+    student_quas = Qcum_on + Qcum_off,
+    student_deaths = Dcum_on + Dcum_off,
+    saf_n = S_saf + E_saf + I_saf + R_saf + P_saf + Q_saf - Dcum_saf,
+    saf_cases = Icum_saf,
+    saf_hosps = Hcum_saf,
+    saf_deaths = Dcum_saf,
+    tests = Test
+  ) %>%
+  ungroup() %>%
+  mutate(tests_pc = tests / (student_n + saf_n))
+
+df_peak <- do.call("rbind",list_res_70) %>%
+  group_by(scenario, run) %>%
+  summarize(
+    student_cases_peak = max(Isym_on + Isym_off, na.rm = TRUE),
+    student_isos_peak = max(P_on + P_off, na.rm = TRUE),
+    student_isos_days = sum(P_on + P_off, na.rm = TRUE),
+    student_quas_peak = max(Q_on + Q_off, na.rm = TRUE),
+    student_quas_days = sum(Q_on + Q_off, na.rm = TRUE),
+    saf_cases_peak = max(Isym_saf, na.rm = TRUE),
+  ) %>%
+  ungroup()
+
+df_out <- full_join(df_cum, df_peak, by = c("scenario", "run")) %>%
+  pivot_longer(
+    -c(scenario, run),
+    names_to = "measure",
+    values_to = "value"
+  ) %>%
+  group_by(measure, scenario) %>%
+  summarize(
+    low = quantile(value, 0.027, na.rm = TRUE),
+    med = quantile(value, 0.7, na.rm = TRUE),
+    high = quantile(value, 0.977, na.rm = TRUE)
+  ) %>%
+  mutate(value = paste0(
+    round(med,digits=0),
+    " (", round(low,digits=0), "-",
+    round(high, digits=0), ")",sep="")
+  ) %>%
+  pivot_wider(id_cols = measure, names_from = scenario, values_from = value)
+
+var_order <- data.frame(measure=c("student_cases","student_cases_peak","student_hosps","student_deaths","student_isos","student_isos_peak","student_isos_days",
+                                  "student_quas","student_quas_peak","student_quas_days","saf_cases","saf_cases_peak","saf_hosps","saf_deaths","tests","tests_pc"),
+                        Measure= c("StudentCases","StudentCasesPeak","StudentHosps","StudentDeaths","StudentIsolate","StudentIsolatePeak","StudentIsolateDays",
+                                   "StudentQuarantined","StudentQuaPeak","StudentQuarantinedDays","StaffCases","StaffCasesPeak","StaffHosps","StaffDeaths","Tests","TestsPerCapita")) %>%
+  mutate(measure= as.character(measure))
+
+df_out<-var_order %>% left_join(df_out, by="measure") %>%
+  rename("70% coverage" = "70covg",
+         "...without NPIs" = "NoNPI",
+         "...without screening" = "NoScreen",
+         "...without NPIs or screening"= "NoNPIScreen") 
+
+kable(df_out[,c("Measure",
+                "70% coverage",
+                "...without NPIs",
+                "...without screening",
+                "...without NPIs or screening")], digits = 0, align = "c") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
+```
+
+\newpage
+## Summary results -- 90% Vaccine Coverage
+
+```{r}
+#' 
+#' ## Totals -- at end of the semester
+## ------------------------------------------------------------------------
+df_cum<-do.call("rbind",list_res_90)%>%
+  filter(time == max(time)) %>%
+  group_by(scenario, run) %>%
+  summarize(
+    student_n = S_on + E_on + I_on + R_on + P_on + Q_on - Dcum_on +
+      S_off + E_off + I_off + R_off + P_off + Q_off - Dcum_off,
+    student_cases = Icum_on + Icum_off,
+    student_hosps = Hcum_on + Hcum_off,
+    student_isos = Pcum_on + Pcum_off,
+    student_quas = Qcum_on + Qcum_off,
+    student_deaths = Dcum_on + Dcum_off,
+    saf_n = S_saf + E_saf + I_saf + R_saf + P_saf + Q_saf - Dcum_saf,
+    saf_cases = Icum_saf,
+    saf_hosps = Hcum_saf,
+    saf_deaths = Dcum_saf,
+    tests = Test
+  ) %>%
+  ungroup() %>%
+  mutate(tests_pc = tests / (student_n + saf_n))
+
+df_peak <- do.call("rbind",list_res_90) %>%
+  group_by(scenario, run) %>%
+  summarize(
+    student_cases_peak = max(Isym_on + Isym_off, na.rm = TRUE),
+    student_isos_peak = max(P_on + P_off, na.rm = TRUE),
+    student_isos_days = sum(P_on + P_off, na.rm = TRUE),
+    student_quas_peak = max(Q_on + Q_off, na.rm = TRUE),
+    student_quas_days = sum(Q_on + Q_off, na.rm = TRUE),
+    saf_cases_peak = max(Isym_saf, na.rm = TRUE),
+  ) %>%
+  ungroup()
+
+df_out <- full_join(df_cum, df_peak, by = c("scenario", "run")) %>%
+  pivot_longer(
+    -c(scenario, run),
+    names_to = "measure",
+    values_to = "value"
+  ) %>%
+  group_by(measure, scenario) %>%
+  summarize(
+    low = quantile(value, 0.029, na.rm = TRUE),
+    med = quantile(value, 0.9, na.rm = TRUE),
+    high = quantile(value, 0.999, na.rm = TRUE)
+  ) %>%
+  mutate(value = paste0(
+    round(med,digits=0),
+    " (", round(low,digits=0), "-",
+    round(high, digits=0), ")",sep="")
+  ) %>%
+  pivot_wider(id_cols = measure, names_from = scenario, values_from = value)
+
+var_order <- data.frame(measure=c("student_cases","student_cases_peak","student_hosps","student_deaths","student_isos","student_isos_peak","student_isos_days",
+                                  "student_quas","student_quas_peak","student_quas_days","saf_cases","saf_cases_peak","saf_hosps","saf_deaths","tests","tests_pc"),
+                        Measure= c("StudentCases","StudentCasesPeak","StudentHosps","StudentDeaths","StudentIsolate","StudentIsolatePeak","StudentIsolateDays",
+                                   "StudentQuarantined","StudentQuaPeak","StudentQuarantinedDays","StaffCases","StaffCasesPeak","StaffHosps","StaffDeaths","Tests","TestsPerCapita")) %>%
+  mutate(measure= as.character(measure))
+
+df_out<-var_order %>% left_join(df_out, by="measure") %>%
+  rename("90% coverage" = "90covg",
+         "...without NPIs" = "NoNPI",
+         "...without screening" = "NoScreen",
+         "...without NPIs or screening"= "NoNPIScreen") 
+
+kable(df_out[,c("Measure",
+                "90% coverage",
+                "...without NPIs",
+                "...without screening",
+                "...without NPIs or screening")], digits = 0, align = "c") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
+```
+
+
+\newpage
+## Parameters
+This table shows the parameter inputs into the model and their ranges used in sensitivity analysis.  The 'value' column shows our base case scenario for what we expect to be the most likely set of conditions and interventions.  
+
+```{r param-table, echo=F}
+parameter_table %>%
+  select(Parameter, Value,Lower, Upper) %>%
+  filter(Parameter !="Under-reporting factor") %>%
+  filter(Value !="0.00026") %>%     #something dodgy about daily rate parameter, wont render
+  replace(is.na(.),"")  %>% 
+  kable(digits = 2, align = "l") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```

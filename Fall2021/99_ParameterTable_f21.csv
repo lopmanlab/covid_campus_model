@@ -1,0 +1,35 @@
+Parameter,Value,Lower,Upper,Change Status for Shiny,Source,Notes,Distribution,Var
+Populations,,,,,,,,
+Total students,"15,000",,,UnderInput,,,,N
+Students living on campus,"4,500","4,500","4,500",UnderInput,,ranges from (low) a room or apartment that results in housing to serve one person regardless of the number of rooms in the unit to (high) the number of beds Emory fills in a normal semester,Uniform,N_on
+Staff and faculty,"15,266",,,UnderInput,,,,N_saf
+Natural history and clinical,,,,,,,,
+Latent period (days),3,2,4,AdvancedSetting,https://pubmed.ncbi.nlm.nih.gov/32150748/?from_term=lessler+covid&from_pos=1,,Gamma,latent
+Infectious period (days),7,6,8,AdvancedSetting,https://pubmed.ncbi.nlm.nih.gov/32291278/?from_term=kissler&from_pos=1,First day is asymptomatic,Gamma,infectious
+Proportion severe - students,0.0224,0.0133,0.0456,AdvancedSetting,https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext,Age standrdized to Emory,Beta,p_hosp_stu
+Proportion severe - staff/faculty,0.055,0.0327,0.1122,AdvancedSetting,https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext,,Beta,p_hosp_saf
+Proportion fatal - students,0.0006,0.0003,0.0014,AdvancedSetting,https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext,,Uniform,p_death_stu
+Proportion fatal - staff/faculty,0.0052,0.0029,0.0105,AdvancedSetting,https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext,,Uniform,p_death_saf
+Proportion symptomatic - students,0.35,0.27,0.43,AdvancedSetting,https://cmmid.github.io/topics/covid19/reports/20200426-Main-Age_dependence_v2_BUNDLED.pdf,,Beta,p_sympt_stu
+Proportion symptomatic - staff/faculty,0.51,0.41,0.59,AdvancedSetting,https://cmmid.github.io/topics/covid19/reports/20200426-Main-Age_dependence_v2_BUNDLED.pdf,,Beta,p_sympt_saf
+Testing and quarantine,,,,,,,,
+Time from onset of infectiousness to testing (1/days),2,7,1,InterventionScenario,,"First day is asymptomatic, so when this value is 2, testing is on first day of disease",Uniform,testing
+Screening frequency (1/days),7,7,7,InterventionScenario,,"Monthly, range is once per semester to daily",Uniform,screening
+Duration of quarantine (days),14,,,InterventionScenario,,,,isolation
+Number of contacts per case,2,1,14,InterventionScenario,Mossong et al; Prem et al,NEED Source,Uniform,contacts
+Proportion of contacts reached,0.75,0.5,0.9,,,,Uniform,p_contacts_reached
+Proportion experiencing ILI symptoms per day,0.00333,0.003,0.003667,InterventionScenario,Nichol et al; Guh et al,,Uniform,ili
+PCR Sensitivity ,,,,,,,,
+Day 2 of infectiousness,0.75,0.6,0.83,AdvancedSetting,https://www.acpjournals.org/doi/10.7326/M20-1495,,Beta,sensitivity_2
+Day 4 of infectiousness,0.8,0.7,0.85,AdvancedSetting,https://www.acpjournals.org/doi/10.7326/M20-1496,,Beta,sensitivity
+Day 7 of infectiousness,0.75,0.65,0.8,AdvancedSetting,https://www.acpjournals.org/doi/10.7326/M20-1497,,Beta,sensitivity_7
+Transmission,,,,,,,,
+Students <-> Students,2,0.7,2.5,SecondarySetting,,,Uniform,R0_student_to_student
+On campus students <-> On campus students,1,0.3,1.4,SecondarySetting,,,Uniform,R0_on_to_on
+All students <-> staff/faculty,0.5,0.15,0.7,SecondarySetting,,,Uniform,R0_saf
+Staff/faculty <-> staff/faculty,0.5,0.15,0.7,SecondarySetting,,,Uniform,
+Daily new cases in community (proportion),0.000517857,0.000310714,0.001035714,UnderInput,https://dph.georgia.gov/covid-19-daily-status-report,,Beta,daily_new_case
+Under-reporting factor,1,,,UnderInput,,,None,under_report
+Efficacy of NPIs,0.000001,0.000001,0.000001,SecondarySetting,https://www.thelancet.com/action/showPdf?pii=S0140-6736%2820%2931142-9,assume 50% compliance,Beta,eff_npi
+VE,0.9,,,,,,,ve
+Proportion immune from previous infection,0.2,,,,,,,p_imm

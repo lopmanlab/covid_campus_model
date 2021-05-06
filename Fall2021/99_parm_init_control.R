@@ -1,5 +1,4 @@
 parameter_table <- read.csv("99_ParameterTable_f21.csv") # Parameter table manuscript
-#parameter_table <-read.csv("ParameterTable_EmoryFall2021.csv")   # Parameter table Fall 2021
 
 p_tab <- parameter_table[,1:9]
 p_tab$Value <-gsub(",","",p_tab$Value)
@@ -17,11 +16,8 @@ infectious <- p_tab$Value[which(p_tab$Var == "infectious")]
 
 
 N_on <- p_tab$Value[which(p_tab$Var == "N_on")]
-
 N_off<-p_tab$Value[which(p_tab$Var == "N")]-N_on           #Based on number on campus
-
 N_saf <- p_tab$Value[which(p_tab$Var == "N_saf")]
-
 N = N_on + N_off + N_saf
 
 
@@ -58,28 +54,38 @@ sensitivity_7  <- p_tab$Value[which(p_tab$Var == "sensitivity_7")]              
 
 isolation <- p_tab$Value[which(p_tab$Var == "isolation")]                         # isolation or quarantine period in days
 
-p_vacc <- p_tab$Value[which(p_tab$Var == "p_vacc")]                               # proportion vaccinated at baseline
 p_imm <- p_tab$Value[which(p_tab$Var == "p_imm")]                                 # proportion natural infected at baseline
 ve <- p_tab$Value[which(p_tab$Var == "ve")]                                       # vaccine or natural protection
 
+
+# p_vacc_stu <- p_tab$Value[which(p_tab$Var == "p_vacc_stu")]                       # proportion vaccinated at baseline - students
+# p_vacc_saf <- p_tab$Value[which(p_tab$Var == "p_vacc_saf")]                       # proportion vaccinated at baseline - staff/faculty
+
+covg <- (1:10)/10
+init <- vector("list", length(covg))
+
+for (i in seq_along(covg)) {
+
+p_vacc_stu <- covg[i]   
+p_vacc_saf <- covg[i] 
 
 # Emory population
 E_on=0                      #students living on campus
 I_on=0
 P_on = 0
-R_on = N_on*(p_vacc+p_imm-p_vacc*p_imm)*ve  
+R_on = N_on*(p_vacc_stu+p_imm-p_vacc_stu*p_imm)*ve  
 Q_on = 0
 
 E_off=0                     #students living off campus
 I_off=0
 P_off = 0
-R_off = N_off*(p_vacc+p_imm-p_vacc*p_imm)*ve
+R_off = N_off*(p_vacc_stu+p_imm-p_vacc_stu*p_imm)*ve
 Q_off = 0
 
 E_saf=0
 I_saf=0
 P_saf = 0
-R_saf = N_saf*(p_vacc+p_imm-p_vacc*p_imm)*ve
+R_saf = N_saf*(p_vacc_saf+p_imm-p_vacc_saf*p_imm)*ve
 Q_saf = 0
 
 testing=0
@@ -87,7 +93,7 @@ screening_on=0              #screening interval for oncampus students
 screening =0             #screening intervals for off campus students and staff
 
 ## Initial conditions to model
-init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptible
+assign(paste0("init_", i), init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptible
                  E_on=E_on,                         # number initially incubating
                  I_on=I_on,                         # number initially infectious
                  Isym_on = 0,
@@ -100,7 +106,6 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  Hcum_on =0,
                  Dcum_on=0,
                  Icum_on_camp=0,
-                 #Icum_on_com=0,
 
                  S_off=N_off-(E_off+I_off+R_off),
                  E_off=E_off,
@@ -115,7 +120,6 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  Hcum_off = 0,
                  Dcum_off =0,
                  Icum_off_camp=0,
-                 #Icum_off_com=0,
 
                  S_saf=N_saf-(E_saf+I_saf+R_saf),
                  E_saf=E_saf,
@@ -129,13 +133,14 @@ init <- init.dcm(S_on=N_on-(E_on+I_on+R_on),        # number initially susceptib
                  Hcum_saf =0,
                  Dcum_saf =0,
                  Icum_saf_camp=0,
-                 #Icum_saf_com=0,
 
                  Test = 0,
                  lam_on = 0,
                  lam_off = 0,
                  lam_saf = 0
                  )
+)
+}
 
 # Control features
 control <- control.dcm(nsteps = 116, new.mod = model)  #Time steps for manuscript
