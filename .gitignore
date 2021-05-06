@@ -8,3 +8,10 @@
 renv/
 99_psa_runs_spring1.log
 99_psa_runs_spring1.tex
+Plots/11222020/res_fig2_rawmodeloutputs.RDS
+Plots/11222020/res_fig2_rawmodeloutputs_test2.RDS
+Plots/11222020/res_fig2_rawmodeloutputs_test4.RDS
+Plots/11222020/res_fig2_rawmodeloutputs_test7.RDS
+Plots/11222020/res_fig2_rawmodeloutputs_test.RDS
+Plots/11222020/res_fi2_rawmodeloutputs_trans.RDS
+Plots/11222020/res_fig5_rawmodeloutputs.RDS

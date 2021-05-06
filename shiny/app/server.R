@@ -52,6 +52,7 @@ server <- function(input, output, session) {
       sensitivity             = input$sensitivity,
       testing                 = 0,#input$testing,
       screening               = 0,#input$screening,
+      screening_on            = 0,
       p_asympt_stu            = input$p_asympt_stu,
       p_asympt_saf            = input$p_asympt_saf,
       ili                     = input$ili,

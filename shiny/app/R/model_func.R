@@ -1,6 +1,8 @@
 model <- function(t, t0, parms) {
   with(as.list(c(t0, parms)), {
 
+    screening_on <- screening
+
     community <- daily_new_case * 1e-5 * under_report
     
     # ODEs

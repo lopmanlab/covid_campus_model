@@ -9,6 +9,8 @@ output:
 
 
 ```{r}
+memory.limit(size=50000000)
+
 knitr::opts_chunk$set(echo = TRUE)
 # Load dependencies, functions and parameters
 source("99_dependencies.R")
@@ -277,7 +279,7 @@ kable(df_out[,c("measure","base","test4","screen30","combo")], digits = 0, align
 
 
 #saveRDS(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_scen.RDS")
-#write.csv(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_scen.csv")
+write.csv(df_out[,c("measure","base","test4","screen30","combo")],"tables/res_scen_redo.csv")
 
 
 ```
@@ -294,18 +296,36 @@ propcomm<-do.call("rbind",list_res)%>%
       select(scenario, Icum_stu_camp, Icum_stu, prop_stu_camp,prop_saf_camp)%>%
       group_by(scenario) %>%
         summarize(
-        low_stu = quantile(prop_stu_camp, 0.025, na.rm = TRUE),
-        med_stu = quantile(prop_stu_camp, 0.5, na.rm = TRUE),
-        high_stu = quantile(prop_stu_camp, 0.975, na.rm = TRUE),
-        low_saf = quantile(prop_saf_camp, 0.025, na.rm=TRUE),
-        med_saf = quantile(prop_saf_camp, 0.5, na.rm = TRUE),
-        high_saf = quantile(prop_saf_camp, 0.975, na.rm=TRUE)
+        low_stu =1-quantile(prop_stu_camp, 0.975, na.rm = TRUE),
+        med_stu = 1-quantile(prop_stu_camp, 0.5, na.rm = TRUE),
+        high_stu = 1-quantile(prop_stu_camp, 0.025, na.rm = TRUE),
+        low_saf = 1-quantile(prop_saf_camp, 0.975, na.rm=TRUE),
+        med_saf = 1-quantile(prop_saf_camp, 0.5, na.rm = TRUE),
+        high_saf = 1-quantile(prop_saf_camp, 0.025, na.rm=TRUE)
       ) 
 
-#saveRDS(propcomm,"tables/propcomm.RDS")
+propcomm1 <- do.call("rbind",list_res)%>%
+      filter(time == max(time)) %>%
+      #select(Icum_on_camp, Icum_off_camp,Icum_stu, Icum_saf_camp, Icum_saf) %>%
+      mutate(Icum_stu_camp = Icum_on_camp + Icum_off_camp,
+             prop_stu_comm = 1-Icum_stu_camp/Icum_stu,
+             prop_saf_comm = 1-Icum_saf_camp/Icum_saf) %>%
+      select(scenario, prop_stu_comm, prop_saf_comm) 
+
+png("Plots/11222020/supp_boxplot.png", units="in", width=6, height=5, res=800)
+propcomm1%>% melt() %>% 
+  mutate(scenario = factor(scenario, levels=c("base","screen30","test4","combo"))) %>%
+  ggplot() +geom_boxplot(aes(x=scenario, y=value, fill = variable))+
+  theme_bw() +ylab("Prop. due to community transmission")+
+  scale_fill_manual(values=alpha(c("darkblue","darkred"),0.2),
+                    name="",
+                    labels=c("Stud","Staff"))+
+  ggtitle("Prop. of cumulative cases due to community transmission \nby intervention")
+dev.off()
+
+saveRDS(propcomm,"tables/propcomm.RDS")
 
 ```
-
 
 ```{r}
 #' ## PRCC
@@ -313,7 +333,45 @@ propcomm<-do.call("rbind",list_res)%>%
 results<-data.frame(matrix(ncol=2,nrow=total.set.size))
 results[,1]<-as.data.frame(mod_combo) %>% filter(time==116) %>% select(Icum_stu)
 results[,2]<-as.data.frame(mod_combo) %>% filter(time==116) %>% select(Icum_saf)
+```
 
+```{r}
+## Scatter plots for PRCC assumption check
+
+
+df <- data.frame(matrix(nrow=1000,ncol=18))
+for (i in 1:18){
+  df[,i] <- mod_combo$param[i]
+  colnames(df)[i] <- names(mod_combo$param[i])
+}
+
+df <- cbind(df,results)
+df<- df %>% select(-isolation)
+colnames(df)[18:19]<- c("cum_stud","cum_staff")
+df$sim <- seq(1:1000)
+df <- df%>% rename("beta_stu_to_stu"="beta_student_to_student")
+
+png("Plots/5_input_output_scatterplots_stud.png", units="in", width=8, height=7, res=700)
+df %>% select(-cum_staff) %>% melt(id.vars = c("sim","cum_stud")) %>%
+  ggplot(aes(x=value, y= cum_stud)) + geom_point() + facet_wrap(~variable, scales = "free")+
+ theme_bw()+theme(plot.title = element_text(size=7),
+        axis.text.x = element_text(size=7, angle=45))+ylab("Cumulative student cases")
+dev.off()
+
+png("Plots/5_input_output_scatterplots_staff.png", units="in", width=8, height=7, res=700)
+df %>% select(-cum_stud) %>% melt(id.vars = c("sim","cum_staff")) %>%
+  ggplot(aes(x=value, y= cum_staff)) + geom_point() + facet_wrap(~variable, scales = "free") +theme_bw()+
+ theme(plot.title = element_text(size=7),
+  axis.text.x = element_text(size=7, angle=45))+ylab("Cumulative staff cases")
+dev.off()
+
+
+
+```
+
+
+```{r}
+# Actual PRCC test
 variable <- data.frame(R0_StoS = R0_student_to_student.int,
                 R0_OntoOn = R0_on_to_on.int,
                 R0_saf = R0_saf.int,
@@ -340,20 +398,20 @@ for (i in 1:ncol(results)){
 }
 
 df_res<-as.data.frame(do.call(rbind,pcc_res)) %>% select(original)
-df_res$output <-rep(rep(c("stud","staff"),each =13),1)
+df_res$output <-rep(rep(c("Student","Staff"),each =13),1)
 df_res$output <-as.factor(df_res$output)
 df_res$var<-rep(colnames(variable),2)
 
-png("Plots/5_prcc_redo.png", units="in", width=7, height=5, res=300)
+png("Plots/5_prcc_redo.png", units="in", width=7, height=5, res=600)
 ggplot(data=df_res, aes(x= var,y = original,fill=output)) +
   geom_bar(position="dodge",stat="identity") +
   scale_fill_grey()+
   scale_x_discrete(limits=colnames(variable),labels=variable_name)+
   coord_flip() + theme_classic()+
-  ggtitle("Partial Rank Correlation Coefficient of variables")+xlab("Variable")+ylab("")+theme(legend.title=element_blank())
+  ggtitle("Partial rank correlation coefficient of variables")+xlab("Variable")+ylab("")+theme(legend.title=element_blank())
 dev.off()
 
-#' 
+saveRDS(pcc_res,"tables/pcc_res.RDS")
 ```
 
 ```{r}
@@ -609,8 +667,7 @@ df_cum1<-mod_nocont%>%
 
 #saveRDS(df_nocont,"tables/res_nocont.RDS")
 
-     # %>%
-      #pivot_wider(id_cols = measure, values_from = value)
+
 ```
 
 ```{r}
@@ -656,18 +713,20 @@ df_cum<-do.call("rbind",list_res1)%>%
 
 df_stu <- df_cum %>% filter(measure=="student_cases") %>%
   mutate(
-    perc_red = round((1-med/3067)*100,digits=0)
+    perc_red = round((1-med/3068)*100,digits=0)
   )
 
 df_saf <- df_cum %>% filter(measure=="saf_cases") %>%
   mutate(
-    perc_red = round((1-med/1062)*100,digits=0)
+    perc_red = round((1-med/1063)*100,digits=0)
   )
 
 df_summary <- full_join(df_stu,df_saf)  %>%
     pivot_wider(id_cols = scenario, names_from = measure, values_from = c(value,perc_red))
 
 df_summary
+
+write.csv(df_summary,"tables/res_summary_redo.csv")
 
 #saveRDS(df_summary,"tables/res_summary.RDS")
 ```
