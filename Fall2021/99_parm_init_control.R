@@ -66,7 +66,8 @@ init <- vector("list", length(covg))
 
 for (i in seq_along(covg)) {
 
-p_vacc_stu <- covg[i]   
+# p_vacc_stu <- covg[i]   # vaccine coverage fixed for students varied with staff
+p_vacc_stu <- 0.9   # vaccine coverage fixed for students at 90%
 p_vacc_saf <- covg[i] 
 
 # Emory population

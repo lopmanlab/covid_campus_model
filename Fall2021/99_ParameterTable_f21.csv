@@ -13,7 +13,7 @@ Proportion fatal - staff/faculty,0.0052,0.0029,0.0105,AdvancedSetting,https://ww
 Proportion symptomatic - students,0.35,0.27,0.43,AdvancedSetting,https://cmmid.github.io/topics/covid19/reports/20200426-Main-Age_dependence_v2_BUNDLED.pdf,,Beta,p_sympt_stu
 Proportion symptomatic - staff/faculty,0.51,0.41,0.59,AdvancedSetting,https://cmmid.github.io/topics/covid19/reports/20200426-Main-Age_dependence_v2_BUNDLED.pdf,,Beta,p_sympt_saf
 Testing and quarantine,,,,,,,,
-Time from onset of infectiousness to testing (1/days),2,7,1,InterventionScenario,,"First day is asymptomatic, so when this value is 2, testing is on first day of disease",Uniform,testing
+Time from onset of infectiousness to testing (1/days),4,4,4,InterventionScenario,,"First day is asymptomatic, so when this value is 2, testing is on first day of disease",Uniform,testing
 Screening frequency (1/days),7,7,7,InterventionScenario,,"Monthly, range is once per semester to daily",Uniform,screening
 Duration of quarantine (days),14,,,InterventionScenario,,,,isolation
 Number of contacts per case,2,1,14,InterventionScenario,Mossong et al; Prem et al,NEED Source,Uniform,contacts

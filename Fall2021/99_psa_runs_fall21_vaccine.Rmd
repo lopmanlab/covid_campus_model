@@ -49,10 +49,10 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
-                   eff_npi = 0.6,
-                   testing = testing,
+                   eff_npi = 0.5,
+                   testing = 1/4,
                    screening_on = 1/7,
-                   screening=1/7)
+                   screening=0)
 
 mod_50 <- dcm(param, init_5, control)
 mod_50 <- mutate_epi(mod_50, I_stu = Isym_on + Isym_off,
@@ -84,8 +84,8 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
-                   eff_npi = 0.6,
-                   testing = testing,
+                   eff_npi = 0.5,
+                   testing = 1/4,
                    screening_on = 0,
                    screening=0)
 
@@ -120,9 +120,9 @@ param <- param.dcm(latent = latent.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
                    eff_npi = 0,
-                   testing = testing,
+                   testing = 1/4,
                    screening_on = 1/7,
-                   screening=1/7)
+                   screening=0)
 
 mod_50_nonpi <- dcm(param, init_5, control)
 mod_50_nonpi <- mutate_epi(mod_50_nonpi, I_stu = Isym_on + Isym_off,
@@ -155,9 +155,9 @@ param <- param.dcm(latent = latent.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
                    eff_npi = 0,
-                   testing = testing,
+                   testing = 1/4,
                    screening_on = 0,
-                   screening=0)
+                   screening=0)  
 
 mod_50_nonpi_noscreen <- dcm(param, init_5, control)
 mod_50_nonpi_noscreen <- mutate_epi(mod_50_nonpi_noscreen, I_stu = Isym_on + Isym_off,
@@ -192,10 +192,10 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
-                   eff_npi = 0.6,
-                   testing = testing,
+                   eff_npi = 0.5,
+                   testing = 1/4,
                    screening_on = 1/7,
-                   screening=1/7)
+                   screening=0)
 
 mod_70 <- dcm(param, init_7, control)
 mod_70 <- mutate_epi(mod_70, I_stu = Isym_on + Isym_off,
@@ -227,8 +227,8 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
-                   eff_npi = 0.6,
-                   testing = testing,
+                   eff_npi = 0.5,
+                   testing = 1/4,
                    screening_on = 0,
                    screening=0)
 
@@ -263,9 +263,9 @@ param <- param.dcm(latent = latent.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
                    eff_npi = 0,
-                   testing = testing,
+                   testing = 1/4,
                    screening_on = 1/7,
-                   screening=1/7)
+                   screening=0)
 
 mod_70_nonpi <- dcm(param, init_7, control)
 mod_70_nonpi <- mutate_epi(mod_70_nonpi, I_stu = Isym_on + Isym_off,
@@ -298,7 +298,7 @@ param <- param.dcm(latent = latent.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
                    eff_npi = 0,
-                   testing = testing,
+                   testing = 1/4,
                    screening_on = 0,
                    screening=0)
 
@@ -332,10 +332,10 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
-                   eff_npi = 0.6,
-                   testing = testing,
+                   eff_npi = 0.5,
+                   testing = 1/4,
                    screening_on = 1/7,
-                   screening=1/7)
+                   screening=0)
 
 mod_90 <- dcm(param, init_9, control)
 mod_90 <- mutate_epi(mod_90, I_stu = Isym_on + Isym_off,
@@ -367,8 +367,8 @@ param <- param.dcm(latent = latent.int,
                    p_contacts_reached = p_contacts_reached.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
-                   eff_npi = 0.6,
-                   testing = testing,
+                   eff_npi = 0.5,
+                   testing = 1/4,
                    screening_on = 0,
                    screening=0)
 
@@ -403,9 +403,9 @@ param <- param.dcm(latent = latent.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
                    eff_npi = 0,
-                   testing = testing,
+                   testing = 1/4,
                    screening_on = 1/7,
-                   screening=1/7)
+                   screening=0)
 
 mod_90_nonpi <- dcm(param, init_9, control)
 mod_90_nonpi <- mutate_epi(mod_90_nonpi, I_stu = Isym_on + Isym_off,
@@ -438,7 +438,7 @@ param <- param.dcm(latent = latent.int,
                    ili = ili.int,
                    sensitivity = sensitivity.int,
                    eff_npi = 0,
-                   testing = testing,
+                   testing = 1/4,
                    screening_on = 0,
                    screening=0)
 
@@ -453,7 +453,7 @@ mod_90_nonpi_noscreen <- mutate_epi(mod_90_nonpi_noscreen, I_stu = Isym_on + Isy
 ```
 
 
-## Plots for 70% Coverage scenarios
+<!-- ## Plots for 70% Coverage scenarios -->
 
 ```{r fig.width=12, fig.height=12}
 #' 
@@ -464,9 +464,7 @@ mod_90_nonpi_noscreen <- mutate_epi(mod_90_nonpi_noscreen, I_stu = Isym_on + Isy
 
 # Combine scenarios of interest into list of data frames
 list_res_50<-lapply(list("50covg"=mod_50,"NoNPI"=mod_50_nonpi,"NoScreen"=mod_50_noscreen, "NoNPIScreen"=mod_50_nonpi_noscreen),as.data.frame)
-
 list_res_70<-lapply(list("70covg"=mod_70,"NoNPI"=mod_70_nonpi,"NoScreen"=mod_70_noscreen, "NoNPIScreen"=mod_70_nonpi_noscreen),as.data.frame)
-
 list_res_90<-lapply(list("90covg"=mod_90,"NoNPI"=mod_90_nonpi,"NoScreen"=mod_90_noscreen, "NoNPIScreen"=mod_90_nonpi_noscreen),as.data.frame)
 
 list_res_50<-lapply(names(c(list_res_50)),function(x) {
@@ -493,11 +491,11 @@ p4<-psa_plot(list_res_70[[4]],title1="...without NPIs or screening", title2 = ".
 # Arrange plots for output
 
 #png("Plots/5_psa_plots12.png", units="in", width=6, height=5, res=500)
-grid.arrange(p1[[1]]+rremove("legend"),p1[[2]]+rremove("legend"),
-             p2[[1]]+rremove("legend"),p2[[2]]+rremove("legend"),
-             p3[[1]]+rremove("legend"),p3[[2]]+rremove("legend"),
-             p4[[1]]+rremove("legend"),p4[[2]]+rremove("legend"),
-             ncol = 2)
+# grid.arrange(p1[[1]]+rremove("legend"),p1[[2]]+rremove("legend"),
+#              p2[[1]]+rremove("legend"),p2[[2]]+rremove("legend"),
+#              p3[[1]]+rremove("legend"),p3[[2]]+rremove("legend"),
+#              p4[[1]]+rremove("legend"),p4[[2]]+rremove("legend"),
+#              ncol = 2)
 #dev.off()
 ```
 
@@ -562,8 +560,7 @@ df_cum<-do.call("rbind",list_res_50)%>%
 
 var_order <- data.frame(measure=c("student_cases","student_cases_peak","student_hosps","student_deaths","student_isos","student_isos_peak","student_isos_days",
                "student_quas","student_quas_peak","student_quas_days","saf_cases","saf_cases_peak","saf_hosps","saf_deaths","tests","tests_pc"),
-               Measure= c("StudentCases","StudentCasesPeak","StudentHosps","StudentDeaths","StudentIsolate","StudentIsolatePeak","StudentIsolateDays",
-               "StudentQuarantined","StudentQuaPeak","StudentQuarantinedDays","StaffCases","StaffCasesPeak","StaffHosps","StaffDeaths","Tests","TestsPerCapita")) %>%
+               Measure= c("Student Cases","Student Cases Peak","Student Hosps","Student Deaths","Student Isolate","Student Isolate Peak","Student Isolate Days", "Student Quarantined","Student Quarantine Peak","Student Quarantined Days","Staff Cases","Staff Cases Peak","Staff Hosps","Staff Deaths","Tests","Screening Per Capita")) %>%
             mutate(measure= as.character(measure))
 
 df_out<-var_order %>% left_join(df_out, by="measure") %>%
@@ -737,16 +734,16 @@ kable(df_out[,c("Measure",
 ```
 
 
-\newpage
-## Parameters
-This table shows the parameter inputs into the model and their ranges used in sensitivity analysis.  The 'value' column shows our base case scenario for what we expect to be the most likely set of conditions and interventions.  
+<!-- \newpage -->
+<!-- ## Parameters -->
+<!-- This table shows the parameter inputs into the model and their ranges used in sensitivity analysis.  The 'value' column shows our base case scenario for what we expect to be the most likely set of conditions and interventions.   -->
 
-```{r param-table, echo=F}
-parameter_table %>%
-  select(Parameter, Value,Lower, Upper) %>%
-  filter(Parameter !="Under-reporting factor") %>%
-  filter(Value !="0.00026") %>%     #something dodgy about daily rate parameter, wont render
-  replace(is.na(.),"")  %>% 
-  kable(digits = 2, align = "l") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
-```
+<!-- ```{r param-table, echo=F} -->
+<!-- parameter_table %>% -->
+<!--   select(Parameter, Value,Lower, Upper) %>% -->
+<!--   filter(Parameter !="Under-reporting factor") %>% -->
+<!--   filter(Value !="0.00026") %>%     #something dodgy about daily rate parameter, wont render -->
+<!--   replace(is.na(.),"")  %>%  -->
+<!--   kable(digits = 2, align = "l") %>% -->
+<!--   kable_styling(bootstrap_options = c("striped", "hover", "condensed")) -->
+<!-- ``` -->
